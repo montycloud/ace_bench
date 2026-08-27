@@ -1,0 +1,192 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  VPCSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all traffic"
+      VpcId: !ImportValue VPCID
+      SecurityGroupIngress:
+        - CidrIp: "0.0.0.0/0"
+          IpProtocol: "-1"
+
+  LambdaKMSKeys:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: "KMS Keys for Lambda Environment Variables"
+      Enabled: true
+
+  ExecutionRoleFunction1:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+        - PolicyName: CreateNetworkInterfacePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                Resource: "*"
+  HelloWorldFunction1:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - "wafr-lambda-1"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      Handler: "index.handler"
+      Role: !GetAtt ExecutionRoleFunction1.Arn
+      Runtime: python3.11
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              return "Hello, World! (Function 1)"
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref VPCSG
+        SubnetIds:
+          - !ImportValue SubnetAID
+          - !ImportValue SubnetBID
+      Environment:
+        Variables:
+          databaseName: lambdadb
+          databaseUser: admin
+      KmsKeyArn: !GetAtt LambdaKMSKeys.Arn
+
+  ExecutionRoleFunction2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          Action:
+            - "sts:AssumeRole"
+          Effect: Allow
+          Principal:
+            "AWS": "*"
+      Policies:
+        - PolicyName: "LambdaExecutionFunction2"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "lambda:InvokeFunction"
+                  - ec2:CreateNetworkInterface
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                Effect: Allow
+                Resource: "*"
+
+  # Lambda Function 2
+  HelloWorldFunction2:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - "wafr-lambda-2"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      Handler: "index.handler"
+      Role: !GetAtt ExecutionRoleFunction2.Arn
+      Runtime: python3.11
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              return "Hello, World! (Function 2)"
+      Environment:
+        Variables:
+          databaseName: lambdadb
+          databaseUser: admin
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref VPCSG
+        SubnetIds:
+          - !ImportValue SubnetAID
+          - !ImportValue SubnetBID
+      KmsKeyArn: !GetAtt LambdaKMSKeys.Arn
+
+  LambdatriggerRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Scheduled rule to trigger the Lambda function
+      ScheduleExpression: rate(1 minute)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt HelloWorldFunction2.Arn
+          Id: MyLambdaTarget
+
+  permission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref HelloWorldFunction2
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt LambdatriggerRule.Arn
+
+  MyLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt ExecutionRoleFunction2.Arn
+      Code:
+        ZipFile: |
+          exports.handler = async function(event, context) {
+            console.log("EVENT: \n" + JSON.stringify(event, null, 2))
+            return context.logStreamName
+          }
+      Runtime: nodejs20.x
+
+# Define outputs for reference
+Outputs:
+  ExecutionRoleFunction1Arn:
+    Value: !GetAtt ExecutionRoleFunction1.Arn
+  ExecutionRoleFunction2Arn:
+    Value: !GetAtt ExecutionRoleFunction2.Arn
+  HelloWorldFunction1Arn:
+    Value: !GetAtt HelloWorldFunction1.Arn
+  HelloWorldFunction2Arn:
+    Value: !GetAtt HelloWorldFunction2.Arn
+  LambdaId:
+    Description: "Lambda id"
+    Value: !Ref MyLambdaFunction
+  LambdaArn:
+    Description: "Lambda arn"
+    Value: !GetAtt MyLambdaFunction.Arn

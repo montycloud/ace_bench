@@ -1,0 +1,62 @@
+Resources:
+  ComputeOptimizerDisableExecutor:
+    Type: Custom::ComputeOptimizerDisable
+    Properties:
+      ServiceToken: !Sub "${ComputeOptimizerDisable.Arn}"
+
+  ComputeOptimizerDisable:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !Sub "${IAMRole.Arn}"
+      Handler: index.handler
+      Timeout: 20
+      Runtime: python3.12
+      Code:
+        ZipFile: !Sub |
+          import boto3
+          import os
+          import cfnresponse
+          responce_data = {}
+          def handler(event, context):
+              try:
+                  client = boto3.client('compute-optimizer') 
+                  response = client.update_enrollment_status(
+                      status='Inactive'
+                  )
+                  responce_data['Message'] = "disabled compute optimizer successfully"
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, responce_data)
+              except Exception as e:
+                  responce_data['Message'] = "Operation unsuccessfull"
+                  cfnresponse.send(event, context, cfnresponse.FAILED, responce_data)
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: ["sts:AssumeRole"]
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - compute-optimizer:*
+                Resource: "*"
+
+Outputs:
+  LambdaName:
+    Description: Lambda Name
+    Value: !Ref ComputeOptimizerDisable
+  ComputeOptimizerCustomResource:
+    Description: Custom Resource that disables Compute Optimizer
+    Value: !Ref ComputeOptimizerDisableExecutor
+  AccountId:
+    Description: AccountId for QA Run
+    Value: !Sub "${AWS::AccountId}"

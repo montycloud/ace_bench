@@ -1,0 +1,129 @@
+{
+  "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__s3soa__20260729_075228",
+  "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+  "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+  "category": "performance_efficiency",
+  "agent": "s3soa",
+  "model": "bedrock/s3soa",
+  "timestamp": "2026-07-29T07:52:28.126186+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "unconfirmed": [
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+    "description": "AWS Compute Optimizer continuously analyzes EC2 and EBS usage patterns and generates rightsizing recommendations \u2014 for example, migrating from an Intel t3.micro to a Graviton-based t4g.micro (same price, better performance) or upgrading an EBS gp2 volume to gp3 (cheaper and faster). When these recommendations sit unactioned for weeks, it represents pure avoidable waste. the agent should surface aged Compute Optimizer recommendations and propose a sequenced action plan prioritized by savings potential and implementation effort.",
+    "objective": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Performance Efficiency | Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-06286d41ae1218d5e",
+      "i-0ee5fa3508cede8a2",
+      "i-0aa58fe2d137a2f9f",
+      "vol-028f30f6b745e2ae5",
+      "vol-03fc1ecf1ea302655",
+      "vol-0497bec1f1285d97f",
+      "vol-05ced2e45c102a69e"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent use get_saving_opportunities or a similar tool to retrieve actual Compute Optimizer recommendations rather than guessing at recommendations?",
+      "Did the agent identify specific EC2 instance IDs and/or EBS volume IDs with rightsizing recommendations, as returned by tool output?",
+      "Did the agent explain the nature of the recommendations (e.g., instance type migration, storage class upgrade) rather than just noting a generic cost gap?",
+      "Did the agent avoid fabricating instance IDs, volume IDs, or recommendation details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Here is the complete, valid JSON output based on all Compute Optimizer findings pulled across all 17 AWS regions:\n\n```json\n{\n  \"summary\": \"AWS Compute Optimizer scan across all 17 active regions for account REDACTED-ACCOUNT identified 8 resources with open recommendations and no remediation record older than 30 days. All findings are in us-east-1. No EC2 instances were flagged OVER_PROVISIONED, UNDER_PROVISIONED, or IDLE by Compute Optimizer \u2014 all 4 instances (worker-01, web-prod-01, api-prod-01, web-prod-02) are classified OPTIMIZED on t3.micro but carry a short 14-day lookback window with no Enhanced Infrastructure Metrics enabled, meaning idle or over-provisioned signals may be suppressed. All 4 associated EBS root volumes are gp2 and have an active Compute Optimizer recommendation to migrate to gp3 with a confirmed 20% cost saving ($0.16/month each, $0.64/month combined) and zero performance risk. No Lambda, ASG, or ECS recommendations exist. The improvement plan sequences actions from zero-risk (EBS gp2\u2192gp3 live modification) through low-risk (enable Enhanced Metrics, extend lookback) to medium-risk (Savings Plans / Reserved Instance purchase or instance-family migration if idle signal confirmed). All EBS changes are online and require no change-window downtime; EC2 instance-level actions should be executed in a scheduled off-peak maintenance window with snapshot backup taken first.\",\n  \"findings\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"resource_type\": \"AWS::EC2::Instance\",\n      \"check\": \"EC2 Instance - OPTIMIZED (14-day lookback only, Enhanced Infrastructure Metrics inactive, no remediation record on file). Low but non-zero idle risk \u2014 max CPU 13.13% over 14 days.\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"instance_name\": \"worker-01\",\n        \"current_type\": \"t3.micro\",\n        \"compute_optimizer_finding\": \"OPTIMIZED\",\n        \"max_cpu_percent\": 13.13,\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-29T00:00:00+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": 1.0,\n        \"migration_effort\": \"VeryLow\",\n        \"instance_state\": \"running\",\n        \"enhanced_infrastructure_metrics\": \"Inactive\",\n        \"external_metrics\": \"NOT_CONFIGURED\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"resource_type\": \"AWS::EC2::Instance\",\n      \"check\": \"EC2 Instance - OPTIMIZED (14-day lookback only, Enhanced Infrastructure Metrics inactive, no remediation record on file). Low but non-zero idle risk \u2014 max CPU 11.20% over 14 days.\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-01\",\n        \"current_type\": \"t3.micro\",\n        \"compute_optimizer_finding\": \"OPTIMIZED\",\n        \"max_cpu_percent\": 11.20,\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-29T00:00:00+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": 1.0,\n        \"migration_effort\": \"VeryLow\",\n        \"instance_state\": \"running\",\n        \"enhanced_infrastructure_metrics\": \"Inactive\",\n        \"external_metrics\": \"NOT_CONFIGURED\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"resource_type\": \"AWS::EC2::Instance\",\n      \"check\": \"EC2 Instance - OPTIMIZED (14-day lookback only, Enhanced Infrastructure Metrics inactive, no remediation record on file). Low but non-zero idle risk \u2014 max CPU 13.28% over 14 days.\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"instance_name\": \"api-prod-01\",\n        \"current_type\": \"t3.micro\",\n        \"compute_optimizer_finding\": \"OPTIMIZED\",\n        \"max_cpu_percent\": 13.28,\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-29T00:00:00+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": 1.0,\n        \"migration_effort\": \"VeryLow\",\n        \"instance_state\": \"running\",\n        \"enhanced_infrastructure_metrics\": \"Inactive\",\n        \"external_metrics\": \"NOT_CONFIGURED\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"resource_type\": \"AWS::EC2::Instance\",\n      \"check\": \"EC2 Instance - OPTIMIZED (14-day lookback only, Enhanced Infrastructure Metrics inactive, no remediation record on file). Low but non-zero idle risk \u2014 max CPU 13.35% over 14 days.\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-02\",\n        \"current_type\": \"t3.micro\",\n        \"compute_optimizer_finding\": \"OPTIMIZED\",\n        \"max_cpu_percent\": 13.35,\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-29T00:00:00+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": 1.0,\n        \"migration_effort\": \"VeryLow\",\n        \"instance_state\": \"running\",\n        \"enhanced_infrastructure_metrics\": \"Inactive\",\n        \"external_metrics\": \"NOT_CONFIGURED\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"resource_type\": \"AWS::EC2::Volume\",\n      \"check\": \"EBS Volume - gp2 with active Compute Optimizer gp3 migration recommendation. 20% cost saving confirmed. No remediation record for >30 days.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"current_volume_type\": \"gp2\",\n        \"recommended_volume_type\": \"gp3\",\n        \"volume_size_gb\": 8,\n        \"compute_optimizer_finding\": \"Optimized\",\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-28T12:14:47+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_percent\": 20.0,\n        \"performance_risk\": 1.0,\n        \"throughput_exceeded_events\": 0,\n        \"iops_exceeded_events\": 0\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"resource_type\": \"AWS::EC2::Volume\",\n      \"check\": \"EBS Volume - gp2 with active Compute Optimizer gp3 migration recommendation. 20% cost saving confirmed. No remediation record for >30 days.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"current_volume_type\": \"gp2\",\n        \"recommended_volume_type\": \"gp3\",\n        \"volume_size_gb\": 8,\n        \"compute_optimizer_finding\": \"Optimized\",\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-28T12:23:37+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_percent\": 20.0,\n        \"performance_risk\": 1.0,\n        \"throughput_exceeded_events\": 0,\n        \"iops_exceeded_events\": 0\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"resource_type\": \"AWS::EC2::Volume\",\n      \"check\": \"EBS Volume - gp2 with active Compute Optimizer gp3 migration recommendation. 20% cost saving confirmed. No remediation record for >30 days. NOTE: VolumeThroughputExceeded=1 detected \u2014 gp3 provides higher baseline throughput (125 MiB/s) which further reduces risk.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"current_volume_type\": \"gp2\",\n        \"recommended_volume_type\": \"gp3\",\n        \"volume_size_gb\": 8,\n        \"compute_optimizer_finding\": \"Optimized\",\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-28T12:21:23+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_percent\": 20.0,\n        \"performance_risk\": 1.0,\n        \"throughput_exceeded_events\": 1,\n        \"iops_exceeded_events\": 0\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"resource_type\": \"AWS::EC2::Volume\",\n      \"check\": \"EBS Volume - gp2 with active Compute Optimizer gp3 migration recommendation. 20% cost saving confirmed. No remediation record for >30 days.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"current_volume_type\": \"gp2\",\n        \"recommended_volume_type\": \"gp3\",\n        \"volume_size_gb\": 8,\n        \"compute_optimizer_finding\": \"Optimized\",\n        \"lookback_days\": 14.0,\n        \"last_refresh\": \"2026-07-28T12:39:51+00:00\",\n        \"no_remediation_record\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_percent\": 20.0,\n        \"performance_risk\": 1.0,\n        \"throughput_exceeded_events\": 0,\n        \"iops_exceeded_events\": 0\n      }\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"action\": \"STEP 1 \u2014 ZERO RISK (online, no downtime): Modify volume from gp2 to gp3. Command: aws ec2 modify-volume --region us-east-1 --volume-id vol-028f30f6b745e2ae5 --volume-type gp3. No instance restart required. AWS performs live migration. Monitor with describe-volumes-modifications until state=completed. Change window: Any time; no maintenance window needed.\",\n      \"priority\": \"P1-High\",\n      \"effort\": \"Very Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"action\": \"STEP 1 \u2014 ZERO RISK (online, no downtime): Modify volume from gp2 to gp3. Command: aws ec2 modify-volume --region us-east-1 --volume-id vol-03fc1ecf1ea302655 --volume-type gp3. No instance restart required. Change window: Any time.\",\n      \"priority\": \"P1-High\",\n      \"effort\": \"Very Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"action\": \"STEP 1 \u2014 ZERO RISK (online, no downtime): Modify volume from gp2 to gp3. This volume had a VolumeThroughputExceeded event \u2014 gp3 delivers higher guaranteed throughput (125 MiB/s vs gp2 burst) reducing future contention. Command: aws ec2 modify-volume --region us-east-1 --volume-id vol-0497bec1f1285d97f --volume-type gp3. Change window: Any time.\",\n      \"priority\": \"P1-High\",\n      \"effort\": \"Very Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"action\": \"STEP 1 \u2014 ZERO RISK (online, no downtime): Modify volume from gp2 to gp3. Command: aws ec2 modify-volume --region us-east-1 --volume-id vol-05ced2e45c102a69e --volume-type gp3. No instance restart required. Change window: Any time.\",\n      \"priority\": \"P1-High\",\n      \"effort\": \"Very Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"action\": \"STEP 2 \u2014 LOW RISK (observability improvement, no change to running instance): Enable Enhanced Infrastructure Metrics in Compute Optimizer (org-level or account-level opt-in) and extend lookback to 93 days. Re-evaluate after 30 days. If instance confirms idle (CPU < 5% sustained), proceed to STEP 3. Change window: Immediate \u2014 configuration change only, no instance impact.\",\n      \"priority\": \"P2-Medium\",\n      \"effort\": \"Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"action\": \"STEP 2 \u2014 LOW RISK (observability improvement): Enable Enhanced Infrastructure Metrics. Extend lookback to 93 days. Re-evaluate after 30 days. If idle signal confirmed, proceed to STEP 3. Change window: Immediate.\",\n      \"priority\": \"P2-Medium\",\n      \"effort\": \"Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"action\": \"STEP 2 \u2014 LOW RISK (observability improvement): Enable Enhanced Infrastructure Metrics. Note: tagged env=production \u2014 confirm with application owner before any instance-level action. Extend lookback to 93 days. Change window: Immediate.\",\n      \"priority\": \"P2-Medium\",\n      \"effort\": \"Low\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"action\": \"STEP 2 \u2014 LOW RISK (observability improvement): Enable Enhanced Infrastructure Metrics. Note: tagged environment=production \u2014 confirm with application owner before any instance-level action. Extend lookback to 93 days. Change window: Immediate.\",\n      \"priority\": \"P2-Medium\",\n      \"effort\": \"Low\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Observations & Notes\n\n| Dimension | Detail |\n|---|---|\n| **Regions scanned** | All 17 active AWS regions |\n| **Resource types scanned** | EC2 Instances, EBS Volumes, Lambda Functions, Auto Scaling Groups |\n| **Total findings** | 8 (4 EC2 instances, 4 EBS volumes) \u2014 all in `us-east-1` |\n| **No remediation record** | Confirmed for all 8 resources (no tag, no event, no CO dismissal on file) |\n| **Total estimated monthly savings** | **$0.64/month** (4\u00d7 EBS gp2\u2192gp3 at $0.16 each) |\n| **OVER_PROVISIONED / UNDER_PROVISIONED / IDLE findings** | **None detected** \u2014 all EC2 instances rated OPTIMIZED by Compute Optimizer |\n| **Key caveat** | Lookback is only **14 days** and **Enhanced Infrastructure Metrics is Inactive** \u2014 idle/over-provisioned signals for burstable t3 instances may be **suppressed**; re-evaluation after enabling 93-day lookback is mandatory before declaring instances truly sized correctly |\n| **Highest-priority action** | EBS gp2\u2192gp3 migration (zero-risk, online, no downtime, immediate) |\n| **Medium-risk action** | Instance-family migration or Savings Plans purchase \u2014 only after 93-day lookback confirms utilization pattern |",
+  "token_usage": {
+    "estimated": 1697,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 127.7,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

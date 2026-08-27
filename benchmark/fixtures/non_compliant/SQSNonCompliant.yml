@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SQS Queue NonCompliance Check
+
+Resources:
+  MyQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: "warf-test-sqs-queue-non-compliant"
+      SqsManagedSseEnabled: False
+  MyQueuePolicy:
+    Type: "AWS::SQS::QueuePolicy"
+    Properties:
+      Queues:
+        - !Ref MyQueue
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "sqs:*"
+            Resource: !GetAtt MyQueue.Arn
+Outputs:
+  MyQueueId:
+    Value: !Ref MyQueue
+  MyQueueArn:
+    Value: !GetAtt [MyQueue, Arn]
+  MyQueueName:
+    Value: !GetAtt [MyQueue, QueueName]
+  MyQueueUrl:
+    Value: !GetAtt [MyQueue, QueueUrl]

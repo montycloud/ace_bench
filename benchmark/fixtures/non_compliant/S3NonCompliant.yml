@@ -1,0 +1,375 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Creates a NC S3 Bucket
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      LocationName: "use1-az4"
+    us-west-2:
+      LocationName: "usw2-az4"
+
+Conditions:
+  IsUSEast1: !Equals [!Ref "AWS::Region", "us-east-1"]
+  IsUSWest2: !Equals [!Ref "AWS::Region", "us-west-2"]
+  IsSupportedRegion: !Or [!Condition IsUSEast1, !Condition IsUSWest2]
+
+Resources:
+  WartestkmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS Key for wartestKinesisStreamNonCompliant
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Id: key-default-1
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: "*"
+            Action: "*"
+            Resource: "*"
+
+  ExpressBucket:
+    Type: AWS::S3Express::DirectoryBucket
+    Condition: IsSupportedRegion
+    Properties:
+      LocationName: !FindInMap
+        - RegionMap
+        - !Ref "AWS::Region"
+        - LocationName
+      DataRedundancy: SingleAvailabilityZone
+  S3Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      # AccelerateConfiguration:
+      #   AccelerationStatus: "Suspended"
+      # AccessControl: "PublicRead"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: "aws:kms"
+              KMSMasterKeyID: !Ref WartestkmsKey
+      # BucketName: !Sub "wartestncs3bucketnc01-${AWS::AccountId}-${AWS::Region}"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      VersioningConfiguration:
+        Status: Suspended
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+  S3Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      # AccelerateConfiguration:
+      #   AccelerationStatus: "Suspended"
+      #AccessControl: "AuthenticatedRead"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: "aws:kms"
+              KMSMasterKeyID: !Ref WartestkmsKey
+      # BucketName: !Sub "wartests3ncbucketnc02-${AWS::AccountId}-${AWS::Region}"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      VersioningConfiguration:
+        Status: Suspended
+
+  S3Bucket3:
+    Type: AWS::S3::Bucket
+    Properties:
+      # AccelerateConfiguration:
+      #   AccelerationStatus: "Suspended"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: "aws:kms"
+              KMSMasterKeyID: !Ref WartestkmsKey
+      BucketName: !Sub "wartestncs3bucketnc03-${AWS::AccountId}-${AWS::Region}"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      VersioningConfiguration:
+        Status: Suspended
+
+  BucketPolicy1:
+    Type: "AWS::S3::BucketPolicy"
+    DependsOn:
+      - "PublicAccessBlockConfiguration1"
+      - "S3BucketACLCustomResource1"
+    Properties:
+      Bucket: !Ref S3Bucket1
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowSSLRequestsOnly
+            Effect: Allow
+            Principal:
+              "*"
+              # AWS:  "*"
+            Action:
+              - s3:*
+            Resource:
+              - !GetAtt "S3Bucket1.Arn"
+              - !Sub "${S3Bucket1.Arn}/*"
+
+  BucketPolicy2:
+    Type: "AWS::S3::BucketPolicy"
+    DependsOn:
+      - "PublicAccessBlockConfiguration1"
+      - "S3BucketACLCustomResource1"
+    Properties:
+      Bucket: !Ref S3Bucket2
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowSSLRequestsOnly # AWS Foundational Security Best Practices v1.0.0 S3.5
+            Effect: Allow
+            Principal:
+              "*"
+              # AWS: "*"
+            Action:
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:PutObject
+              - s3:DeleteObject
+            Resource:
+              - !GetAtt "S3Bucket2.Arn"
+              - !Sub "${S3Bucket2.Arn}/*"
+            Condition:
+              Bool:
+                "aws:SecureTransport": true
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Policies:
+        - PolicyName: "root"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                  - "logs:CreateLogStream"
+                  - "logs:DescribeLogGroups"
+                  - "logs:PutMetricData"
+                  - "logs:CreateLogGroup"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  PublicAccessBlockConfiguration1:
+    Type: AWS::Lambda::Function
+    Properties:
+      Timeout: 120
+      FunctionName: "Public_Access_Block_Configuration"
+      Environment:
+        Variables:
+          Bucket1: !Ref S3Bucket1
+          Bucket2: !Ref S3Bucket2
+          Bucket3: !Ref S3Bucket3
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import cfnresponse
+          def handler(event, context):
+            if event["RequestType"] == "Create":
+              client = boto3.client("s3")
+              try:
+                for bucket_name in [os.environ['Bucket1'], os.environ['Bucket2'], os.environ['Bucket3']]:
+                  client.put_public_access_block(
+                      Bucket=bucket_name,
+                      PublicAccessBlockConfiguration={
+                          'BlockPublicAcls': False,
+                          'IgnorePublicAcls': False,
+                          'BlockPublicPolicy': False,
+                          'RestrictPublicBuckets': False
+                      }
+                  )
+                  print(f"Public access block disabled for {bucket_name}")
+              except Exception as e:
+                  print(f"An error occurred: {e}")
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+              return
+            elif event["RequestType"] in ["Update", "Delete"]:
+              print("Update or delete Create Logic")
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+              return
+      Runtime: python3.11
+      Handler: "index.handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+
+  S3BucketACLCustomResource1:
+    Type: Custom::S3BucketACL
+    Properties:
+      ServiceToken: !GetAtt PublicAccessBlockConfiguration1.Arn
+
+  S3BucketACLLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Timeout: 120
+      FunctionName: "set_acl_policy_on_s3_bucket"
+      Environment:
+        Variables:
+          Bucket1: !Ref S3Bucket1
+          Bucket2: !Ref S3Bucket2
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import cfnresponse
+          def handler(event, context):
+            if event["RequestType"] == "Create":
+              client = boto3.client("s3")
+              bucket1_acl_response = client.get_bucket_acl(Bucket=os.environ['Bucket1'])
+              bucket2_acl_response = client.get_bucket_acl(Bucket=os.environ['Bucket2'])
+
+              bucket1_acl_response = client.get_bucket_acl(Bucket=os.environ['Bucket1'])
+              bucket1_acl_response['Grants'][0]['Permission']= 'FULL_CONTROL'
+              response = client.put_bucket_acl(
+                AccessControlPolicy={
+                    'Grants': bucket1_acl_response['Grants'],
+                    'Owner': bucket1_acl_response['Owner']
+                },
+                Bucket=os.environ['Bucket1']
+              )
+              bucket1_putacl_response = client.put_bucket_acl(ACL='public-read-write', Bucket=os.environ['Bucket1'])
+              bucket2_putacl_response = client.put_bucket_acl(ACL='public-read-write', Bucket=os.environ['Bucket2'])
+
+              bucket2_acl_response = client.get_bucket_acl(Bucket=os.environ['Bucket2'])
+              bucket2_acl_response['Grants'][0]['Permission']= 'FULL_CONTROL'
+              response = client.put_bucket_acl(
+                AccessControlPolicy={
+                    'Grants': bucket2_acl_response['Grants'],
+                    'Owner': bucket2_acl_response['Owner']
+                },
+                Bucket=os.environ['Bucket2']
+              )
+              bucket2_acl_response1 = client.get_bucket_acl(Bucket=os.environ['Bucket2'])
+              # Add a new grant for the 'Authenticated Users' group
+              bucket2_acl_response1['Grants'].append({
+                  'Grantee': {
+                      'Type': 'Group',
+                      'URI': 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+                  },
+                  'Permission': 'READ'
+              })
+
+              response = client.put_bucket_acl(
+                  AccessControlPolicy={
+                      'Grants': bucket2_acl_response1['Grants'],
+                      'Owner': bucket2_acl_response1['Owner']
+                  },
+                  Bucket=os.environ['Bucket2']
+              )
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+              return
+            elif (event["RequestType"] == "Update" or event["RequestType"] == "Delete"):
+              print("Update or delete Create Logic")
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+              return
+      Runtime: python3.11
+      Handler: "index.handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+  S3BucketACLCustomResource:
+    Type: Custom::S3BucketACL
+    Properties:
+      ServiceToken: !GetAtt S3BucketACLLambdaFunction.Arn
+
+  BucketDeletionFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.11
+      Timeout: 300
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          import os
+
+          def delete_bucket_contents(bucket_name):
+              s3 = boto3.resource('s3')
+              bucket = s3.Bucket(bucket_name)
+              bucket.object_versions.delete()
+
+          def handler(event, context):
+              if event['RequestType'] == 'Delete':
+                  s3_client = boto3.client('s3')
+                  try:
+                      for i in range(1, 4):
+                          bucket_name = event['ResourceProperties'][f'Bucket{i}']
+                          delete_bucket_contents(bucket_name)
+                          s3_client.delete_bucket(Bucket=bucket_name)
+                          print(f"Deleted bucket: {bucket_name}")
+                  except Exception as e:
+                      print(f"Error deleting buckets: {str(e)}")
+                      cfnresponse.send(event, context, cfnresponse.FAILED, {})
+                      return
+
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+
+  BucketDeletionTrigger:
+    Type: Custom::BucketDeletion
+    Properties:
+      ServiceToken: !GetAtt BucketDeletionFunction.Arn
+      Bucket1: !Ref S3Bucket1
+      Bucket2: !Ref S3Bucket2
+      Bucket3: !Ref S3Bucket3
+Outputs:
+  ExpressBucketID:
+    Condition: IsSupportedRegion
+    Value: !Ref ExpressBucket
+  S3Bucket1Name:
+    Description: S3 Bucket Name
+    Value: !Ref S3Bucket1
+  S3Bucket2Name:
+    Description: S3 Bucket 2 Name
+    Value: !Ref S3Bucket2
+  S3Bucket1Arn:
+    Description: S3 Bucket 1 ARN
+    Value:
+      Fn::GetAtt: [S3Bucket1, Arn]
+  S3Bucket2Arn:
+    Description: S3 Bucket 2 ARN
+    Value:
+      Fn::GetAtt: [S3Bucket2, Arn]
+  S3Bucket3Arn:
+    Description: S3 Bucket 3 ARN
+    Value:
+      Fn::GetAtt: [S3Bucket3, Arn]

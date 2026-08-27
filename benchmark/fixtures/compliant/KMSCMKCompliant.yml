@@ -1,0 +1,16 @@
+Resources:
+  WartestkmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS Key for wartestKinesisStreamNonCompliant
+      Enabled: true 
+      EnableKeyRotation: true
+
+Outputs:
+  WartestkmsKeyId:
+    Description: WartestkmsKey ID
+    Value:
+      Ref: WartestkmsKey
+  WartestkmsKeyArn:
+    Description: WartestkmsKey Arn
+    Value: !GetAtt WartestkmsKey.Arn

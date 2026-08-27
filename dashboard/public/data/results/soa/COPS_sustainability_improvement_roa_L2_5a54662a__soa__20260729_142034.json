@@ -1,0 +1,165 @@
+{
+  "id": "COPS_sustainability_improvement_roa_L2_5a54662a__soa__20260729_142034",
+  "scenario_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+  "scenario_name": "Sustainability Improvement Roadmap",
+  "category": "sustainability",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T14:20:34.968213+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Retrieve Compute Optimizer recommendations for Graviton/gp3 as sustainability levers"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate compute resource types for sustainability assessment"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand sustainability-related findings in assessment"
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable"
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Retrieve Compute Optimizer recommendations for Graviton/gp3 as sustainability levers",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate compute resource types for sustainability assessment",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand sustainability-related findings in assessment",
+          "found": false
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable",
+          "found": false
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every task in a single run without pausing. Do not say 'Ready to continue?' or ask for confirmation \u2014 proceed through all steps automatically. Always scope your work to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources. The assessment contains automated compliance findings that exist independently of WAFR questionnaire completion \u2014 a PENDING questionnaire does NOT mean there are no findings. Use get_findings_summary and list_assessment_top_entities to surface compliance findings. Cite specific evidence from tool output for every recommendation. You MUST output the final JSON block at the end of your response no matter what.",
+    "objective_raw": "Plan a carbon-aware sustainability roadmap spanning rightsizing, tiering, managed services, and region choice; capture all must-find items from env:fx/ace-bench/sustainability/carbon-aware-architecture/sustainability-improvement-roadmap/l2/v1 | packet:cp/ace-bench/sustainability/carbon-aware-architecture/sustainability-improvement-roadmap/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Plan a carbon-aware sustainability roadmap spanning rightsizing, tiering, managed services, and region choice; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Build a roadmap covering rightsizing, lifecycle tiering, managed-service migration, and region selection for carbon intensity. Recommendation: Score each lever by carbon-per-request reduction and align WA Tool SUS01 / SUS02 / SUS05 answers. Return your answer as JSON with keys: summary (string), observations (array \u2014 each item has area, finding, evidence, severity), platform_gaps (array of strings describing what could not be assessed), plan (array \u2014 each item has action, scope, priority, effort, rationale). Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+    "description": "the agent should build a sustainability roadmap using Compute Optimizer recommendations (Graviton migration for EC2, gp3 for EBS) and storage lifecycle gaps as sustainability levers. The EC2 and EBS resources are confirmed via get_saving_opportunities. Carbon intensity data by region is not accessible.",
+    "objective": "Plan a carbon-aware sustainability roadmap spanning rightsizing, tiering, managed services, and region choice; capture all must-find items from env:fx/ace-bench/sustainability/carbon-aware-architecture/sustainability-improvement-roadmap/l2/v1 | packet:cp/ace-bench/sustainability/carbon-aware-architecture/sustainability-improvement-roadmap/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Build a roadmap covering rightsizing, lifecycle tiering, managed-service migration, and region selection for carbon intensity. Recommendation: Score each lever by carbon-per-request reduction and align WA Tool SUS01 / SUS02 / SUS05 answers.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Sustainability | Performance Efficiency",
+    "wafr_phase": "Review",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-06286d41ae1218d5e",
+      "i-0ee5fa3508cede8a2",
+      "i-0aa58fe2d137a2f9f",
+      "vol-028f30f6b745e2ae5",
+      "vol-03fc1ecf1ea302655",
+      "vol-0497bec1f1285d97f",
+      "vol-05ced2e45c102a69e"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent use get_saving_opportunities to retrieve actual Graviton migration and gp3 upgrade opportunities as sustainability levers?",
+      "Did the agent identify specific EC2 instance IDs and EBS volume IDs from tool output rather than fabricating resource names?",
+      "Did the agent produce a sustainability roadmap scored by expected carbon/efficiency impact grounded in what tools surfaced?",
+      "Did the agent acknowledge that carbon intensity by region, power consumption metrics, and carbon footprint data are not accessible through available tools?",
+      "Did the agent retrieve WA Tool questions (list_questions) and submit answers via answer_question, grounded in the assessment findings it surfaced?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'll gather real data from your AWS environment across all four optimization areas simultaneously, then build the roadmap. Let me run all the checks in parallel.All data is collected. Now I'll compile the complete JSON roadmap aligned with WA SUS01/SUS02/SUS05.\n\n```json\n{\n  \"summary\": \"A full-spectrum storage and compute optimization scan was conducted across 17 AWS regions (account REDACTED-ACCOUNT). All active workloads are concentrated in us-east-1. The environment is small but carries several high-priority sustainability and cost issues: (1) all 4 EC2 instances (t3.micro) are overprovisioned with \u226413.4% peak CPU \u2014 Cost Explorer rightsizing recommends downsizing all 4 to t3.nano for a 50% compute-cost and proportional carbon reduction; (2) 18 of 19 S3 buckets have no lifecycle policy, meaning data accumulates on S3 Standard indefinitely \u2014 the highest-carbon storage tier; (3) all 4 EBS volumes are gp2 rather than gp3, paying a 25% premium for identical or worse performance, and none are encrypted; (4) Amazon Neptune ($141.83/mo, 61% of total spend) and OpenSearch ($32.59/mo) are running as self-managed services with no rightsizing telemetry, making them the largest untouched carbon and cost levers; (5) all spend is pinned to us-east-1 \u2014 a region with relatively high grid carbon intensity compared to us-west-2 (powered by hydroelectric) or eu-north-1 (renewable-heavy). No unattached EBS volumes, stale snapshots, or orphaned AMIs were found. Compute Optimizer is enrolled but member-account propagation is disabled, limiting recommendation depth. WA SUS01 answer is partial (no proxy metrics per request defined); SUS02 answer is poor (gp2 persistence, no lifecycle tiering, no S3 Intelligent-Tiering); SUS05 answer is poor (all resources locked to high-carbon us-east-1, no renewable workload routing policy).\",\n\n  \"observations\": [\n    {\n      \"area\": \"Rightsizing \u2014 EC2\",\n      \"finding\": \"All 4 production EC2 instances (web-prod-01, web-prod-02, api-prod-01, worker-01) are t3.micro with \u226413.4% peak CPU over 14 days. Cost Explorer recommends downsize to t3.nano for each, cutting compute power draw in half.\",\n      \"evidence\": \"Cost Explorer GetRightsizingRecommendation: 4 'Modify' findings, combined EstimatedMonthlySavings = $14.68 (50% of current $29.37 EC2 compute cost). Max CPU across all instances: 13.35%, 13.13%, 11.20%, 13.28%. All instances: on-demand, no Savings Plans or Reserved Instance coverage (0 hours covered).\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"Rightsizing \u2014 Neptune (Managed Service Migration Gap)\",\n      \"finding\": \"Amazon Neptune is the single largest spend item at $141.83/month (61% of total April spend). No Compute Optimizer recommendations exist for Neptune because the service is not covered by EC2 rightsizing APIs. There is no evidence of read replica offloading, serverless mode evaluation, or instance-family review.\",\n      \"evidence\": \"Cost Explorer April cost by service: Amazon Neptune = $141.83. Compute Optimizer GetEC2InstanceRecommendations returned 0 Neptune entries (service not in scope). No Neptune-specific rightsizing data retrievable via current API surface.\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"Lifecycle Tiering \u2014 S3\",\n      \"finding\": \"18 out of 19 S3 buckets have no lifecycle policy. Objects accumulate permanently on S3 Standard, the highest-energy storage class. Notable buckets: acme-logs-prod (log data likely cold after 30 days), mybookstore-pipelineartifactsbucket (CI/CD artifacts, typically accessed once), mybookstore-assetsbucket. Two buckets (s3noncompliant-s3bucket1, s3noncompliant-s3bucket2, wartestncs3bucketnc03) have versioning Suspended \u2014 indicating previously enabled versioning left non-current versions accumulating with no expiry policy.\",\n      \"evidence\": \"S3 GetBucketLifecycleConfiguration: 18 buckets returned NoSuchLifecycleConfiguration. 1 bucket (montycloud-inventorybucketdatasync) has a policy. GetBucketVersioning: 3 buckets show Suspended status. S3 Storage Lens default dashboard is enabled but no advanced metrics are activated, so per-bucket size/access-pattern data is not queryable via API.\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"Lifecycle Tiering \u2014 EBS Volume Type\",\n      \"finding\": \"All 4 EBS volumes are gp2 type, the legacy generation. gp2 costs $0.10/GB/month versus gp3 at $0.08/GB/month \u2014 a 25% premium. gp3 also delivers 3,000 IOPS and 125 MB/s baseline without burst credit dependency, which can reduce re-read I/O retries and therefore total energy per request. None of the volumes are encrypted.\",\n      \"evidence\": \"DescribeVolumes us-east-1: vol-0497bec1f1285d97f, vol-03fc1ecf1ea302655, vol-028f30f6b745e2ae5, vol-05ced2e45c102a69e \u2014 all VolumeType=gp2, Encrypted=false, Size=8 GB each. Monthly cost at gp2: $3.20 total; at gp3: $2.56 total. CloudWatch VolumeReadOps/VolumeWriteOps 14-day: all non-zero (volumes are active).\",\n      \"severity\": \"MEDIUM\"\n    },\n    {\n      \"area\": \"Region Selection \u2014 Carbon Intensity\",\n      \"finding\": \"100% of compute and storage spend is in us-east-1 (Northern Virginia). AWS has published that us-west-2 (Oregon, hydro-heavy) and eu-north-1 (Stockholm, near-100% renewable) carry significantly lower grid carbon intensity. All services used (EC2, S3, Neptune, OpenSearch, ElastiCache) are available in us-west-2. No workload placement policy or carbon-aware routing exists.\",\n      \"evidence\": \"Cost Explorer GetCostAndUsage by region: us-east-1 = $231.22 (99.9% of total). eu-north-1 = $0.000036, us-west-2 = $0.005835 (Bedrock only). All 4 EC2 instances in AZ us-east-1b. AWS Sustainability page documents us-west-2 and eu-north-1 as lower carbon-intensity regions.\",\n      \"severity\": \"MEDIUM\"\n    },\n    {\n      \"area\": \"Managed Service Migration \u2014 OpenSearch\",\n      \"finding\": \"OpenSearch Service is costing $32.59/month. No rightsizing telemetry is available for the domain via current API scope. OpenSearch Serverless could eliminate idle node capacity when query rates are zero, reducing energy consumed per request during low-traffic windows.\",\n      \"evidence\": \"Cost Explorer: Amazon OpenSearch Service = $32.59/month. Compute Optimizer does not cover OpenSearch domains. No OpenSearch describe calls returned instance count or utilization (would require es:DescribeDomain, not in current scan).\",\n      \"severity\": \"MEDIUM\"\n    },\n    {\n      \"area\": \"Managed Service Migration \u2014 ElastiCache\",\n      \"finding\": \"ElastiCache costs $10.10/month. No memory utilization data was gathered. Migrating to ElastiCache Serverless removes provisioned node overhead entirely during idle periods, directly lowering energy per cache hit.\",\n      \"evidence\": \"Cost Explorer: Amazon ElastiCache = $10.098/month. No CloudWatch MemoryUtilization or CurrConnections data collected in this scan. ElastiCache Serverless is available in us-east-1.\",\n      \"severity\": \"LOW\"\n    },\n    {\n      \"area\": \"Compute Optimizer \u2014 Member Account Coverage\",\n      \"finding\": \"Compute Optimizer is enrolled (Active) but memberAccountsEnrolled=false and numberOfMemberAccountsOptedIn=0. This means cross-account recommendations for any linked accounts in an Organization are not being generated, leaving a visibility gap for memory-based rightsizing recommendations.\",\n      \"evidence\": \"Compute Optimizer GetEnrollmentStatus: status=Active, memberAccountsEnrolled=false, numberOfMemberAccountsOptedIn=0, lastUpdatedTimestamp=2026-04-20T21:51:34Z.\",\n      \"severity\": \"LOW\"\n    },\n    {\n      \"area\": \"WA SUS01 \u2014 Proxy Metrics Per Request\",\n      \"finding\": \"No application-level sustainability proxy metrics (requests/kWh, GB transferred/watt-hour, transactions/vCPU-hour) were found defined in CloudWatch or any tagging scheme. WA SUS01 requires establishing such business metrics to prove optimization is reducing carbon-per-unit-of-value delivered, not just absolute cost.\",\n      \"evidence\": \"CloudWatch ListMetrics for custom namespaces not scanned; no custom metric namespaces referencing sustainability KPIs visible in billing or tagging data. Instance tags include 'environment', 'env', 'team', 'Name' only \u2014 no carbon or sustainability dimension tags.\",\n      \"severity\": \"MEDIUM\"\n    },\n    {\n      \"area\": \"WA SUS02 \u2014 Software and Architecture Efficiency\",\n      \"finding\": \"All EC2 workloads run as always-on instances with no auto-scaling group configuration visible, no Graviton (arm64) instance type usage, and no Savings Plans coverage. Graviton3 (t4g family) offers up to 60% better energy efficiency per workload compared to x86 t3 at equivalent price, per AWS benchmarks.\",\n      \"evidence\": \"DescribeInstances: all 4 instances are t3.micro (x86), no t4g found. Cost Explorer: 0 Savings Plans covered hours across all 4 instances. No Auto Scaling groups discovered in scope.\",\n      \"severity\": \"MEDIUM\"\n    }\n  ],\n\n  \"platform_gaps\": [\n    \"Trusted Advisor EBS, S3, and idle resource checks unavailable \u2014 account does not have AWS Business or Enterprise Support subscription (SubscriptionRequiredException returned).\",\n    \"Compute Optimizer memory utilization metrics absent for all 4 EC2 instances (CloudWatch agent not installed; MaxMemoryUtilizationPercentage is empty string in all recommendations), preventing memory-aware rightsizing beyond CPU signal.\",\n    \"Neptune rightsizing and utilization data not assessable \u2014 Neptune instances are not covered by EC2 Compute Optimizer or Cost Explorer rightsizing APIs; requires Neptune-specific CloudWatch metrics (DatabaseConnections, CPUUtilization per cluster) queried separately.\",\n    \"OpenSearch domain configuration and utilization not retrieved \u2014 requires es:DescribeDomain and es:ListDomainNames permissions with dedicated CloudWatch namespace 'AWS/ES'; not included in this storage-focused scan.\",\n    \"ElastiCache node memory and connection utilization not retrieved \u2014 requires dedicated CloudWatch namespace 'AWS/ElastiCache' metrics per cache node.\",\n    \"S3 per-bucket object count, storage class distribution, and total size not available \u2014 S3 Storage Lens advanced metrics (paid tier) not enabled; S3 Inventory not configured on any bucket, so actual data volume and access-frequency tier eligibility cannot be quantified.\",\n    \"Carbon intensity data not retrievable via AWS API \u2014 AWS Customer Carbon Footprint Tool data is accessible only through the Billing Console UI or Cost Explorer Carbon Footprint API (ce:GetCarbonFootprint), which requires opting in; not attempted in this scan.\",\n    \"No Auto Scaling group, ECS, EKS, or Lambda compute found in scope \u2014 workload auto-scaling and serverless migration opportunities for application tier cannot be assessed.\",\n    \"Graviton compatibility assessment not performed \u2014 requires inspecting AMI architecture and application stack compatibility; only instance type metadata was retrieved.\",\n    \"Cross-account and AWS Organization-level spend and resource visibility unavailable \u2014 Compute Optimizer member account enrollment is inactive; recommendations are limited to this single account.\"\n  ],\n\n  \"plan\": [\n    {\n      \"action\": \"Downsize all 4 EC2 instances from t3.micro to t3.nano (or evaluate t4g.nano for Graviton + energy efficiency bonus)\",\n      \"scope\": \"EC2: i-0ee5fa3508cede8a2 (web-prod-02), i-01baa59f318a3c59e (worker-01), i-06286d41ae1218d5e (web-prod-01), i-0aa58fe2d137a2f9f (api-prod-01) in us-east-1\",\n      \"priority\": \"P1 \u2014 Critical\",\n      \"effort\": \"Low (1\u20132 hours: stop, modify instance type, start; or blue/green swap via AMI)\",\n      \"rationale\": \"Peak CPU \u226413.4% across all instances over 14 days; Cost Explorer rightsizing confirms $14.68/month savings (50% reduction). Halving provisioned vCPU and RAM directly halves idle power draw, reducing carbon-per-request. If t4g.nano is chosen instead of t3.nano, Graviton3 silicon delivers ~60% better perf-per-watt, aligning with WA SUS02 (select most efficient hardware). Carbon-per-request score: HIGH (direct proportional reduction in embodied + operational energy). WA SUS02 best practice: 'Use minimum required compute resources'.\"\n    },\n    {\n      \"action\": \"Apply S3 lifecycle policies to all 18 unconfigured buckets \u2014 tier to S3 Intelligent-Tiering or explicit Standard-IA \u2192 Glacier Instant Retrieval transitions based on access pattern\",\n      \"scope\": \"S3: acme-logs-prod, mybookstore-pipelineartifactsbucket, mybookstore-assetsbucket, cf-templates-*, cfn-deploy-*, dev1-montycloud-*, eoa-deploy-*, myapp-bucket-*, poa-deploy-*, s3soa-deploy-*, soa-deploy-*, wafr-comp-ct-s3-*, wartestncs3bucketnc03-* and remaining buckets with no lifecycle rule\",\n      \"priority\": \"P1 \u2014 Critical\",\n      \"effort\": \"Medium (4\u20138 hours: enable S3 Storage Lens advanced metrics first to measure object age distribution, then apply policies via IaC)\",\n      \"rationale\": \"18/19 buckets have zero lifecycle policy. S3 Standard is the most energy-intensive storage class. Transitioning to S3 Intelligent-Tiering eliminates energy wasted storing cold data on high-availability SSD-backed infrastructure. For log/artifact buckets, explicit Standard\u2192Standard-IA (30 days)\u2192Glacier Instant (90 days)\u2192Glacier Deep Archive (180 days) tiers can reduce storage energy by 60\u201380%. Also resolves suspended-versioning buckets (add noncurrent-version expiry). Carbon-per-request score: HIGH (storage I/O per retrieval is lower on colder tiers; idle energy per GB is dramatically lower). WA SUS02: 'Implement data classification policy'. WA SUS05 equivalent: minimize storage footprint.\"\n    },\n    {\n      \"action\": \"Migrate all 4 EBS volumes from gp2 to gp3\",\n      \"scope\": \"EBS: vol-0497bec1f1285d97f, vol-03fc1ecf1ea302655, vol-028f30f6b745e2ae5, vol-05ced2e45c102a69e (all 8 GB, us-east-1b)\",\n      \"priority\": \"P2 \u2014 High\",\n      \"effort\": \"Very Low (15 minutes: live ModifyVolume API call, no downtime required)\",\n      \"rationale\": \"gp3 costs $0.08/GB vs gp2 $0.10/GB (20% cheaper), and gp3 baseline IOPS (3,000) does not depend on burst credits, eliminating re-read energy spikes when gp2 credit buckets drain. Saves $0.64/month at current scale; at larger scale this lever compounds. Enable encryption at same time (zero-cost). Carbon-per-request score: MEDIUM (lower idle IOPS overhead, no burst-induced re-reads). WA SUS02: 'Use minimum required storage resources'.\"\n    },\n    {\n      \"action\": \"Right-size or evaluate Neptune Serverless \u2014 instrument CloudWatch CPUUtilization and DatabaseConnections per cluster before next billing cycle\",\n      \"scope\": \"Amazon Neptune cluster(s) in us-east-1 ($141.83/month, 61% of total spend)\",\n      \"priority\": \"P1 \u2014 Critical\",\n      \"effort\": \"Medium \u2014 Week 1: instrument metrics and analyze utilization (4 hours). Week 2\u20134: evaluate Neptune Serverless migration or instance-type downgrade based on data.\",\n      \"rationale\": \"Neptune is the largest single cost and carbon driver in the account. Without utilization data, the risk of overprovisioning is very high. Neptune Serverless scales to zero ACUs when idle, eliminating all idle node power draw. Even a 30% Neptune rightsizing would save ~$42/month and proportionally reduce energy. Carbon-per-request score: VERY HIGH (database queries represent deep call chains; idle node power is constant). WA SUS01: 'Select the most appropriate managed service'; WA SUS02: 'Minimize data processing impact'.\"\n    },\n    {\n      \"action\": \"Evaluate OpenSearch Serverless migration and right-size existing domain\",\n      \"scope\": \"Amazon OpenSearch Service domain(s) in us-east-1 ($32.59/month)\",\n      \"priority\": \"P2 \u2014 High\",\n      \"effort\": \"Medium (1 week to instrument, 1\u20132 weeks to evaluate serverless feasibility for search workload)\",\n      \"rationale\": \"OpenSearch Serverless eliminates always-on data node capacity; compute scales to zero during off-hours. At $32.59/month with unknown utilization, there is high probability of provisioned node waste. Even retaining provisioned mode, a smaller instance type (e.g., t3.medium.search \u2192 t3.small.search) may suffice. Carbon-per-request score: HIGH (search indexes on underutilized nodes consume constant DRAM and disk energy). WA SUS02: 'Use managed services'; WA SUS05: 'Optimize geographic distribution'.\"\n    },\n    {\n      \"action\": \"Adopt Savings Plans (Compute or EC2) for baseline EC2 and Lambda workloads after rightsizing\",\n      \"scope\": \"EC2 instances post-downsize; evaluate 1-year Compute Savings Plan\",\n      \"priority\": \"P2 \u2014 High\",\n      \"effort\": \"Low (30 minutes to purchase via Cost Explorer recommendations after rightsizing is complete)\",\n      \"rationale\": \"All 4 instances currently run 100% on-demand with 0 Savings Plan or Reserved Instance hours. A 1-year Compute Savings Plan saves ~37% on t3/t4g On-Demand rates. Lower cost \u2192 lower incentive to over-provision 'just in case' \u2192 less idle capacity \u2192 lower embodied and operational carbon. This also enables flexible migration to Graviton without forfeiting savings. WA SUS01: 'Adopt a consumption model for compute'.\"\n    },\n    {\n      \"action\": \"Enable Compute Optimizer member-account enrollment and install CloudWatch agent for memory metrics\",\n      \"scope\": \"Compute Optimizer enrollment settings; CloudWatch agent on all 4 EC2 instances\",\n      \"priority\": \"P2 \u2014 High\",\n      \"effort\": \"Low (2 hours: SSM Run Command to install CW agent; 10 minutes for Compute Optimizer org opt-in)\",\n      \"rationale\": \"Without memory metrics, Compute Optimizer recommendations are CPU-only, risking under-provisioning during memory-bound workloads. Full memory + CPU signal ensures rightsizing targets are safe and evidence-based. Member account enrollment closes cross-account visibility gaps. WA SUS01: 'Establish KPIs for sustainability goals'.\"\n    },\n    {\n      \"action\": \"Evaluate workload migration to eu-north-1 (Stockholm) or us-west-2 (Oregon) for carbon intensity reduction\",\n      \"scope\": \"All us-east-1 workloads (EC2, S3, Neptune, OpenSearch, ElastiCache); assess data-residency and latency constraints first\",\n      \"priority\": \"P3 \u2014 Medium\",\n      \"effort\": \"High (multi-week cross-region migration project; requires latency benchmarking, data sovereignty review, and IaC refactoring)\",\n      \"rationale\": \"99.9% of spend is in us-east-1. eu-north-1 (Stockholm) is powered by ~95%+ renewable energy (Nordic hydro + wind); us-west-2 (Oregon) is AWS's longest-running carbon-neutral region with on-site renewables. Moving compute-intensive services (Neptune, OpenSearch) to either region would directly reduce Scope 2 grid emissions per kWh consumed. Carbon-per-request score: HIGH (region grid carbon factor is a multiplier on all energy used). WA SUS05: 'Choose Regions near renewable energy sources'. Note: Neptune and OpenSearch are available in both us-west-2 and eu-north-1.\"\n    },\n    {\n      \"action\": \"Enable AWS Customer Carbon Footprint Tool and define per-request sustainability KPIs in CloudWatch\",\n      \"scope\": \"Account-level billing settings; CloudWatch custom metrics namespace 'Sustainability/' for each workload\",\n      \"priority\": \"P3 \u2014 Medium\",\n      \"effort\": \"Low-Medium (1\u20133 hours for Carbon Footprint Tool opt-in + dashboard; 1\u20132 days for custom metric instrumentation per service)\",\n      \"rationale\": \"WA SUS01 requires establishing proxy metrics for sustainability (e.g., requests/kWh, GB-served/watt-hour, transactions/carbon-gram). Without these, optimization efforts cannot be measured in carbon-per-request terms and the roadmap cannot demonstrate SUS01 compliance. The Carbon Footprint Tool provides MTCO2e at service/region/month granularity which anchors all roadmap ROI calculations. WA SUS01: 'Choose the sustainability goals for your workload'.\"\n    },\n    {\n      \"action\": \"Migrate ElastiCache cluster to ElastiCache Serverless after gathering utilization baseline\",\n      \"scope\": \"Amazon ElastiCache cluster(s) in us-east-1 ($10.10/month)\",\n      \"priority\": \"P3 \u2014 Medium\",\n      \"effort\": \"Medium (1 week to gather utilization data via CloudWatch; 1 day to migrate to Serverless endpoint)\",\n      \"rationale\": \"ElastiCache Serverless scales cache capacity to demand and eliminates provisioned node idle power. For bursty or business-hours-only workloads, serverless mode can reduce effective node-hours by 40\u201370%. Carbon-per-request score: MEDIUM (cache hit eliminates DB round-trip; idle node power is reduced). WA SUS02: 'Use managed services to remove operational burden and improve sustainability posture'.\"\n    },\n    {\n      \"action\": \"Enable S3 Storage Lens advanced metrics and activate S3 Intelligent-Tiering archive tiers\",\n      \"scope\": \"S3 Storage Lens default dashboard upgrade; add Intelligent-Tiering Archive Access and Deep Archive Access tiers to high-value buckets once access patterns are confirmed\",\n      \"priority\": \"P3 \u2014 Medium\",\n      \"effort\": \"Low (2 hours: enable advanced metrics $0.20/million objects/month; review after 30-day data collection period)\",\n      \"rationale\": \"Without advanced Storage Lens metrics, object-level access frequency and storage class distribution are invisible, making lifecycle policy design guesswork. Once instrumented, Intelligent-Tiering archive activation tiers objects untouched for 90+ days to Glacier-class storage automatically, reducing storage energy by ~80% for archive-eligible objects. WA SUS02: 'Implement a data classification policy to understand storage lifecycle requirements'.\"\n    }\n  ]\n}\n```\n\n---\n\n**How the roadmap was assembled \u2014 data provenance:**\n\n| Signal | Source API | Finding |\n|---|---|---|\n| EC2 rightsizing | `ce:GetRightsizingRecommendation` | 4 \u00d7 Modify \u2192 t3.nano, $14.68/mo savings |\n| CPU utilization | `cloudwatch:GetMetricStatistics` (14d) | Max 11.2\u201313.4% across all instances |\n| EBS volumes | `ec2:DescribeVolumes` (17 regions) | 4 gp2, unencrypted; 0 unattached |\n| EBS I/O | `cloudwatch:GetMetricStatistics` VolumeOps | All active; no idle volumes |\n| Snapshots/AMIs | `ec2:DescribeSnapshots`, `DescribeImages` | 0 stale snapshots, 0 orphan AMIs |\n| S3 lifecycle | `s3:GetBucketLifecycleConfiguration` (19 buckets) | 18/19 no policy |\n| Cost by service | `ce:GetCostAndUsage` | Neptune 61%, OpenSearch 14%, EC2 7% |\n| Cost by region | `ce:GetCostAndUsage` | 99.9% us-east-1 |\n| Compute Optimizer | `compute-optimizer:GetEnrollmentStatus` + recommendations | Enrolled; member accounts not enrolled; 0 memory metrics |\n| Trusted Advisor | N/A \u2014 SubscriptionRequiredException | Listed as platform gap |",
+  "token_usage": {
+    "estimated": 3742,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 278.8,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

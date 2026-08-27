@@ -1,0 +1,113 @@
+{
+  "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__s3soa__20260729_070420",
+  "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+  "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+  "category": "security",
+  "agent": "s3soa",
+  "model": "bedrock/s3soa",
+  "timestamp": "2026-07-29T07:04:20.366626+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources by findings count \u2014 IAM privilege checks surface here"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status to understand scope of IAM privilege violations"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources by findings count \u2014 IAM privilege checks surface here",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status to understand scope of IAM privilege violations",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NCLambda-adminRole-us-east-1"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "NCLambda-adminRole-us-east-1"
+      ],
+      "unconfirmed": [
+        "arn:aws:iam::aws:policy/AdministratorAccess",
+        "arn:aws:iam::REDACTED-ACCOUNT:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items from env:fx/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/l1/v1 | packet:cp/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List every IAM policy (managed or inline) whose statements include Action=\"*\" with Resource=\"*\" and a non-restricted Principal; include role name, policy ARN, and the attached principals. Recommendation: Flag each as immediate least-privilege violation and reference the workload(s) that should drive the scoped replacement policy. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+    "description": "IAM roles define what actions AWS services and code can perform. A role with Action:* (wildcard) in its policy grants unlimited permissions \u2014 any code running under that role can create, delete, or modify anything in the account. The principle of least privilege requires granting only the specific permissions needed, nothing more. Wildcard policies are a critical misconfiguration that turns a compromised Lambda function or EC2 instance into a full account takeover. the agent should identify IAM roles or policies with overly broad wildcard action grants.",
+    "objective": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items from env:fx/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/l1/v1 | packet:cp/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List every IAM policy (managed or inline) whose statements include Action=\"*\" with Resource=\"*\" and a non-restricted Principal; include role name, policy ARN, and the attached principals. Recommendation: Flag each as immediate least-privilege violation and reference the workload(s) that should drive the scoped replacement policy.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "NCLambda-adminRole-us-east-1"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is IAM roles or policies with wildcard actions (Action:* or overly broad permissions) violating least privilege?",
+      "Did the agent identify specific IAM role or policy names \u2014 or, if tools could not surface role names, explicitly acknowledge that rather than fabricating names?",
+      "Did the agent avoid fabricating IAM role names, policy ARNs, or permission details not verifiable from tool output?",
+      "Did the agent recommend scoping down permissions to least privilege (specifying exact actions and resources needed rather than wildcards)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Good \u2014 the listing phase succeeded. Now I have the roles with inline policies identified. Let me proceed with fetching the inline policy documents and all managed policy versions in a tightly scoped second pass.The ListRolePolicies calls are consuming all 100 API slots before I can even get to GetRolePolicy. I need to restructure into 3 tightly-targeted scripts: (1) managed policies only, (2) inline role policies only for roles that have them, (3) inline user/group policies. Let me use the data already collected about which roles have inline policies.Interesting \u2014 the `ListPolicies` returned both lists, but `GetPolicyVersion` for each was not called individually because `asyncio.gather` with the script apparently skipped the per-policy checks. Let me verify the actual managed policy documents were fetched.Managed policies done. Now let me check inline policies for roles \u2014 I'll use `GenerateServiceLastAccessedDetails` approach isn't needed; instead I'll get the roles list with their details and only fetch inline policy documents for roles that have them.Excellent! Now let me check inline policies on Users and Groups.All data is collected. Now I have the complete picture across all 3 surfaces. Let me compile the full JSON output.\n\n```json\n{\n  \"summary\": \"Full IAM scan completed across 60 managed policies (11 customer-managed, 49 attached AWS-managed), 96 IAM roles (58 inline policies checked), 0 IAM users, and 0 IAM groups. Two least-privilege violations were found \u2014 both granting unrestricted Action='*' with Resource='*' and no Condition clause. (1) The AWS-managed 'AdministratorAccess' policy (arn:aws:iam::aws:policy/AdministratorAccess) is attached to 9 roles, several of which appear to be Lambda execution roles and SSO-vended admin roles, indicating over-privileged workload identities. (2) An inline policy 'testmgrsetExecutionRolePolicy' on role 'AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole' grants full wildcard access and is assumed by both the SSM service and a cross-account SSM change-manager admin role. Both findings represent CRITICAL least-privilege violations per AWS IAM best practices and the AWS Well-Architected Security Pillar (SEC03-BP02).\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess\",\n      \"resource_type\": \"AWS Managed Policy\",\n      \"check\": \"Policy statement contains Effect=Allow, Action='*', Resource='*' with no Condition \u2014 grants unrestricted access to every AWS API across all resources\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"policy_name\": \"AdministratorAccess\",\n        \"policy_arn\": \"arn:aws:iam::aws:policy/AdministratorAccess\",\n        \"policy_scope\": \"AWS Managed\",\n        \"offending_statement\": {\n          \"Effect\": \"Allow\",\n          \"Action\": \"*\",\n          \"Resource\": \"*\"\n        },\n        \"attached_users\": [],\n        \"attached_groups\": [],\n        \"attached_roles\": [\n          \"AWSReservedSSO_AdministratorAccess_8a5b1eee827ceb6a\",\n          \"s3soa-lambda-role\",\n          \"poa-lambda-role\",\n          \"eoa-lambda-role\",\n          \"stacksets-exec-efe5bc55ed43e622afe427d1a7a96c79\",\n          \"OrganizationAccountAccessRole\",\n          \"AWSReservedSSO_CloudOpsAdminAccess_4ede9f265a0c77d1\",\n          \"MontyCloud-AdminRole-dev1\",\n          \"soa-lambda-role\"\n        ],\n        \"total_attached_principals\": 9,\n        \"notable_workload_roles\": [\n          \"s3soa-lambda-role \u2014 Lambda execution role; should be scoped to s3:Get*/s3:Put* on specific buckets only\",\n          \"poa-lambda-role  \u2014 Lambda execution role; should be scoped to the specific services its workload invokes\",\n          \"eoa-lambda-role  \u2014 Lambda execution role; same \u2014 workload-driven scoped policy required\",\n          \"soa-lambda-role  \u2014 Lambda execution role; same \u2014 workload-driven scoped policy required\",\n          \"MontyCloud-AdminRole-dev1 \u2014 Third-party/tool integration role; should use a customer-managed policy limited to required APIs\"\n        ]\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::REDACTED-ACCOUNT:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole\",\n      \"resource_type\": \"IAM Role \u2014 Inline Policy\",\n      \"check\": \"Inline policy 'testmgrsetExecutionRolePolicy' contains Effect=Allow, Action='*', Resource='*' with no Condition \u2014 grants unrestricted access to every AWS API across all resources\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"role_name\": \"AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole\",\n        \"role_arn\": \"arn:aws:iam::REDACTED-ACCOUNT:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole\",\n        \"inline_policy_name\": \"testmgrsetExecutionRolePolicy\",\n        \"offending_statement\": {\n          \"Effect\": \"Allow\",\n          \"Action\": \"*\",\n          \"Resource\": \"*\"\n        },\n        \"trust_principals\": [\n          \"ssm.amazonaws.com\",\n          \"arn:aws:iam::257105873514:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetAdminRole\"\n        ],\n        \"workload_context\": \"AWS Systems Manager Quick Setup \u2014 Change Manager invocation role. SSM Change Manager invocation roles require only ssm:StartAutomationExecution, ssm:GetAutomationExecution, and iam:PassRole on specific automation documents and target resources \u2014 not full administrative access.\"\n      }\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 s3soa-lambda-role\",\n      \"action\": \"1) Audit Lambda function 's3soa-lambda-role' with IAM Access Analyzer + CloudTrail to identify the actual APIs called. 2) Create a new customer-managed policy scoped to only those actions on the specific S3 buckets and other resources the function accesses (e.g., s3:GetObject, s3:PutObject on arn:aws:s3:::target-bucket/*). 3) Detach AdministratorAccess. 4) Attach the new scoped policy. 5) Validate with IAM Policy Simulator. Reference: AWS Lambda execution role least-privilege pattern (SEC03-BP02).\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Medium \u2014 requires CloudTrail analysis (~1 day) + policy authoring + testing\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 poa-lambda-role\",\n      \"action\": \"1) Run IAM Access Analyzer on the role to generate a least-privilege policy from CloudTrail activity (last 90 days). 2) Replace AdministratorAccess with the generated policy scoped to the workload's required services. 3) Apply resource-level conditions where supported. 4) Detach AdministratorAccess. Reference: Use IAM Access Analyzer to generate least-privilege policies.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Medium \u2014 1 day discovery + 0.5 day policy implementation\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 eoa-lambda-role\",\n      \"action\": \"1) Identify the Lambda function(s) using this role via Lambda console or CLI (aws lambda list-functions --query 'Functions[?Role==`<arn>`]'). 2) Use IAM Access Analyzer policy generation to extract least-privilege permissions from CloudTrail. 3) Create scoped customer-managed policy. 4) Detach AdministratorAccess and attach scoped policy.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Medium \u2014 1 day\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 soa-lambda-role\",\n      \"action\": \"Same remediation pattern as eoa-lambda-role. Identify bound Lambda functions, generate least-privilege policy via IAM Access Analyzer, replace AdministratorAccess.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Medium \u2014 1 day\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 MontyCloud-AdminRole-dev1\",\n      \"action\": \"1) Review what AWS APIs MontyCloud (third-party cloud management platform) actually calls in your account via CloudTrail. 2) Work with MontyCloud support to obtain their recommended minimum-permissions policy document. 3) Create a customer-managed policy based on their documented API requirements. 4) Detach AdministratorAccess. 5) Consider adding an aws:RequestedRegion condition to restrict operations to your deployed regions.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"High \u2014 requires vendor coordination + testing (~2-3 days)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 stacksets-exec-efe5bc55ed43e622afe427d1a7a96c79\",\n      \"action\": \"1) Review which CloudFormation StackSets this execution role deploys. 2) Scope the role to only the AWS services those StackSets provision (e.g., if StackSets only deploy EC2+VPC, restrict to ec2:*, vpc-related actions). 3) Replace AdministratorAccess with a targeted policy. Consider using SCPs at the Organizations level as a complementary control.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Medium-High \u2014 depends on StackSets complexity (~1-2 days)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 OrganizationAccountAccessRole\",\n      \"action\": \"OrganizationAccountAccessRole is created by AWS Organizations for cross-account access from the management account. Review whether it truly requires AdministratorAccess or if it can be scoped. If full admin is required, enforce MFA conditions: add 'Condition': {'Bool': {'aws:MultiFactorAuthPresent': 'true'}} as a compensating control. Also restrict the trust policy to specific management-account roles/users rather than the entire account.\",\n      \"priority\": \"P2 \u2014 HIGH\",\n      \"effort\": \"Low-Medium \u2014 policy update + MFA condition addition (~0.5 day)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 AWSReservedSSO_AdministratorAccess_8a5b1eee827ceb6a\",\n      \"action\": \"1) Review which IAM Identity Center users/groups are assigned this permission set. 2) In IAM Identity Center, replace the AdministratorAccess permission set with a custom permission set scoped to the actual admin tasks performed. If full admin is required for break-glass scenarios, restrict assignment to a dedicated break-glass group with session duration \u22641 hour and CloudTrail alerting on all API calls made under this role.\",\n      \"priority\": \"P2 \u2014 HIGH\",\n      \"effort\": \"Medium \u2014 requires IAM Identity Center permission set redesign + stakeholder alignment (~1-2 days)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::aws:policy/AdministratorAccess \u2192 AWSReservedSSO_CloudOpsAdminAccess_4ede9f265a0c77d1\",\n      \"action\": \"1) Audit what CloudOps engineers actually need in IAM Identity Center. 2) Replace AdministratorAccess permission set with a CloudOps-specific permission set: typical scope includes ec2:*, ecs:*, rds:Describe*, cloudwatch:*, logs:*, support:* but NOT iam:*, organizations:*, or billing:*. 3) Enforce session duration \u22644h and MFA.\",\n      \"priority\": \"P2 \u2014 HIGH\",\n      \"effort\": \"Medium \u2014 permission set scoping workshop + rollout (~2 days)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:iam::REDACTED-ACCOUNT:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole\",\n      \"action\": \"1) Replace the inline policy 'testmgrsetExecutionRolePolicy' (Action='*', Resource='*') with a scoped policy granting only: ssm:StartAutomationExecution, ssm:GetAutomationExecution, ssm:DescribeAutomationExecutions on the specific SSM Automation document ARNs used by this Change Manager setup; plus iam:PassRole restricted to the specific execution role ARN. 2) Scope the trust policy to only ssm.amazonaws.com with a aws:SourceAccount condition. 3) Consider whether the cross-account role (arn:aws:iam::257105873514:role/AWS-QuickSetup-SSMChangeMgr-testmgrsetAdminRole) also requires review. 4) If this is a test/dev setup ('testmgrset' prefix), evaluate whether the role is still needed and delete it if not.\",\n      \"priority\": \"P1 \u2014 IMMEDIATE\",\n      \"effort\": \"Low \u2014 inline policy replacement is a single IAM update (~0.5 day)\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Findings at a Glance\n\n| # | Resource ID | Type | Severity | Issue |\n|---|------------|------|----------|-------|\n| 1 | `arn:aws:iam::aws:policy/AdministratorAccess` | AWS Managed Policy | **CRITICAL** | `Action: *, Resource: *` attached to **9 roles** including 4 Lambda execution roles |\n| 2 | `AWS-QuickSetup-SSMChangeMgr-testmgrsetInvocationRole` / `testmgrsetExecutionRolePolicy` | IAM Role Inline Policy | **CRITICAL** | `Action: *, Resource: *` in inline policy; assumed by `ssm.amazonaws.com` + cross-account admin role |\n\n---\n\n### What Was Scanned\n\n| Surface | Count | Flagged |\n|---------|-------|---------|\n| Customer-managed policies | 11 | 0 |\n| Attached AWS-managed policies | 49 | **1** (`AdministratorAccess`) |\n| Role inline policies | 58 across 96 roles | **1** (`testmgrsetExecutionRolePolicy`) |\n| User inline policies | 0 users | 0 |\n| Group inline policies | 0 groups | 0 |\n\n---\n\n### Top Remediation Priorities\n\n1. **P1 \u2014 Lambda roles** (`s3soa-lambda-role`, `poa-lambda-role`, `eoa-lambda-role`, `soa-lambda-role`): Use **IAM Access Analyzer policy generation** from CloudTrail data to auto-generate scoped replacements \u2014 this is the lowest-effort/highest-impact fix.\n2. **P1 \u2014 SSM Change Manager inline policy**: Single inline policy swap \u2014 30 minutes of work. No excuse to leave `Action: *` on an SSM automation invocation role.\n3. **P2 \u2014 IAM Identity Center permission sets**: Replace AdministratorAccess SSO assignments with workload-scoped permission sets and enforce MFA + short session durations.\n4. **P2 \u2014 Third-party role** (`MontyCloud-AdminRole-dev1`): Engage vendor for their documented minimum-permissions policy.",
+  "token_usage": {
+    "estimated": 2028,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 256.9,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

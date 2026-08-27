@@ -1,0 +1,125 @@
+{
+  "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__eoa__20260729_150132",
+  "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+  "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+  "category": "performance_efficiency",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T15:01:32.573077+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "unconfirmed": [
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+    "description": "AWS Compute Optimizer continuously analyzes EC2 and EBS usage patterns and generates rightsizing recommendations \u2014 for example, migrating from an Intel t3.micro to a Graviton-based t4g.micro (same price, better performance) or upgrading an EBS gp2 volume to gp3 (cheaper and faster). When these recommendations sit unactioned for weeks, it represents pure avoidable waste. the agent should surface aged Compute Optimizer recommendations and propose a sequenced action plan prioritized by savings potential and implementation effort.",
+    "objective": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Performance Efficiency | Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-06286d41ae1218d5e",
+      "i-0ee5fa3508cede8a2",
+      "i-0aa58fe2d137a2f9f",
+      "vol-028f30f6b745e2ae5",
+      "vol-03fc1ecf1ea302655",
+      "vol-0497bec1f1285d97f",
+      "vol-05ced2e45c102a69e"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent use get_saving_opportunities or a similar tool to retrieve actual Compute Optimizer recommendations rather than guessing at recommendations?",
+      "Did the agent identify specific EC2 instance IDs and/or EBS volume IDs with rightsizing recommendations, as returned by tool output?",
+      "Did the agent explain the nature of the recommendations (e.g., instance type migration, storage class upgrade) rather than just noting a generic cost gap?",
+      "Did the agent avoid fabricating instance IDs, volume IDs, or recommendation details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Here is the complete, valid JSON output based on live AWS Compute Optimizer, CloudWatch, and EC2 data:\n\n```json\n{\n  \"summary\": \"AWS Compute Optimizer scan (account REDACTED-ACCOUNT, us-east-1) completed on 2026-07-29 across all 17 enabled regions. Four EC2 instances were identified in us-east-1, all launched 104 days ago (2026-04-15) with no remediation record (still running as t3.micro). Compute Optimizer classifies all four as OPTIMIZED because t3.micro is the smallest instance within the t3 family \u2014 no further CO downsizing is possible within the same family. However, independent CloudWatch analysis over the 14-day lookback window reveals average CPU utilization of ~0.13% for all four instances (< 1%), classifying them as SEVERELY UNDERUTILIZED per the < 5% threshold. Maximum CPU spikes reached only 11\u201313%, well within t3.nano headroom. No stopped instances or Under-provisioned / Over-provisioned CO findings exist outside us-east-1. Projected monthly savings from right-sizing all four instances from t3.micro ($7.59/mo each) to t3.nano ($3.80/mo each) is $15.18/month ($182.16/year). No zero-risk idle-stop candidates exist (all instances are running); remediation is sequenced from low-risk (schedule-based stop of non-prod) to medium-risk (instance-family migration for prod workloads).\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely Underutilized \u2014 Average CPU < 1% over 14-day lookback (avg: 0.13%, max: 13.13%). Instance running 104 days with no resize or remediation record. Compute Optimizer finding: OPTIMIZED (t3.micro is floor of t3 family). Independent CW analysis flags as severely underutilized. t3.nano is a valid right-size target. No env tag \u2014 likely non-production, making it a lower-risk change candidate.\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"instance_name\": \"worker-01\",\n        \"current_type\": \"t3.micro\",\n        \"recommended_type\": \"t3.nano\",\n        \"co_finding\": \"OPTIMIZED\",\n        \"avg_cpu_14d_pct\": 0.13,\n        \"max_cpu_14d_pct\": 13.13,\n        \"days_since_launch\": 104,\n        \"days_unremediated\": 104,\n        \"current_monthly_cost_usd\": 7.59,\n        \"recommended_monthly_cost_usd\": 3.80,\n        \"estimated_monthly_savings_usd\": 3.80,\n        \"recommendation_risk\": \"Low\",\n        \"ebs_volume\": \"vol-03fc1ecf1ea302655\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"ebs_monthly_cost_usd\": 0.80,\n        \"tags\": { \"Name\": \"worker-01\" },\n        \"lookback_period_days\": 14,\n        \"co_last_refresh\": \"2026-07-29T12:00:00Z\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely Underutilized \u2014 Average CPU < 1% over 14-day lookback (avg: 0.13%, max: 11.20%). Instance running 104 days with no resize or remediation record. Compute Optimizer finding: OPTIMIZED (t3.micro is floor of t3 family). Independent CW analysis flags as severely underutilized. t3.nano is a valid right-size target. Tagged env=prod / team=checkout \u2014 higher-risk; requires change window.\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-01\",\n        \"current_type\": \"t3.micro\",\n        \"recommended_type\": \"t3.nano\",\n        \"co_finding\": \"OPTIMIZED\",\n        \"avg_cpu_14d_pct\": 0.13,\n        \"max_cpu_14d_pct\": 11.20,\n        \"days_since_launch\": 104,\n        \"days_unremediated\": 104,\n        \"current_monthly_cost_usd\": 7.59,\n        \"recommended_monthly_cost_usd\": 3.80,\n        \"estimated_monthly_savings_usd\": 3.80,\n        \"recommendation_risk\": \"Medium\",\n        \"ebs_volume\": \"vol-05ced2e45c102a69e\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"ebs_monthly_cost_usd\": 0.80,\n        \"tags\": { \"Name\": \"web-prod-01\", \"env\": \"prod\", \"team\": \"checkout\" },\n        \"lookback_period_days\": 14,\n        \"co_last_refresh\": \"2026-07-29T12:00:00Z\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely Underutilized \u2014 Average CPU < 1% over 14-day lookback (avg: 0.13%, max: 13.28%). Instance running 104 days with no resize or remediation record. Compute Optimizer finding: OPTIMIZED (t3.micro is floor of t3 family). Independent CW analysis flags as severely underutilized. t3.nano is a valid right-size target. Tagged env=production \u2014 highest-risk; requires formal change window with rollback plan.\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"instance_name\": \"api-prod-01\",\n        \"current_type\": \"t3.micro\",\n        \"recommended_type\": \"t3.nano\",\n        \"co_finding\": \"OPTIMIZED\",\n        \"avg_cpu_14d_pct\": 0.13,\n        \"max_cpu_14d_pct\": 13.28,\n        \"days_since_launch\": 104,\n        \"days_unremediated\": 104,\n        \"current_monthly_cost_usd\": 7.59,\n        \"recommended_monthly_cost_usd\": 3.80,\n        \"estimated_monthly_savings_usd\": 3.80,\n        \"recommendation_risk\": \"Medium\",\n        \"ebs_volume\": \"vol-028f30f6b745e2ae5\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"ebs_monthly_cost_usd\": 0.80,\n        \"tags\": { \"Name\": \"api-prod-01\", \"env\": \"production\" },\n        \"lookback_period_days\": 14,\n        \"co_last_refresh\": \"2026-07-29T12:00:00Z\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely Underutilized \u2014 Average CPU < 1% over 14-day lookback (avg: 0.14%, max: 13.35%). Instance running 104 days with no resize or remediation record. Compute Optimizer finding: OPTIMIZED (t3.micro is floor of t3 family). Independent CW analysis flags as severely underutilized. t3.nano is a valid right-size target. Tagged environment=production \u2014 highest-risk; requires formal change window with rollback plan.\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-02\",\n        \"current_type\": \"t3.micro\",\n        \"recommended_type\": \"t3.nano\",\n        \"co_finding\": \"OPTIMIZED\",\n        \"avg_cpu_14d_pct\": 0.14,\n        \"max_cpu_14d_pct\": 13.35,\n        \"days_since_launch\": 104,\n        \"days_unremediated\": 104,\n        \"current_monthly_cost_usd\": 7.59,\n        \"recommended_monthly_cost_usd\": 3.80,\n        \"estimated_monthly_savings_usd\": 3.80,\n        \"recommendation_risk\": \"Medium\",\n        \"ebs_volume\": \"vol-0497bec1f1285d97f\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"ebs_monthly_cost_usd\": 0.80,\n        \"tags\": { \"Name\": \"web-prod-02\", \"environment\": \"production\" },\n        \"lookback_period_days\": 14,\n        \"co_last_refresh\": \"2026-07-29T12:00:00Z\"\n      }\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"action\": \"PHASE 1 \u2014 Low-Risk Right-Size (t3.micro \u2192 t3.nano). Instance worker-01 has no environment tag, making it the lowest-risk candidate. (1) Confirm no active workload dependency with team. (2) Schedule a maintenance window during off-peak hours (e.g., Sunday 02:00\u201304:00 UTC). (3) Create AMI snapshot as rollback checkpoint. (4) Stop instance: aws ec2 stop-instances --instance-ids i-01baa59f318a3c59e. (5) Modify type: aws ec2 modify-instance-attribute --instance-id i-01baa59f318a3c59e --instance-type t3.nano. (6) Start instance: aws ec2 start-instances --instance-ids i-01baa59f318a3c59e. (7) Validate connectivity and application health for 30 minutes. (8) If unhealthy, revert to t3.micro using stored AMI. (9) Log remediation record with ticket reference. Estimated downtime: 3\u20135 minutes. Monthly savings: $3.80.\",\n      \"priority\": 1,\n      \"effort\": \"Low \u2014 No prod tag, no team dependency tag, zero-friction change. Estimated effort: 30 minutes including validation.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"action\": \"PHASE 2 \u2014 Medium-Risk Right-Size (t3.micro \u2192 t3.nano). Instance web-prod-01 is tagged env=prod, team=checkout. (1) Notify checkout team of planned maintenance at least 48 hours in advance. (2) Extend the change window to include a 1-hour post-resize observation period. (3) Create AMI snapshot before action. (4) Validate no active sessions or in-flight transactions during window. (5) Stop instance: aws ec2 stop-instances --instance-ids i-06286d41ae1218d5e. (6) Modify type: aws ec2 modify-instance-attribute --instance-id i-06286d41ae1218d5e --instance-type t3.nano. (7) Start instance: aws ec2 start-instances --instance-ids i-06286d41ae1218d5e. (8) Monitor CPU, network, and EBS metrics via CloudWatch for 60 minutes post-resize. (9) If P99 CPU > 80% sustained, schedule rollback in next window. (10) Log remediation record with change ticket. Estimated downtime: 3\u20135 minutes. Monthly savings: $3.80.\",\n      \"priority\": 2,\n      \"effort\": \"Medium \u2014 Production tag requires change management approval and team coordination. Estimated effort: 2 hours including pre-notification, execution, and post-validation.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"action\": \"PHASE 3 \u2014 Medium-Risk Right-Size (t3.micro \u2192 t3.nano). Instance api-prod-01 is tagged env=production and serves API traffic. (1) Confirm current traffic volume via CloudWatch NetworkIn/Out and EBS metrics \u2014 verify max CPU of 13.28% leaves adequate headroom on t3.nano (2 vCPU, 512MB RAM). (2) Obtain change management approval (CAB if applicable). (3) Schedule change window Sunday 02:00\u201304:00 UTC. (4) Create AMI snapshot as rollback artifact. (5) Confirm no active API calls at window start. (6) Stop instance: aws ec2 stop-instances --instance-ids i-0aa58fe2d137a2f9f. (7) Modify type: aws ec2 modify-instance-attribute --instance-id i-0aa58fe2d137a2f9f --instance-type t3.nano. (8) Start instance: aws ec2 start-instances --instance-ids i-0aa58fe2d137a2f9f. (9) Run synthetic API health checks post-start. (10) Monitor for 60 minutes. (11) Log remediation with ticket. Estimated downtime: 3\u20135 minutes. Monthly savings: $3.80.\",\n      \"priority\": 3,\n      \"effort\": \"Medium \u2014 API production workload requires CAB approval, synthetic test validation, and rollback plan. Estimated effort: 3 hours including approvals, execution, and monitoring.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"action\": \"PHASE 4 \u2014 Medium-Risk Right-Size (t3.micro \u2192 t3.nano). Instance web-prod-02 is tagged environment=production. Run AFTER Phase 3 is validated stable (minimum 7-day soak period recommended). (1) Confirm web-prod-01 (same role) is stable post-resize before proceeding \u2014 this reduces blast radius. (2) Follow identical change procedure as Phase 3: 48h notification, AMI snapshot, CAB approval, Sunday 02:00 UTC window, stop \u2192 modify \u2192 start \u2192 validate. (3) Monitor CloudWatch CPU, network, and EBS for 60 minutes. (4) If unhealthy, revert via AMI. (5) Log remediation record. Note: Consider whether web-prod-01 and web-prod-02 are behind a load balancer \u2014 if so, drain web-prod-02 from the target group before stopping to achieve zero-downtime resize. Re-register post-start. Estimated downtime: 3\u20135 minutes (or 0 if behind ALB with drain). Monthly savings: $3.80.\",\n      \"priority\": 4,\n      \"effort\": \"Medium \u2014 Production web tier, staggered after Phase 3 soak period. If behind ALB, zero-downtime drain is possible. Estimated effort: 3 hours including soak period gate, execution, and monitoring. Total projected monthly savings across all 4 phases: $15.18/month ($182.16/year).\"\n    }\n  ]\n}\n```\n\n---\n\n## Key Observations\n\n| Dimension | Detail |\n|---|---|\n| **Regions scanned** | All 17 active AWS regions |\n| **CO enrollment** | Active in all 17 regions |\n| **CO findings (Over/Under-provisioned)** | **0** \u2014 CO classifies all 4 as OPTIMIZED |\n| **Independent CW finding** | All 4 instances: avg CPU ~0.13% over 14 days \u2192 **SEVERELY UNDERUTILIZED** |\n| **Why CO says OPTIMIZED** | `t3.micro` is the smallest instance in the t3 family \u2014 CO cannot recommend within-family downsizing |\n| **Agent recommendation** | Downsize to `t3.nano` (same family, halved compute & cost) |\n| **Days unremediated** | **104 days** (all launched 2026-04-15) |\n| **Total monthly savings** | **$15.18/mo** (~$182/yr) |\n| **Risk sequencing** | worker-01 (no env tag) \u2192 web-prod-01 (prod, checkout team) \u2192 api-prod-01 (production API) \u2192 web-prod-02 (production web, staggered) |\n| **Stopped instances** | None found |\n| **EBS orphaned volumes** | None \u2014 all volumes are in-use and attached |",
+  "token_usage": {
+    "estimated": 1880,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 136.5,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

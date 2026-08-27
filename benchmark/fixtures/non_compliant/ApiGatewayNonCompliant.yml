@@ -1,0 +1,183 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: My API Gateway
+
+Parameters:
+  apiGatewayName:
+    Type: String
+    AllowedPattern: ^[a-zA-Z0-9_.\-]+$
+    Default: wafrtestsec4
+
+  apiGatewayDescription:
+    Type: String
+    AllowedPattern: ^[a-zA-Z0-9_.\- ]+$
+    Default: A REST API
+
+Resources:
+  apiRoleArn:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt apiCloudWatchRole.Arn
+  apiCloudWatchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: apigateway.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+  apiGateway:
+    Type: AWS::ApiGateway::RestApi
+    DependsOn:
+      - apiCloudWatchRole
+    Properties:
+      Name: !Ref apiGatewayName
+      Description: !Ref apiGatewayDescription
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  apiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt apiGateway.RootResourceId
+      PathPart: mock
+      RestApiId: !Ref apiGateway
+
+  apiGatewayRootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      ApiKeyRequired: false
+      AuthorizationType: NONE
+      HttpMethod: GET
+      Integration:
+        RequestTemplates:
+          application/json: |
+            {"statusCode": 200}
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{"message": "OK"}'
+            StatusCode: 200
+        Type: MOCK
+        TimeoutInMillis: 29000
+      MethodResponses:
+        - ResponseModels:
+            application/json: !Ref apiGatewayModel
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: 200
+      ResourceId: !Ref apiGatewayResource
+      RestApiId: !Ref apiGateway
+
+  apiGatewayModel:
+    Type: AWS::ApiGateway::Model
+    Properties:
+      ContentType: application/json
+      RestApiId: !Ref apiGateway
+      Schema: {}
+
+  apiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: apiGatewayRootMethod
+    Properties:
+      RestApiId: !Ref apiGateway
+
+  apiGatewayStageCacheNonEncrypt1:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: UnEncryptCache1
+      RestApiId: !Ref apiGateway
+      DeploymentId: !Ref apiGatewayDeployment
+      CacheClusterEnabled: true
+      CacheClusterSize: 0.5
+      TracingEnabled: false
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: GET
+          MetricsEnabled: false
+          DataTraceEnabled: false
+          ThrottlingBurstLimit: 0
+          ThrottlingRateLimit: 0
+          LoggingLevel: INFO
+          CachingEnabled: true
+          CacheDataEncrypted: false
+
+  apiGatewayStageCacheNonEncrypt:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: UnEncryptCache
+      RestApiId: !Ref apiGateway
+      DeploymentId: !Ref apiGatewayDeployment
+      CacheClusterEnabled: false
+      TracingEnabled: false
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: GET
+          MetricsEnabled: false
+          DataTraceEnabled: false
+          ThrottlingBurstLimit: 0
+          ThrottlingRateLimit: 0
+          LoggingLevel: INFO
+
+  apiCloudWatch:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref apiGatewayName
+      RetentionInDays: 7
+
+Outputs:
+  ResourceId:
+    Value: !Ref apiGateway
+  apiGatewayId:
+    Description: Api Gateway ID
+    Value: !Join
+      - ""
+      - - !Ref apiGateway
+        - /mock/GET
+  ApiGatewayStageId:
+    Description: Api Gateway ID
+    Value: !Join
+      - "/"
+      - - !Ref apiGateway
+        - !Ref apiGatewayStageCacheNonEncrypt1
+  apiGatewayStageThrottling:
+    Description: Api Gateway Stage Throttling
+    Value: !Join
+      - ""
+      - - "arn:aws:apigateway:"
+        - !Ref AWS::Region
+        - "::/restapis/"
+        - !Ref apiGateway
+        - /stages/
+        - !Ref apiGatewayStageCacheNonEncrypt
+        - /mock/GET
+  apiGatewayStageCacheNonEncryptArn:
+    Description: Api Gateway Stage Arn
+    Value: !Join
+      - ""
+      - - "arn:aws:apigateway:"
+        - !Ref AWS::Region
+        - "::/restapis/"
+        - !Ref apiGateway
+        - /stages/
+        - !Ref apiGatewayStageCacheNonEncrypt
+  apiGatewayStageCacheNonEncrypt1:
+    Description: Api Gateway Stage Arn
+    Value: !Join
+      - ""
+      - - "arn:aws:apigateway:"
+        - !Ref AWS::Region
+        - "::/restapis/"
+        - !Ref apiGateway
+        - /stages/
+        - !Ref apiGatewayStageCacheNonEncrypt1
+        - /mock/GET
+  apiGatewayStageCacheNonEncryptId:
+    Description: Api GatewayStage ID
+    Value: !Ref apiGatewayStageCacheNonEncrypt

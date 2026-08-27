@@ -1,0 +1,123 @@
+{
+  "id": "COPS_kms_keys_with_rotation_disable_L1_f8c2675f__eoa__20260729_142512",
+  "scenario_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+  "scenario_name": "KMS Keys With Rotation Disabled and Unbounded Access",
+  "category": "security",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:25:12.919806+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top resources/checks to identify KMS keys flagged for rotation or policy issues"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand KMS key rotation check failure distribution"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate KMS resources directly to get specific key IDs from the assessment"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top resources/checks to identify KMS keys flagged for rotation or policy issues",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand KMS key rotation check failure distribution",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate KMS resources directly to get specific key IDs from the assessment",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "1e007832-6f44-4c5c-bc87-6a9bdddf4d28"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "1e007832-6f44-4c5c-bc87-6a9bdddf4d28"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Identify KMS governance violations (rotation disabled, unbounded principals) across CMK inventory; capture all must-find items from env:fx/ace-bench/security-risk-com/key-management/kms-keys-with-rotation-disabled-an/l1/v1 | packet:cp/ace-bench/security-risk-com/key-management/kms-keys-with-rotation-disabled-an/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Identify KMS governance violations (rotation disabled, unbounded principals) across CMK inventory; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Enumerate CMKs where EnableKeyRotation is false OR the key policy contains Principal=\"*\" without scoping conditions. Recommendation: Enable annual rotation, replace Principal=\"*\" with explicit account/role principals, and add aws:PrincipalOrgID or source VPC endpoint conditions where appropriate. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+    "description": "AWS KMS customer-managed keys (CMKs) encrypt data across S3, RDS, Lambda, and other services. Key rotation automatically generates a new cryptographic key version each year \u2014 if a key is ever compromised, rotation limits how much historical data is at risk. Without rotation, the same key material is used indefinitely. A KMS key policy with Principal:* grants any AWS principal access to the key, effectively making encryption useless. the agent should identify KMS keys with rotation disabled and overly permissive key policies.",
+    "objective": "Identify KMS governance violations (rotation disabled, unbounded principals) across CMK inventory; capture all must-find items from env:fx/ace-bench/security-risk-com/key-management/kms-keys-with-rotation-disabled-an/l1/v1 | packet:cp/ace-bench/security-risk-com/key-management/kms-keys-with-rotation-disabled-an/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Enumerate CMKs where EnableKeyRotation is false OR the key policy contains Principal=\"*\" without scoping conditions. Recommendation: Enable annual rotation, replace Principal=\"*\" with explicit account/role principals, and add aws:PrincipalOrgID or source VPC endpoint conditions where appropriate.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "1e007832-6f44-4c5c-bc87-6a9bdddf4d28"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is KMS customer-managed keys with automatic key rotation disabled?",
+      "Did the agent identify specific KMS key IDs \u2014 or, if tools could not surface specific key IDs, explicitly acknowledge that rather than fabricating key IDs?",
+      "Did the agent also address the overly permissive key policy issue (Principal:* allowing any principal to use the key)?",
+      "Did the agent avoid fabricating KMS key IDs (specifically the undeployed dbc1e4f2 KMSCMKNonCompliant key) or rotation/policy details not verifiable from tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I need to stay within my scope. I'm an **EC2 Optimization Agent** \u2014 I only perform EC2 instance analysis and optimization tasks (underutilized instances, right-sizing recommendations, and stopped instances with EBS cost analysis).\n\nThe request you've submitted is a **KMS (Key Management Service) security audit**, specifically:\n\n- Checking CMK key rotation status\n- Auditing KMS key policies for overly permissive principals (`Principal=\"*\"`)\n- Recommending IAM/KMS policy hardening\n\nThis falls outside my designated scope. I'm not able to perform KMS audits, IAM policy analysis, or security compliance checks.\n\n---\n\n**To get this done, I'd suggest:**\n\n| Option | Tool / Service |\n|---|---|\n| **AWS Security Hub** | Automated finding: `KMS.4` (key rotation) & policy checks |\n| **AWS Config Rules** | `cmk-backing-key-rotation-enabled` managed rule |\n| **AWS Trusted Advisor** | KMS best practice checks |\n| **IAM Access Analyzer** | Detects `Principal: \"*\"` in resource policies |\n| **A KMS/Security-scoped agent** | Purpose-built for encryption & policy audits |\n\n---\n\n**What I *can* help you with:**\n\n- \ud83d\udd0d Scanning for **underutilized EC2 instances** (low CPU)\n- \ud83d\udcd0 **Right-sizing recommendations** with projected cost savings\n- \ud83d\udcbe Identifying **stopped EC2 instances** still incurring EBS charges\n\nWould you like me to run an EC2 optimization analysis on your environment?",
+  "token_usage": {
+    "estimated": 274,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 8.8,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

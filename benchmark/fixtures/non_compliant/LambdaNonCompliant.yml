@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates Non-Compliant Lambda Resources 
+Resources:
+  FailingLambdaExecRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ["-", [NCLambda-ExecutionRole, !Ref AWS::Region]]
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  LambdaAdminRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      RoleName: !Join ["-", [NCLambda-adminRole, !Ref AWS::Region]]
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: 
+                - "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Policies: 
+        - PolicyName: "LambdaadminPolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: "*"
+                Resource: "*"
+  
+  TimeoutLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Timeout: 1 
+      FunctionName:
+        !Join [
+          "-",
+          ["nc-lambda-func-to", !Select [2, !Split ["/", !Ref AWS::StackId]]],
+        ]
+      Handler: "index.handler"
+      Role: !GetAtt LambdaAdminRole.Arn
+      Runtime: python3.11
+      Code:
+        ZipFile: |
+          import time
+          def handler(event, context):
+            i = 2
+            while i > 1:
+              print("I am sleeping, DND") 
+
+  FailingLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Environment:
+        Variables:
+          test_variable: "value"
+      FunctionName:
+        !Join [
+          "-",
+          ["nc-lambda-func", !Select [2, !Split ["/", !Ref AWS::StackId]]],
+        ]
+      Handler: "index.handler"
+      Role: !GetAtt FailingLambdaExecRole.Arn
+      Runtime: python3.11
+      Code:
+        ZipFile: |
+          def handler(event, context):
+            
+              result = 1 / 0 
+              return {
+                  'statusCode': 200,
+                  'body': 'Function executed successfully'
+              }
+
+  FailingLambdatriggerRule:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: Scheduled rule to trigger the Lambda function
+        ScheduleExpression: rate(2 minutes)  
+        State: ENABLED
+        Targets:
+          - Arn: !GetAtt FailingLambda.Arn
+            Id: MyLambdaTarget
+
+  TriggerEventPermission1:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt FailingLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt FailingLambdatriggerRule.Arn
+
+  TriggerEventPermission2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt TimeoutLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt FailingLambdatriggerRule.Arn
+  
+  # ExecutionRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Action:
+  #             - "sts:AssumeRole"
+  #           Effect: Allow
+  #           Principal:
+  #             "AWS": "*"
+  #     Policies:
+  #       - PolicyName: "LambdaExecution"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement:
+  #             - Action: "*"
+  #               Effect: Allow
+  #               Resource: "*"
+                
+  HelloWorldFunction2:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "HelloWorldFunction2"
+      Handler: "index.handler"
+      Role: !GetAtt FailingLambdaExecRole.Arn
+      Runtime: python3.11
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              return "Hello, World! (Function 2)"
+  LambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: !Ref HelloWorldFunction2
+      Action: "lambda:InvokeFunction"
+      Principal: "*"
+
+Outputs:
+  FailingLambdaExecRole:
+    Value: !GetAtt FailingLambdaExecRole.Arn
+  FailingLambdaArn:
+    Value: !GetAtt FailingLambda.Arn
+  HelloWorldFunction2Arn:
+    Value: !GetAtt HelloWorldFunction2.Arn
+  TimeoutLambdaArn:
+    Value: !GetAtt [TimeoutLambda, Arn]
+  

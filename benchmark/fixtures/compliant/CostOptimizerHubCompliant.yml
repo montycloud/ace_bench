@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  MyLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: MyLambdaPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - "cost-optimization-hub:UpdateEnrollmentStatus"
+                  - "cost-optimization-hub:ListEnrollmentStatuses"
+                Resource: "*"
+
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import logging
+          import os
+          import json
+          import cfnresponse
+          def handler(event, context):
+            response_data = {}
+            try:
+              client = boto3.client('cost-optimization-hub')
+              request_type = event['RequestType']
+              
+              if request_type in ['Create', 'Update']:
+                client.update_enrollment_status(status='Active')
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, "CustomResourcePhysicalID")
+              elif request_type == 'Delete':
+                # client.update_enrollment_status(status='Inactive')
+                # We Can't disable with the member account
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, "CustomResourcePhysicalID")
+            except Exception as e:
+              cfnresponse.send(event, context, cfnresponse.FAILED, response_data, "CustomResourcePhysicalID")
+              raise e
+
+      Runtime: python3.11
+      Timeout: 120
+
+  MyCustomResource:
+    Type: Custom::MyCustomResource
+    Properties:
+      ServiceToken: !GetAtt MyLambdaFunction.Arn
+      ServiceTimeout: 120
+
+Outputs:
+  AccountIdRegion:
+    Description: AccountIdRegion
+    Value: !Join ["", [!Ref AWS::AccountId, "/", !Ref AWS::Region]]

@@ -1,0 +1,176 @@
+{
+  "id": "COPS_missing_detective_metric_filte_L1_de40af00__soa__20260729_104541",
+  "scenario_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+  "scenario_name": "Missing Detective Metric Filters for Account Events",
+  "category": "monitoring_&_observability",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T10:45:41.341271+00:00",
+  "total_score": 0.58,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.33,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface the real metric-filter resources failing detective-control checks, matching sibling scenarios on the same fixture"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Retrieve the underlying findings rather than relying only on account-level security-service overview tools"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface the real metric-filter resources failing detective-control checks, matching sibling scenarios on the same fixture",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Retrieve the underlying findings rather than relying only on account-level security-service overview tools",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "found": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk"
+      ],
+      "found_in_response": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk"
+      ],
+      "found_in_tools": [],
+      "missed": [
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "unconfirmed": [
+        "wafr-comp-ct-bec2b3a0",
+        "wafr-comp-ct-bec2b3a0",
+        "wafr-comp-ct-bec2b3a0",
+        "CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [
+        "security_check_0",
+        "security_check_1",
+        "security_check_2",
+        "security_check_3",
+        "security_check_4",
+        "security_check_5",
+        "security_check_6",
+        "security_check_7",
+        "security_check_8",
+        "security_check_9",
+        "security_check_10",
+        "security_check_11",
+        "security_check_12",
+        "security_check_13",
+        "security_check_14",
+        "security_check_15",
+        "security_check_16",
+        "security_check_17",
+        "security_check_18",
+        "security_check_19",
+        "service_amazon_sqs",
+        "service_aws_cloudtrail",
+        "service_amazon_sns",
+        "service_amazon_s3",
+        "service_amazon_ec2"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Assess detective metric-filter coverage against CIS AWS Foundations Benchmark v1.5 controls; capture all must-find items from env:fx/ace-bench/monitoring-observ/audit-evidence-detective-metric-fi/missing-detective-metric-filters-f/l1/v1 | packet:cp/ace-bench/monitoring-observ/audit-evidence-detective-metric-fi/missing-detective-metric-filters-f/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Assess detective metric-filter coverage against CIS AWS Foundations Benchmark v1.5 controls; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify missing CloudWatch Logs metric filters against CloudTrail for: root-user usage, console sign-in without MFA, IAM policy changes, NACL/SG changes, and disabled CloudTrail. Recommendation: Provide the metric-filter pattern JSON and alarm-threshold pair for each missing check, mapped to CIS AWS Foundations Benchmark. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+    "description": "AWS CloudTrail records every API call in your account. Metric filters can watch CloudTrail logs and trigger CloudWatch alarms on specific events \u2014 for example, root account login, unauthorized API calls, or security group changes. A typo or wrong pattern in a metric filter means it never matches, so critical security events go completely undetected. the agent should identify metric filters that are misconfigured or missing for key account-level events.",
+    "objective": "Assess detective metric-filter coverage against CIS AWS Foundations Benchmark v1.5 controls; capture all must-find items from env:fx/ace-bench/monitoring-observ/audit-evidence-detective-metric-fi/missing-detective-metric-filters-f/l1/v1 | packet:cp/ace-bench/monitoring-observ/audit-evidence-detective-metric-fi/missing-detective-metric-filters-f/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify missing CloudWatch Logs metric filters against CloudTrail for: root-user usage, console sign-in without MFA, IAM policy changes, NACL/SG changes, and disabled CloudTrail. Recommendation: Provide the metric-filter pattern JSON and alarm-threshold pair for each missing check, mapped to CIS AWS Foundations Benchmark.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable mandatory logging or audit controls",
+    "wafr_pillar": "Security | Operational Excellence",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+      "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+      "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+    ],
+    "should_not_flag": [
+      "security_check_0",
+      "security_check_1",
+      "security_check_2",
+      "security_check_3",
+      "security_check_4",
+      "security_check_5",
+      "security_check_6",
+      "security_check_7",
+      "security_check_8",
+      "security_check_9",
+      "security_check_10",
+      "security_check_11",
+      "security_check_12",
+      "security_check_13",
+      "security_check_14",
+      "security_check_15",
+      "security_check_16",
+      "security_check_17",
+      "security_check_18",
+      "security_check_19",
+      "service_amazon_sqs",
+      "service_aws_cloudtrail",
+      "service_amazon_sns",
+      "service_amazon_s3",
+      "service_amazon_ec2"
+    ],
+    "judge_criteria": [
+      "Did the agent identify that metric filters for key CloudTrail events are missing or misconfigured (wrong filter patterns/typos), not just absent?",
+      "Did the agent identify specific metric filter names \u2014 or, if tools could not surface specific names, explicitly acknowledge that rather than inventing synthetic IDs like 'security_check_0'?",
+      "Did the agent explain which events should be monitored (e.g., root login, unauthorized API calls, IAM changes, security group modifications)?",
+      "Did the agent avoid hallucinating synthetic resource IDs like 'security_check_N' or 'service_amazon_*' as real assessment findings?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'll systematically gather all the data needed: CloudTrail trails, CloudWatch log groups, existing metric filters, and alarms. Let me run everything in parallel.Now I have everything I need. Let me analyze all five CIS checks against the collected data and produce the final JSON output.```json\n{\n  \"summary\": \"Account REDACTED-ACCOUNT has one active multi-region CloudTrail trail ('wafr-comp-ct-bec2b3a0') delivering logs to CloudWatch Logs group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs'. Analysis of the 6 existing metric filters and 5 alarms against the five CIS AWS Foundations Benchmark controls reveals: (1) ROOT USER USAGE [CIS 1.7/3.3]: No metric filter or alarm exists \u2014 MISSING. (2) CONSOLE SIGN-IN WITHOUT MFA [CIS 3.2]: Filter exists but excludes root accounts; alarm has no SNS action \u2014 INCOMPLETE. (3) IAM POLICY CHANGES [CIS 3.4]: No metric filter or alarm exists \u2014 MISSING. (4) NACL / SECURITY GROUP CHANGES [CIS 3.10/3.11]: No metric filter or alarm exists \u2014 MISSING. (5) CLOUDTRAIL DISABLED/CHANGED [CIS 3.5]: Filter exists but is defective (typo 'UpdateTraile', invalid wildcard 'eventName=Trail', missing 'CreateTrail') \u2014 DEFECTIVE. Total: 3 controls fully missing, 1 incomplete, 1 defective. Remediation requires creating 3 new metric-filter+alarm pairs, fixing 1 filter pattern, and updating 1 alarm to add an SNS notification action.\",\n  \"findings\": [\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"resource_type\": \"AWS::CloudTrail::Trail\",\n      \"check\": \"CIS AWS 1.7 / 3.3 \u2014 Root user usage monitoring\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"No metric filter exists for root account activity in log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs'. No corresponding CloudWatch alarm defined. CIS requires alerting on every root API call and console login.\"\n    },\n    {\n      \"resource_id\": \"NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk\",\n      \"resource_type\": \"AWS::Logs::MetricFilter\",\n      \"check\": \"CIS AWS 3.2 \u2014 Console sign-in without MFA (incomplete coverage + alarm misconfigured)\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Metric filter 'NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk' exists but its pattern restricts to 'userIdentity.type = IAMUser', which silently omits root account MFA-less console logins. Alarm 'ConsoleSignInWithoutMfaAlarmNC' has NO SNS action configured (AlarmActions=[]), so no notification is sent when triggered. CIS 3.2 requires covering all principal types.\"\n    },\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"resource_type\": \"AWS::CloudTrail::Trail\",\n      \"check\": \"CIS AWS 3.4 \u2014 IAM policy changes monitoring\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"No metric filter exists for IAM policy mutation events (PutGroupPolicy, PutRolePolicy, PutUserPolicy, CreatePolicy, DeletePolicy, AttachRolePolicy, DetachRolePolicy, etc.) in log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs'. No corresponding CloudWatch alarm defined.\"\n    },\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"resource_type\": \"AWS::CloudTrail::Trail\",\n      \"check\": \"CIS AWS 3.10 / 3.11 \u2014 NACL and Security Group changes monitoring\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"No metric filter exists for Security Group or Network ACL mutation events (AuthorizeSecurityGroupIngress/Egress, RevokeSecurityGroupIngress/Egress, CreateSecurityGroup, DeleteSecurityGroup, CreateNetworkAcl, DeleteNetworkAcl, etc.) in log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs'. No corresponding CloudWatch alarm defined.\"\n    },\n    {\n      \"resource_id\": \"CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3\",\n      \"resource_type\": \"AWS::Logs::MetricFilter\",\n      \"check\": \"CIS AWS 3.5 \u2014 CloudTrail disabled / configuration changes (defective filter)\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"Metric filter 'CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3' exists but contains three defects: (1) 'eventName = Trail' is an invalid wildcard expression in CloudWatch Logs filter syntax and will never match; (2) 'eventName = UpdateTraile' is a typo (correct: UpdateTrail); (3) 'CreateTrail' event is entirely absent from the pattern. Alarm 'CloudTrailChangesAlarmNC' is wired to this broken metric, so creation of new trails goes undetected and the UpdateTrail event is silently dropped.\"\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"action\": \"Create new CloudWatch Logs metric filter for CIS 1.7/3.3 (root user usage) on log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs' with the pattern and metric name shown in recommended_remediation.ROOT_USER. Then create a CloudWatch Alarm (threshold >= 1, period 300 s) with an SNS action pointing to an active topic (e.g. arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0).\",\n      \"cis_control\": \"CIS AWS 1.7 / 3.3\",\n      \"recommended_remediation\": {\n        \"metric_filter\": {\n          \"filterName\": \"RootAccountUsageMetricFilter\",\n          \"logGroupName\": \"LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n          \"filterPattern\": \"{ $.userIdentity.type = \\\"Root\\\" && $.userIdentity.invokedBy NOT EXISTS && $.eventType != \\\"AwsServiceEvent\\\" }\",\n          \"metricTransformations\": [\n            {\n              \"metricName\": \"RootAccountUsageCount\",\n              \"metricNamespace\": \"CloudTrailMetrics\",\n              \"metricValue\": \"1\",\n              \"defaultValue\": 0\n            }\n          ]\n        },\n        \"alarm\": {\n          \"AlarmName\": \"RootAccountUsageAlarm\",\n          \"MetricName\": \"RootAccountUsageCount\",\n          \"Namespace\": \"CloudTrailMetrics\",\n          \"Statistic\": \"Sum\",\n          \"Period\": 300,\n          \"EvaluationPeriods\": 1,\n          \"Threshold\": 1,\n          \"ComparisonOperator\": \"GreaterThanOrEqualToThreshold\",\n          \"AlarmActions\": [\"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0\"],\n          \"TreatMissingData\": \"notBreaching\"\n        }\n      },\n      \"priority\": \"P1 \u2014 Critical\",\n      \"effort\": \"Low (< 30 min, 2 CLI commands)\"\n    },\n    {\n      \"resource_id\": \"NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk\",\n      \"action\": \"Replace the existing metric filter pattern to remove the 'userIdentity.type = IAMUser' restriction so root MFA-less logins are also detected (CIS 3.2). Update alarm 'ConsoleSignInWithoutMfaAlarmNC' to add SNS AlarmActions so notifications are actually delivered.\",\n      \"cis_control\": \"CIS AWS 3.2\",\n      \"recommended_remediation\": {\n        \"metric_filter\": {\n          \"filterName\": \"ConsoleSignInWithoutMFAMetricFilter\",\n          \"logGroupName\": \"LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n          \"filterPattern\": \"{ ($.eventName = \\\"ConsoleLogin\\\") && ($.additionalEventData.MFAUsed != \\\"Yes\\\") }\",\n          \"metricTransformations\": [\n            {\n              \"metricName\": \"ConsoleSignInWithoutMFA\",\n              \"metricNamespace\": \"CloudTrailMetrics\",\n              \"metricValue\": \"1\",\n              \"defaultValue\": 0\n            }\n          ]\n        },\n        \"alarm_update\": {\n          \"AlarmName\": \"ConsoleSignInWithoutMfaAlarmNC\",\n          \"MetricName\": \"ConsoleSignInWithoutMFA\",\n          \"Namespace\": \"CloudTrailMetrics\",\n          \"Statistic\": \"Sum\",\n          \"Period\": 300,\n          \"EvaluationPeriods\": 1,\n          \"Threshold\": 1,\n          \"ComparisonOperator\": \"GreaterThanOrEqualToThreshold\",\n          \"AlarmActions\": [\"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0\"],\n          \"TreatMissingData\": \"notBreaching\"\n        }\n      },\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (< 30 min, 2 CLI commands)\"\n    },\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"action\": \"Create new CloudWatch Logs metric filter for CIS 3.4 (IAM policy changes) on log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs' with the full IAM mutation event pattern shown in recommended_remediation.IAM_POLICY_CHANGES. Create a corresponding CloudWatch Alarm with SNS action.\",\n      \"cis_control\": \"CIS AWS 3.4\",\n      \"recommended_remediation\": {\n        \"metric_filter\": {\n          \"filterName\": \"IAMPolicyChangesMetricFilter\",\n          \"logGroupName\": \"LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n          \"filterPattern\": \"{ ($.eventName = DeleteGroupPolicy) || ($.eventName = DeleteRolePolicy) || ($.eventName = DeleteUserPolicy) || ($.eventName = PutGroupPolicy) || ($.eventName = PutRolePolicy) || ($.eventName = PutUserPolicy) || ($.eventName = CreatePolicy) || ($.eventName = DeletePolicy) || ($.eventName = CreatePolicyVersion) || ($.eventName = DeletePolicyVersion) || ($.eventName = SetDefaultPolicyVersion) || ($.eventName = AttachRolePolicy) || ($.eventName = DetachRolePolicy) || ($.eventName = AttachUserPolicy) || ($.eventName = DetachUserPolicy) || ($.eventName = AttachGroupPolicy) || ($.eventName = DetachGroupPolicy) }\",\n          \"metricTransformations\": [\n            {\n              \"metricName\": \"IAMPolicyChangeCount\",\n              \"metricNamespace\": \"CloudTrailMetrics\",\n              \"metricValue\": \"1\",\n              \"defaultValue\": 0\n            }\n          ]\n        },\n        \"alarm\": {\n          \"AlarmName\": \"IAMPolicyChangesAlarm\",\n          \"MetricName\": \"IAMPolicyChangeCount\",\n          \"Namespace\": \"CloudTrailMetrics\",\n          \"Statistic\": \"Sum\",\n          \"Period\": 300,\n          \"EvaluationPeriods\": 1,\n          \"Threshold\": 1,\n          \"ComparisonOperator\": \"GreaterThanOrEqualToThreshold\",\n          \"AlarmActions\": [\"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0\"],\n          \"TreatMissingData\": \"notBreaching\"\n        }\n      },\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (< 30 min, 2 CLI commands)\"\n    },\n    {\n      \"resource_id\": \"wafr-comp-ct-bec2b3a0\",\n      \"action\": \"Create new CloudWatch Logs metric filter for CIS 3.10/3.11 (NACL and SG changes) on log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs' with the full SG + NACL mutation event pattern shown in recommended_remediation.NACL_SG_CHANGES. Create a corresponding CloudWatch Alarm with SNS action.\",\n      \"cis_control\": \"CIS AWS 3.10 / 3.11\",\n      \"recommended_remediation\": {\n        \"metric_filter\": {\n          \"filterName\": \"NACLAndSGChangesMetricFilter\",\n          \"logGroupName\": \"LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n          \"filterPattern\": \"{ ($.eventName = AuthorizeSecurityGroupIngress) || ($.eventName = AuthorizeSecurityGroupEgress) || ($.eventName = RevokeSecurityGroupIngress) || ($.eventName = RevokeSecurityGroupEgress) || ($.eventName = CreateSecurityGroup) || ($.eventName = DeleteSecurityGroup) || ($.eventName = CreateNetworkAcl) || ($.eventName = CreateNetworkAclEntry) || ($.eventName = DeleteNetworkAcl) || ($.eventName = DeleteNetworkAclEntry) || ($.eventName = ReplaceNetworkAclEntry) || ($.eventName = ReplaceNetworkAclAssociation) }\",\n          \"metricTransformations\": [\n            {\n              \"metricName\": \"NACLAndSGChangeCount\",\n              \"metricNamespace\": \"CloudTrailMetrics\",\n              \"metricValue\": \"1\",\n              \"defaultValue\": 0\n            }\n          ]\n        },\n        \"alarm\": {\n          \"AlarmName\": \"NACLAndSGChangesAlarm\",\n          \"MetricName\": \"NACLAndSGChangeCount\",\n          \"Namespace\": \"CloudTrailMetrics\",\n          \"Statistic\": \"Sum\",\n          \"Period\": 300,\n          \"EvaluationPeriods\": 1,\n          \"Threshold\": 1,\n          \"ComparisonOperator\": \"GreaterThanOrEqualToThreshold\",\n          \"AlarmActions\": [\"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0\"],\n          \"TreatMissingData\": \"notBreaching\"\n        }\n      },\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (< 30 min, 2 CLI commands)\"\n    },\n    {\n      \"resource_id\": \"CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3\",\n      \"action\": \"Delete and recreate (or use put-metric-filter to overwrite) the defective metric filter 'CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3' with the corrected pattern shown in recommended_remediation.CLOUDTRAIL_DISABLED. Key fixes: (1) remove invalid wildcard 'eventName = Trail', (2) fix typo 'UpdateTraile' \u2192 'UpdateTrail', (3) add 'CreateTrail'. Alarm 'CloudTrailChangesAlarmNC' already has SNS wired \u2014 point it to the corrected metric.\",\n      \"cis_control\": \"CIS AWS 3.5\",\n      \"recommended_remediation\": {\n        \"metric_filter\": {\n          \"filterName\": \"CloudTrailChangesMetricFilter\",\n          \"logGroupName\": \"LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n          \"filterPattern\": \"{ ($.eventName = CreateTrail) || ($.eventName = UpdateTrail) || ($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }\",\n          \"metricTransformations\": [\n            {\n              \"metricName\": \"CloudTrailChangeCount\",\n              \"metricNamespace\": \"CloudTrailMetrics\",\n              \"metricValue\": \"1\",\n              \"defaultValue\": 0\n            }\n          ]\n        },\n        \"alarm\": {\n          \"AlarmName\": \"CloudTrailChangesAlarm\",\n          \"MetricName\": \"CloudTrailChangeCount\",\n          \"Namespace\": \"CloudTrailMetrics\",\n          \"Statistic\": \"Sum\",\n          \"Period\": 300,\n          \"EvaluationPeriods\": 1,\n          \"Threshold\": 1,\n          \"ComparisonOperator\": \"GreaterThanOrEqualToThreshold\",\n          \"AlarmActions\": [\"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0\"],\n          \"TreatMissingData\": \"notBreaching\"\n        }\n      },\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"Low (< 20 min, 1 CLI put-metric-filter + alarm update)\"\n    }\n  ]\n}\n```\n\n---\n\n## What Was Found & Why It Matters\n\nHere is a plain-English breakdown of each finding embedded in the JSON above:\n\n---\n\n### \ud83d\udd34 CRITICAL \u2014 CIS 1.7 / 3.3: Root User Usage (`wafr-comp-ct-bec2b3a0`)\n**Status: Fully MISSING**\nZero metric filters and zero alarms cover root account activity. Any root API call or root console login is completely undetected. The CIS Benchmark treats this as one of the highest-priority controls because root credentials cannot be restricted with IAM policies.\n\n---\n\n### \ud83d\udfe0 HIGH \u2014 CIS 3.2: Console Sign-In Without MFA (`NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk`)\n**Status: INCOMPLETE (filter + alarm both defective)**\n- **Filter gap:** The pattern hardcodes `userIdentity.type = \"IAMUser\"` \u2014 root account MFA-less logins are silently ignored.\n- **Alarm gap:** `ConsoleSignInWithoutMfaAlarmNC` has `AlarmActions = []` \u2014 the alarm fires but **notifies nobody**.\n\n---\n\n### \ud83d\udfe0 HIGH \u2014 CIS 3.4: IAM Policy Changes (`wafr-comp-ct-bec2b3a0`)\n**Status: Fully MISSING**\nNo filter or alarm covers any of the 17 IAM mutation APIs (Attach/Detach/Put/Create/Delete policy events). Privilege escalation via IAM goes completely unmonitored.\n\n---\n\n### \ud83d\udfe0 HIGH \u2014 CIS 3.10/3.11: NACL / Security Group Changes (`wafr-comp-ct-bec2b3a0`)\n**Status: Fully MISSING**\nNo filter or alarm covers any Security Group or Network ACL mutation. Firewall rule changes (e.g., opening port 22/3389 to 0.0.0.0/0) produce no alert whatsoever.\n\n---\n\n### \ud83d\udfe1 MEDIUM \u2014 CIS 3.5: CloudTrail Disabled (`CloudtrailChnagesLogsMetricFilterNC-Rbb9oZhFpFw3`)\n**Status: DEFECTIVE (filter exists but broken)**\nThree bugs in the existing pattern:\n1. `eventName = Trail` \u2014 not valid filter syntax, never matches anything\n2. `UpdateTraile` \u2014 typo, correct spelling is `UpdateTrail`\n3. `CreateTrail` \u2014 entirely absent; new trail creation is unmonitored\n\nThe alarm (`CloudTrailChangesAlarmNC`) is correctly wired to SNS but watches a broken metric.",
+  "token_usage": {
+    "estimated": 1973,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 149.9,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

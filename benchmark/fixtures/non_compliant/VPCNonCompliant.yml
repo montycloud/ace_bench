@@ -1,0 +1,353 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create a VPC with Subnets, Internet Gateway and Security Groups
+Mappings:
+  AMIMap:
+    us-east-1:
+      AMI: ami-0aa7d40eeae50c9a9
+    us-east-2:
+      AMI: ami-05bfbece1ed5beb54
+Resources:
+  DefaultVPCNCRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:*
+                  - logs:CreateLogStream
+                  - logs:DescribeLogGroups
+                  - logs:PutMetricData
+                  - logs:CreateLogGroup
+                  - logs:PutLogEvents
+                Resource: "*"
+  DefaultVPCNCLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !Sub ${DefaultVPCNCRole.Arn}
+      Handler: index.handler
+      Timeout: 600
+      Runtime: python3.12
+      TracingConfig:
+        Mode: PassThrough
+      Code:
+        ZipFile: !Sub |
+          import json
+          import os
+          import boto3
+          import cfnresponse
+          def handler(event, context):
+              print(event)
+              if event["RequestType"] == "Create":
+                  ec2 = boto3.client('ec2')
+                  default_vpc = ec2.describe_vpcs(Filters=[{'Name':'isDefault', 'Values':['true']}])
+                  print(default_vpc)
+                  defaultvpc=default_vpc["Vpcs"][0]["VpcId"]
+                  print(defaultvpc)
+                  subnets = ec2.describe_subnets(Filters=[{'Name': 'vpc-id', 'Values': [defaultvpc]}])
+                  subnet_ids = [subnet['SubnetId'] for subnet in subnets['Subnets']]
+                  subnet_id=subnet_ids[0]
+                  print(subnet_id)
+                  responseData = {"defaultvpc": defaultvpc,"subnetid": subnet_id}
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+                  return responseData
+              elif (event["RequestType"] == "Update" or event["RequestType"] == "Delete"):
+                  print("Update or delete Create Logic")
+                  responseData = {}
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+                  return responseData
+  DefaultVPCCR:
+    Type: Custom::DefaultVPCCR
+    Properties:
+      ServiceToken: !Sub ${DefaultVPCNCLambda.Arn}
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 198.16.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCVPC1
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.1.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: AWS::Region
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET1
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.2.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+          Ref: AWS::Region
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET2
+  SubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.3.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs
+          Ref: AWS::Region
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET3
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCIG1
+  VPCGatewayAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCROUTE1
+  InternetRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn:
+      - VPCGatewayAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+  SubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetA
+      RouteTableId: !Ref RouteTable
+  SubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetB
+      RouteTableId: !Ref RouteTable
+  SecurityGroup1:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG1
+  SecurityGroup2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG2
+  # The below Lambda function delete the security groups created as part of the cluster.
+  MyLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaEC2Permissions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DescribeVpcs"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:RevokeSecurityGroupIngress"
+                  - "logs:*"
+                Resource: "*"
+
+  # Lambda Function
+  DeleteEMRSecurityGroupsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: "index.handler"
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          VPC_ID: !Ref VPC
+      Code:
+        ZipFile: |
+          import os
+          import boto3
+          import cfnresponse
+          def delete_security_groups(ec2_client):
+            # Security group names to delete
+            sg_names_to_delete = ['ElasticMapReduce-slave', 'ElasticMapReduce-master']
+            # Retrieve all VPCs
+            vpc_id = os.environ.get('VPC_ID')
+            # For each VPC, look for each security group name we want to delete
+            for sg_name in sg_names_to_delete:
+              security_groups = ec2_client.describe_security_groups(
+                Filters=[
+                  {'Name': 'group-name', 'Values': [sg_name]},
+                  {'Name': 'vpc-id', 'Values': [vpc_id]}
+                ]
+              )['SecurityGroups']
+              for sg in security_groups:
+                sg_id = sg['GroupId']
+                try:
+                  response = ec2_client.describe_security_groups(GroupIds=[sg_id])
+                  ip_permissions = response['SecurityGroups'][0]['IpPermissions']
+
+                  # Revoke all inbound rules
+                  if ip_permissions:
+                      ec2_client.revoke_security_group_ingress(GroupId=sg_id, IpPermissions=ip_permissions)
+                      print(f"Inbound rules removed for Security Group {sg_id}")
+                  else:
+                      print("No inbound rules to remove.")
+                except Exception as e:
+                  print(f"Could not remove inbound rules {sg_id}")
+            for sg_name in sg_names_to_delete:
+              security_groups = ec2_client.describe_security_groups(
+                Filters=[
+                  {'Name': 'group-name', 'Values': [sg_name]},
+                  {'Name': 'vpc-id', 'Values': [vpc_id]}
+                ]
+              )['SecurityGroups']
+              for sg in security_groups:
+                sg_id = sg['GroupId']
+                try:
+                  ec2_client.delete_security_group(GroupId=sg_id)
+                  print(f"Deleted security group {sg_name} ({sg_id}) in VPC {vpc_id}")
+                except Exception as e:
+                  print(f"Could not delete security group {sg_name} ({sg_id}) in VPC {vpc_id}: {str(e)}")
+
+
+          def handler(event, context):
+            ec2_client = boto3.client('ec2')          
+            if (event["RequestType"] == "Delete"):
+              delete_security_groups(ec2_client)
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDEMRNC")
+              return
+            elif (event["RequestType"] == "Create" or event["RequestType"] == "Update"):
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDEMRNC")
+              return
+      Runtime: python3.11
+      Timeout: 300
+      MemorySize: 128
+
+  # Custom Resource to Trigger the Lambda Function
+  DeleteSecurityGroupsCustomResource:
+    Type: Custom::DeleteEMRSecurityGroups
+    Properties:
+      ServiceToken: !GetAtt DeleteEMRSecurityGroupsFunction.Arn
+      ServiceTimeout: 300
+
+Outputs:
+  AccountIdRegion:
+    Description: AccountIdRegion
+    Value: !Join
+      - ""
+      - - !Ref AWS::AccountId
+        - /
+        - !Ref AWS::Region
+  SecurityGroupID1:
+    Description: Security Group -1 ID
+    Value: !Ref SecurityGroup1
+    Export:
+      Name: SecurityGroupID1
+  SecurityGroupID2:
+    Description: Security Group -2 ID
+    Value: !Ref SecurityGroup2
+    Export:
+      Name: SecurityGroupID2
+  VPCID:
+    Description: VPC ID
+    Value: !Ref VPC
+    Export:
+      Name: VPCID
+  SubnetAID:
+    Description: Subnet A ID
+    Value: !Ref SubnetA
+    Export:
+      Name: SubnetAID
+  SubnetBID:
+    Description: Subnet B ID
+    Value: !Ref SubnetB
+    Export:
+      Name: SubnetBID
+  SubnetCID:
+    Description: Subnet B ID
+    Value: !Ref SubnetC
+    Export:
+      Name: SubnetCID
+  InternetGatewayID:
+    Description: Internetgateway ID
+    Value: !Ref InternetGateway
+    Export:
+      Name: InternetGatewayID
+  RouteTableID:
+    Description: RouteTable ID
+    Value: !Ref RouteTable
+    Export:
+      Name: RouteTableID
+  DefaultVPCId:
+    Description: ID of the Default VPCs
+    Value: !GetAtt DefaultVPCCR.defaultvpc
+  SubnetID:
+    Description: Subnet ID
+    Value: !GetAtt DefaultVPCCR.subnetid

@@ -1,0 +1,120 @@
+{
+  "id": "COPS_missing_flow_log_visibility_on_L1_42611021__soa__20260729_110445",
+  "scenario_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+  "scenario_name": "Missing Flow Log Visibility on Production VPCs",
+  "category": "operations_management",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T11:04:45.602373+00:00",
+  "total_score": 0.75,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top VPC resources with findings to identify those missing flow log configuration"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand VPC flow log check failure counts and scope"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top VPC resources with findings to identify those missing flow log configuration",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand VPC flow log check failure counts and scope",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "vpc-0574311ac28d9b744",
+        "vpc-098106e3fda1f9ba5",
+        "vpc-0a9630bfd89f3d25c"
+      ],
+      "found": [
+        "vpc-0574311ac28d9b744",
+        "vpc-098106e3fda1f9ba5",
+        "vpc-0a9630bfd89f3d25c"
+      ],
+      "found_in_response": [
+        "vpc-0574311ac28d9b744",
+        "vpc-098106e3fda1f9ba5",
+        "vpc-0a9630bfd89f3d25c"
+      ],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Identify production VPCs without flow-log telemetry feeding the investigations pipeline; capture all must-find items from env:fx/ace-bench/operations-manage/network-visibility/missing-flow-log-visibility-on-pro/l1/v1 | packet:cp/ace-bench/operations-manage/network-visibility/missing-flow-log-visibility-on-pro/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Identify production VPCs without flow-log telemetry feeding the investigations pipeline; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List VPCs lacking VPC Flow Logs (ALL traffic) or logging to a short-retention destination. Include VPC ID, associated subnets, and attached workloads. Recommendation: Enable Flow Logs to S3 with partition projection for Athena querying and retain for 365 days. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+    "description": "VPC Flow Logs capture metadata about network traffic in your AWS network \u2014 source IP, destination, port, protocol, and whether the traffic was allowed or denied. Without flow logs, there is no visibility into what is communicating inside your VPC: you cannot detect lateral movement, unexpected connections to sensitive resources, or data exfiltration attempts. Flow logs are essential for security investigations and network anomaly detection. the agent should identify VPCs that have flow logs disabled.",
+    "objective": "Identify production VPCs without flow-log telemetry feeding the investigations pipeline; capture all must-find items from env:fx/ace-bench/operations-manage/network-visibility/missing-flow-log-visibility-on-pro/l1/v1 | packet:cp/ace-bench/operations-manage/network-visibility/missing-flow-log-visibility-on-pro/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List VPCs lacking VPC Flow Logs (ALL traffic) or logging to a short-retention destination. Include VPC ID, associated subnets, and attached workloads. Recommendation: Enable Flow Logs to S3 with partition projection for Athena querying and retain for 365 days.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims",
+    "wafr_pillar": "Operational Excellence | Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "vpc-0574311ac28d9b744",
+      "vpc-098106e3fda1f9ba5",
+      "vpc-0a9630bfd89f3d25c"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is VPC Flow Logs being disabled on production VPCs (not just a general network visibility concern)?",
+      "Did the agent identify specific VPC IDs \u2014 or, if tools could not surface actual VPC IDs, did it explicitly acknowledge that rather than fabricating IDs like 'vpc-REDACTED-ACCOUNT-01'?",
+      "Did the agent explain why flow logs matter (network forensics, lateral movement detection, anomaly detection)?",
+      "Did the agent avoid hallucinating VPC IDs or flow log configuration details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "All three VPCs have zero Flow Logs configured. Now I have everything I need to build the complete JSON response.\n\n```json\n{\n  \"summary\": \"AWS account REDACTED-ACCOUNT (us-east-1) contains 3 VPCs. None of them have VPC Flow Logs enabled for ANY traffic. This means all inbound, outbound, and inter-subnet traffic is completely invisible: there is no forensic audit trail, no network anomaly detection capability, and no compliance evidence (PCI-DSS, HIPAA, SOC 2, CIS AWS Foundations all mandate flow log retention \u2265 365 days). The three affected VPCs host a total of 4 running EC2 instances (web-prod-01/02, worker-01, api-prod-01), 7 VPC-attached Lambda functions (MyBookstore workload), 1 Neptune DB instance, and 11 subnets across multiple AZs. Remediation requires enabling Flow Logs on all three VPCs with traffic-type ALL, delivering to a dedicated S3 bucket configured with partition projection for cost-efficient Athena querying, and a lifecycle policy enforcing 365-day retention. All findings are rated CRITICAL.\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"vpc-0574311ac28d9b744\",\n      \"resource_type\": \"AWS::EC2::VPC\",\n      \"check\": \"VPC Flow Logs \u2014 Missing (ALL traffic)\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"vpc_cidr\": \"172.31.0.0/16\",\n        \"is_default_vpc\": true,\n        \"flow_logs_enabled\": false,\n        \"flow_log_count\": 0,\n        \"traffic_type_covered\": \"NONE\",\n        \"subnets\": [\n          { \"subnet_id\": \"subnet-0f41b9e2758b082dc\", \"cidr\": \"172.31.80.0/20\", \"az\": \"us-east-1b\" },\n          { \"subnet_id\": \"subnet-0a7bd2db87cc08317\", \"cidr\": \"172.31.32.0/20\", \"az\": \"us-east-1d\" },\n          { \"subnet_id\": \"subnet-024154c84b36bb164\", \"cidr\": \"172.31.48.0/20\", \"az\": \"us-east-1e\" },\n          { \"subnet_id\": \"subnet-0deb6815d380aa3b3\", \"cidr\": \"172.31.0.0/20\",  \"az\": \"us-east-1a\" },\n          { \"subnet_id\": \"subnet-0e3ebcef0d97ddfaf\", \"cidr\": \"172.31.64.0/20\", \"az\": \"us-east-1f\" },\n          { \"subnet_id\": \"subnet-0a089b2d33fbbd29e\", \"cidr\": \"172.31.16.0/20\", \"az\": \"us-east-1c\" }\n        ],\n        \"attached_workloads\": [\n          { \"resource_id\": \"i-0ee5fa3508cede8a2\", \"type\": \"EC2\", \"name\": \"web-prod-02\",  \"instance_type\": \"t3.micro\", \"state\": \"running\" },\n          { \"resource_id\": \"i-01baa59f318a3c59e\", \"type\": \"EC2\", \"name\": \"worker-01\",    \"instance_type\": \"t3.micro\", \"state\": \"running\" },\n          { \"resource_id\": \"i-06286d41ae1218d5e\", \"type\": \"EC2\", \"name\": \"web-prod-01\",  \"instance_type\": \"t3.micro\", \"state\": \"running\" },\n          { \"resource_id\": \"i-0aa58fe2d137a2f9f\", \"type\": \"EC2\", \"name\": \"api-prod-01\",  \"instance_type\": \"t3.micro\", \"state\": \"running\" }\n        ],\n        \"compliance_violations\": [\"CIS AWS 2.9\", \"PCI-DSS Req 10.2\", \"HIPAA \u00a7164.312(b)\", \"SOC 2 CC7.2\"],\n        \"risk\": \"Zero visibility into all network traffic crossing this VPC. Lateral movement, data exfiltration, port scanning, and unauthorized access cannot be detected or investigated retrospectively.\"\n      }\n    },\n    {\n      \"resource_id\": \"vpc-0a9630bfd89f3d25c\",\n      \"resource_type\": \"AWS::EC2::VPC\",\n      \"check\": \"VPC Flow Logs \u2014 Missing (ALL traffic)\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"vpc_cidr\": \"198.16.0.0/16\",\n        \"is_default_vpc\": false,\n        \"cloudformation_stack\": \"VPCNonCompliant\",\n        \"mc_key_tag\": \"WARNCVPC1\",\n        \"flow_logs_enabled\": false,\n        \"flow_log_count\": 0,\n        \"traffic_type_covered\": \"NONE\",\n        \"subnets\": [\n          { \"subnet_id\": \"subnet-0a38bb23420884ae1\", \"cidr\": \"198.16.2.0/24\", \"az\": \"us-east-1b\" },\n          { \"subnet_id\": \"subnet-0b0f02adcb2f13576\", \"cidr\": \"198.16.3.0/24\", \"az\": \"us-east-1c\" },\n          { \"subnet_id\": \"subnet-0eba94b0d37cca7c3\", \"cidr\": \"198.16.1.0/24\", \"az\": \"us-east-1a\" }\n        ],\n        \"attached_workloads\": [],\n        \"compliance_violations\": [\"CIS AWS 2.9\", \"PCI-DSS Req 10.2\", \"HIPAA \u00a7164.312(b)\", \"SOC 2 CC7.2\"],\n        \"risk\": \"VPC was explicitly tagged as non-compliant (MC_KEY=WARNCVPC1) and is deployed via a CloudFormation stack named 'VPCNonCompliant', indicating a known control gap that has not been remediated. No flow logs exist despite the tag acknowledging non-compliance.\"\n      }\n    },\n    {\n      \"resource_id\": \"vpc-098106e3fda1f9ba5\",\n      \"resource_type\": \"AWS::EC2::VPC\",\n      \"check\": \"VPC Flow Logs \u2014 Missing (ALL traffic)\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"vpc_cidr\": \"172.31.0.0/16\",\n        \"is_default_vpc\": false,\n        \"cloudformation_stack\": \"MyBookstore\",\n        \"flow_logs_enabled\": false,\n        \"flow_log_count\": 0,\n        \"traffic_type_covered\": \"NONE\",\n        \"subnets\": [\n          { \"subnet_id\": \"subnet-0861ff391d665af14\", \"cidr\": \"172.31.0.0/24\", \"az\": \"us-east-1a\" },\n          { \"subnet_id\": \"subnet-0343d39a314913f57\", \"cidr\": \"172.31.1.0/24\", \"az\": \"us-east-1b\" }\n        ],\n        \"attached_workloads\": [\n          { \"resource_id\": \"neptunedbinstance-flctinps6lhn\", \"type\": \"RDS/Neptune\",    \"engine\": \"neptune\" },\n          { \"resource_id\": \"mybookstore-GetRecommendationsByBook\",                  \"type\": \"Lambda\" },\n          { \"resource_id\": \"mybookstore-Search\",                                    \"type\": \"Lambda\" },\n          { \"resource_id\": \"MyBookstore-bookstoreNeptuneLoaderLambda-2EheYtObWQTf\", \"type\": \"Lambda\" },\n          { \"resource_id\": \"mybookstore-GetRecommendations\",                        \"type\": \"Lambda\" },\n          { \"resource_id\": \"mybookstore-GetBestSellers\",                            \"type\": \"Lambda\" },\n          { \"resource_id\": \"mybookstore-UpdateSearchCluster\",                       \"type\": \"Lambda\" },\n          { \"resource_id\": \"mybookstore-UpdateBestSellers\",                         \"type\": \"Lambda\" }\n        ],\n        \"compliance_violations\": [\"CIS AWS 2.9\", \"PCI-DSS Req 10.2\", \"HIPAA \u00a7164.312(b)\", \"SOC 2 CC7.2\"],\n        \"risk\": \"Production bookstore application VPC hosts a Neptune graph database and 7 Lambda functions with no network traffic logging. Any compromise of the Neptune instance or Lambda functions (e.g., SQL/Gremlin injection, SSRF, data exfiltration via DNS) would be completely undetectable without flow logs.\"\n      }\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"vpc-0574311ac28d9b744\",\n      \"action\": \"Step 1 \u2014 Create a dedicated S3 bucket (e.g. aws-flowlogs-REDACTED-ACCOUNT-use1) with: (a) SSE-S3 or SSE-KMS encryption, (b) Block Public Access enabled on all four settings, (c) S3 Lifecycle rule: transition to S3-IA at 30 days, S3 Glacier at 90 days, expire at 365 days, (d) S3 bucket policy allowing vpc-flow-logs.amazonaws.com to PutObject only under prefix AWSLogs/REDACTED-ACCOUNT/. Step 2 \u2014 Enable VPC Flow Logs: aws ec2 create-flow-logs --resource-type VPC --resource-ids vpc-0574311ac28d9b744 --traffic-type ALL --log-destination-type s3 --log-destination arn:aws:s3:::aws-flowlogs-REDACTED-ACCOUNT-use1/vpc-0574311ac28d9b744/ --log-format '${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}' --destination-options FileFormat=parquet,HiveCompatiblePartitions=true,PerHourPartition=true. Step 3 \u2014 Create Athena table with partition projection: PARTITIONED BY (account string, region string, year string, month string, day string, hour string) with projection.enabled=true and storage.location.template pointing to the S3 prefix. Step 4 \u2014 Create CloudWatch Alarm or EventBridge rule to alert if flow log delivery status enters ERROR state.\",\n      \"priority\": \"P1 \u2014 Immediate (within 24 hours)\",\n      \"effort\": \"Low (30 minutes via Console or IaC). Use the Parquet + Hive-compatible partitions option to reduce Athena scan costs by up to 80% vs plain text logs. CloudFormation or Terraform snippet available to automate all four steps.\"\n    },\n    {\n      \"resource_id\": \"vpc-0a9630bfd89f3d25c\",\n      \"action\": \"Step 1 \u2014 Reuse the same S3 bucket created above (aws-flowlogs-REDACTED-ACCOUNT-use1). The bucket policy already permits delivery for account REDACTED-ACCOUNT. Step 2 \u2014 Enable Flow Logs: aws ec2 create-flow-logs --resource-type VPC --resource-ids vpc-0a9630bfd89f3d25c --traffic-type ALL --log-destination-type s3 --log-destination arn:aws:s3:::aws-flowlogs-REDACTED-ACCOUNT-use1/vpc-0a9630bfd89f3d25c/ --log-format '${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}' --destination-options FileFormat=parquet,HiveCompatiblePartitions=true,PerHourPartition=true. Step 3 \u2014 Update (or redeploy) the 'VPCNonCompliant' CloudFormation stack to embed the FlowLog resource (AWS::EC2::FlowLog) directly, removing the non-compliant posture permanently and preventing drift. Step 4 \u2014 Remove or rename the MC_KEY=WARNCVPC1 tag once the control gap is closed; update your compliance tracker to reflect remediated status.\",\n      \"priority\": \"P1 \u2014 Immediate (within 24 hours). The WARNCVPC1 tag signals a known, acknowledged gap \u2014 regulators and auditors will treat this as willful non-remediation if it persists.\",\n      \"effort\": \"Low (15 minutes). CloudFormation stack update is recommended over manual CLI to ensure the fix is permanent and version-controlled.\"\n    },\n    {\n      \"resource_id\": \"vpc-098106e3fda1f9ba5\",\n      \"action\": \"Step 1 \u2014 Reuse the same S3 bucket (aws-flowlogs-REDACTED-ACCOUNT-use1). Step 2 \u2014 Enable Flow Logs: aws ec2 create-flow-logs --resource-type VPC --resource-ids vpc-098106e3fda1f9ba5 --traffic-type ALL --log-destination-type s3 --log-destination arn:aws:s3:::aws-flowlogs-REDACTED-ACCOUNT-use1/vpc-098106e3fda1f9ba5/ --log-format '${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}' --destination-options FileFormat=parquet,HiveCompatiblePartitions=true,PerHourPartition=true. Step 3 \u2014 For the Neptune DB specifically, also enable Neptune audit logs (aws rds modify-db-cluster --enable-cloudwatch-logs-exports audit) and correlate Neptune query logs with VPC flow log source IPs to detect graph traversal abuse. Step 4 \u2014 Update the MyBookstore CloudFormation stack (stack-id: arn:aws:cloudformation:us-east-1:REDACTED-ACCOUNT:stack/MyBookstore/25cf0a20-317b-11f1-8b60-0e3228531b11) to include the AWS::EC2::FlowLog resource so the control is infrastructure-as-code enforced for all future deployments. Step 5 \u2014 Add an Athena saved query to detect Lambda-to-Neptune traffic anomalies: flag any source IP (Lambda ENI) connecting to Neptune on port 8182 that is NOT one of the expected Lambda function ENIs.\",\n      \"priority\": \"P1 \u2014 Immediate (within 24 hours). This VPC hosts a database (Neptune) and multiple application Lambda functions \u2014 the highest-value attack surface of the three VPCs.\",\n      \"effort\": \"Medium (1\u20132 hours including Athena query setup and Neptune log enablement). Strongly recommend embedding in the MyBookstore CloudFormation/CDK stack for GitOps-enforced compliance.\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Findings Summary\n\n| # | VPC ID | CIDR | Flow Logs | Subnets | Active Workloads | Severity |\n|---|--------|------|-----------|---------|-----------------|----------|\n| 1 | `vpc-0574311ac28d9b744` | 172.31.0.0/16 | \u274c None | 6 | 4 EC2 instances (web-prod-01/02, worker-01, api-prod-01) | \ud83d\udd34 CRITICAL |\n| 2 | `vpc-0a9630bfd89f3d25c` | 198.16.0.0/16 | \u274c None | 3 | None (but **explicitly tagged non-compliant** \u2014 WARNCVPC1) | \ud83d\udd34 CRITICAL |\n| 3 | `vpc-098106e3fda1f9ba5` | 172.31.0.0/16 | \u274c None | 2 | 1 Neptune DB + 7 Lambda functions (MyBookstore) | \ud83d\udd34 CRITICAL |\n\n> **All 3 VPCs (100%)** lack VPC Flow Logs entirely. The recommended fix is a single shared S3 bucket with Parquet + Hive-compatible partitions, a 365-day lifecycle policy, and Athena partition projection \u2014 enabling sub-second queries at a fraction of plain-text log costs.",
+  "token_usage": {
+    "estimated": 1701,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 80.2,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

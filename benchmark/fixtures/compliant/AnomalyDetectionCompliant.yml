@@ -1,0 +1,13 @@
+Resources:
+  AnomalyServiceMonitor:
+    Type: 'AWS::CE::AnomalyMonitor'
+    Properties:
+      MonitorName: 'MonitorName'
+      MonitorType: 'DIMENSIONAL'
+      MonitorDimension: 'SERVICE'
+
+Outputs:
+  AnomalyMonitor:
+    Description: "Cost Anomaly Monitor"
+    Value: !Join [ "", [ Monitor, Name] ]
+  

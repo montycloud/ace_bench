@@ -1,0 +1,143 @@
+{
+  "id": "COPS_point_in_time_recovery_disable_L1_952c1416__eoa__20260729_143657",
+  "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+  "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+  "category": "reliability",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:36:57.890264+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top DynamoDB resources by finding count to identify tables with PITR disabled"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand backup/PITR check failure scope across the assessment"
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "List WAFR reliability pillar questions to find the PITR/backup question and its choices"
+        },
+        {
+          "tool": "get_question",
+          "params": {},
+          "reason": "Get full question detail including choices and improvement plan for the backup/PITR question"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top DynamoDB resources by finding count to identify tables with PITR disabled",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand backup/PITR check failure scope across the assessment",
+          "found": false
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "List WAFR reliability pillar questions to find the PITR/backup question and its choices",
+          "found": false
+        },
+        {
+          "tool": "get_question",
+          "params": {},
+          "reason": "Get full question detail including choices and improvement plan for the backup/PITR question",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "mybookstore-Cart",
+        "mybookstore-Books",
+        "mybookstore-Orders"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "mybookstore-Cart",
+        "mybookstore-Books",
+        "mybookstore-Orders"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items from env:fx/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/l1/v1 | packet:cp/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List DynamoDB tables where PointInTimeRecoverySpecification is disabled, along with table size, write throughput class, and table class. Recommendation: Enable PITR on every non-ephemeral table and schedule on-demand backups for tables exceeding the 35-day PITR window. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+    "description": "DynamoDB Point-in-Time Recovery (PITR) maintains a continuous backup of your table for 35 days, letting you restore to any second in that window. Without PITR, if data is accidentally deleted, corrupted by a bug, or modified by a bad deployment, recovery depends entirely on manual snapshots \u2014 which may not exist or may be hours old. For transactional tables storing orders, payments, or user data, PITR is the safety net that prevents data loss from becoming a business incident. the agent should identify DynamoDB tables with PITR disabled.",
+    "objective": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items from env:fx/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/l1/v1 | packet:cp/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List DynamoDB tables where PointInTimeRecoverySpecification is disabled, along with table size, write throughput class, and table class. Recommendation: Enable PITR on every non-ephemeral table and schedule on-demand backups for tables exceeding the 35-day PITR window.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable backup/DR controls without rollback evidence",
+    "wafr_pillar": "Reliability",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+      "mybookstore-Cart",
+      "mybookstore-Books",
+      "mybookstore-Orders"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is DynamoDB Point-in-Time Recovery (PITR) being disabled on transactional tables?",
+      "Did the agent identify specific DynamoDB table names \u2014 or, if tools could not surface table names, explicitly acknowledge that limitation rather than fabricating table names?",
+      "Did the agent explain the recovery capability PITR provides (continuous 35-day backup, restore to any second in that window)?",
+      "Did the agent avoid fabricating DynamoDB table names or PITR status details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'm sorry, but that request is outside my scope. I'm an **EC2 Optimization Agent** \u2014 I only perform EC2 instance optimization tasks, which include:\n\n- \ud83d\udd0d **Underutilized instance detection** (CPU analysis via CloudWatch)\n- \ud83d\udcd0 **Right-sizing recommendations** (instance type + cost savings)\n- \ud83d\uded1 **Stopped instance audits** (EBS cost estimation)\n\n---\n\n**What you asked about** involves **DynamoDB** (PointInTimeRecoverySpecification, table class, backup windows), which is outside my designated scope.\n\n**To get help with that**, you would need a DynamoDB-focused agent or a general AWS security/compliance auditing tool.\n\n---\n\n**Would you like me to perform an EC2 optimization scan instead?** I can:\n1. Identify underutilized or over-provisioned EC2 instances\n2. Recommend right-sized instance types with projected monthly savings\n3. Flag stopped instances still accruing EBS storage costs\n\nJust say **\"scan my EC2 instances\"** or **\"run EC2 optimization\"** to get started!",
+  "token_usage": {
+    "estimated": 184,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 6.0,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

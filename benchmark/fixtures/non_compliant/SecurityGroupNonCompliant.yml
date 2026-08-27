@@ -1,0 +1,303 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  MyLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: MyLambdaPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - ec2:RevokeSecurityGroupEgress
+                  - ec2:DescribeSecurityGroups
+                  - ec2:AuthorizeSecurityGroupIngress
+                  - ec2:RevokeSecurityGroupIngress
+                Resource: "*"
+
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import logging
+          import os
+          import json
+          import cfnresponse
+          def handler(event, context):
+            response_data = {}
+            try:
+              ec2 = boto3.client('ec2')
+              vpc_id = os.environ['VPC_ID']
+              
+              request_type = event['RequestType']
+              
+              if request_type in ['Create', 'Update']:
+                response = ec2.describe_security_groups(Filters=[
+                  {'Name': 'vpc-id', 'Values': [vpc_id]},
+                  {'Name': 'group-name', 'Values': ['default']}
+                ])
+                security_group = response['SecurityGroups'][0]
+                sg_id = security_group['GroupId']
+                current_permissions = response['SecurityGroups'][0]['IpPermissions']
+                print(current_permissions)
+                desired_permission = {'IpProtocol': '-1', 'IpRanges': [{'CidrIp': '0.0.0.0/0'}], 'Ipv6Ranges': [], 'PrefixListIds': [], 'UserIdGroupPairs': []}
+                open_group_exists = False
+                for item in current_permissions:
+                  if item['IpProtocol'] == "-1" and any(ip_range['CidrIp'] == "0.0.0.0/0" for ip_range in item["IpRanges"]):
+                    open_group_exists = True
+                    break;
+                if not open_group_exists:
+                  ec2.authorize_security_group_ingress(
+                    GroupId=sg_id,
+                    IpPermissions=[desired_permission]
+                  )
+                response_data = {'SecurityGroupId': sg_id}
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, "CustomResourcePhysicalID")
+              elif request_type == 'Delete':
+                response_data = {}
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, "CustomResourcePhysicalID")
+            
+            except Exception as e:
+              cfnresponse.send(event, context, cfnresponse.FAILED, response_data, "CustomResourcePhysicalID")
+              raise e
+
+      Runtime: python3.11
+      Timeout: 120
+      Environment:
+        Variables:
+          VPC_ID: !ImportValue VPCID
+
+  MyCustomResource:
+    Type: Custom::MyCustomResource
+    Properties:
+      ServiceToken: !GetAtt MyLambdaFunction.Arn
+      ServiceTimeout: 120
+      Action: "ManageSecurityGroup"
+      VPC_ID: !ImportValue VPCID
+
+  SecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      VpcId: !ImportValue VPCID
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 445
+          ToPort: 445
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 445
+          ToPort: 445
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 27017
+          ToPort: 27017
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 27017
+          ToPort: 27017
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 9200
+          ToPort: 9200
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 9200
+          ToPort: 9200
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 8089
+          ToPort: 8089
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 8089
+          ToPort: 8089
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "UDP"
+          FromPort: 11211
+          ToPort: 11211
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "UDP"
+          FromPort: 11211
+          ToPort: 11211
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 9092
+          ToPort: 9092
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 9092
+          ToPort: 9092
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 9300
+          ToPort: 9300
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 9300
+          ToPort: 9300
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 23
+          ToPort: 23
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 23
+          ToPort: 23
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 5601
+          ToPort: 5601
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 5601
+          ToPort: 5601
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 6379
+          ToPort: 6379
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 6379
+          ToPort: 6379
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 1433
+          ToPort: 1433
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 1433
+          ToPort: 1433
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 9142
+          ToPort: 9142
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 9142
+          ToPort: 9142
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 135
+          ToPort: 135
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 135
+          ToPort: 135
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 5439
+          ToPort: 5439
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 5439
+          ToPort: 5439
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 1521
+          ToPort: 1521
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 1521
+          ToPort: 1521
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 21
+          ToPort: 21
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 21
+          ToPort: 21
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 20
+          ToPort: 20
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 20
+          ToPort: 20
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "TCP"
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 10.0.0.0/8
+        - IpProtocol: "TCP"
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  SecurityGroupId:
+    Description: Security Group Resource Id
+    Value:
+      Ref: SecurityGroup
+  DefaultSecurityGroupId:
+    Description: The ID of the default security group in the specified VPC.
+    Value: !GetAtt MyCustomResource.SecurityGroupId

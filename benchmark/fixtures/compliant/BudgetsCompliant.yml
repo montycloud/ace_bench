@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS Budget and Alerts wafr template for compliant checks
+Resources:
+  MyBudget:
+    Type: 'AWS::Budgets::Budget'
+    Properties:
+      Budget:
+        BudgetLimit:
+          Amount: 100.0
+          Unit: USD
+        BudgetType: COST
+        TimeUnit: MONTHLY
+      NotificationsWithSubscribers:
+        - Notification:
+            ComparisonOperator: GREATER_THAN
+            NotificationType: ACTUAL
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: 'vijayahariharan@montycloud.com'
+Outputs:
+  BudgetName:
+    Description: 'The name of the AWS Budget'
+    Value: !Ref MyBudget

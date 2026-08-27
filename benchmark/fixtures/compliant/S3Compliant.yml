@@ -1,0 +1,353 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CFN template creates Compliant S3 Bucket following as most Best Practices that apply to S3.
+
+Resources:
+  MyKMSKey:
+    Type: "AWS::KMS::Key"
+    Properties:
+      Description: "KMS Key for S3 bucket encryption"
+      KeyPolicy:
+        Version: "2012-10-17"
+        Id: "key-default-1"
+        Statement:
+          - Sid: "Enable IAM User Permissions"
+            Effect: "Allow"
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: "kms:*"
+            Resource: "*"
+
+  Alias:
+    Type: "AWS::KMS::Alias"
+    Properties:
+      AliasName: !Sub
+        - alias/s3-key-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      TargetKeyId: !Ref MyKMSKey
+
+  MyS3FullAccessRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub
+        - s3-fullaccess-role-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "s3.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: "S3FullAccessPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "s3:*"
+                Resource: "*"
+
+  DestinationBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub
+        - replicationbucket-${AWS::AccountId}-${AWS::Region}-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      VersioningConfiguration:
+        Status: Enabled
+
+  Complaints3Bucket:
+    Type: AWS::S3::Bucket
+    DependsOn: LogBucket
+    Properties:
+      ReplicationConfiguration:
+        Role: !GetAtt MyS3FullAccessRole.Arn
+        Rules:
+          - Destination:
+              Bucket: !GetAtt DestinationBucket.Arn
+              StorageClass: STANDARD
+            Id: Backup
+            Prefix: ""
+            Status: Enabled
+
+      IntelligentTieringConfigurations:
+        - Id: intelligent-compliant-bucket
+          Status: Enabled
+          Tierings:
+            - AccessTier: ARCHIVE_ACCESS
+              Days: 90
+
+      InventoryConfigurations:
+        - Id: InventoryConfigurationId
+          Destination:
+            BucketArn: !GetAtt LogBucket.Arn
+            Format: CSV
+            Prefix: InventoryDestinationPrefix
+          Enabled: true
+          IncludedObjectVersions: Current
+          Prefix: InventoryConfigurationPrefix
+          ScheduleFrequency: Weekly
+
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+            ServerSideEncryptionByDefault:
+              KMSMasterKeyID: !GetAtt MyKMSKey.Arn
+              SSEAlgorithm: aws:kms
+
+      BucketName: !Sub
+        - complaintt-s3-bucket-${AWS::AccountId}-${AWS::Region}-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+
+      LifecycleConfiguration:
+        Rules:
+          - Id: MoveToIA
+            Status: Enabled
+            Transitions:
+              - StorageClass: ONEZONE_IA
+                TransitionInDays: 30
+          - Id: MoveToIntelligentTiering
+            Status: Enabled
+            Transitions:
+              - StorageClass: INTELLIGENT_TIERING
+                TransitionInDays: 60
+
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+      VersioningConfiguration:
+        Status: Enabled
+
+      LoggingConfiguration:
+        DestinationBucketName: !Ref LogBucket
+        LogFilePrefix: accesslogs/
+
+  MyUser:
+    Type: "AWS::IAM::User"
+    Properties:
+      UserName: !Sub
+        - testuser-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+
+  LogBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub
+        - complaint-s3-log-bucket-${AWS::AccountId}-${AWS::Region}-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+
+  ComplaintS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DependsOn: MyUser
+    Properties:
+      Bucket: !Ref Complaints3Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: !GetAtt MyUser.Arn
+          Action:
+            - "s3:PutObject"
+            - "s3:ListBucket"
+            - "s3:GetObject"
+            - "s3:DeleteObject"
+          Resource:
+            - !GetAtt Complaints3Bucket.Arn
+            - !Sub "${Complaints3Bucket.Arn}/*"
+          Condition:
+            Bool:
+              aws:SecureTransport: "true"
+        - Sid: DenyInsecureTransport
+          Effect: Deny
+          Principal: "*"
+          Action: "s3:*"
+          Resource:
+            - !GetAtt Complaints3Bucket.Arn
+            - !Sub "${Complaints3Bucket.Arn}/*"
+          Condition:
+            Bool:
+              aws:SecureTransport: "false"
+
+  LogBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref LogBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+              - "s3:PutObject"
+            Effect: Allow
+            Principal:
+              Service: "logging.s3.amazonaws.com"
+            Resource: !Sub "arn:aws:s3:::${LogBucket}/*"
+            Condition:
+              ArnLike:
+                "aws:SourceArn": !GetAtt Complaints3Bucket.Arn
+
+  MyLambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub
+        - lambda-execution-role-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        - "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+
+  DeleteS3LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Timeout: 120
+      FunctionName: !Sub
+        - delete-s3-buckets-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      Runtime: python3.11
+      Environment:
+        Variables:
+          Account: !Ref AWS::AccountId
+          ComplaintsBucketName: !Ref Complaints3Bucket
+          LogBucketName: !Ref LogBucket
+          DestinationBucketName: !Ref DestinationBucket
+      Handler: "index.handler"
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import cfnresponse
+
+          def delete_bucket(bucket_name, account_id):
+              s3 = boto3.resource('s3')
+              bucket = s3.Bucket(bucket_name)
+              for obj in bucket.objects.all():
+                  obj.delete()
+              bucket.delete(ExpectedBucketOwner=account_id)
+
+          def handler(event, context):
+              try:
+                  if event["RequestType"] == "Delete":
+                      # Delete Complaints3Bucket
+                      delete_bucket(os.environ['ComplaintsBucketName'], os.environ['Account'])
+
+                      # Delete LogBucket
+                      delete_bucket(os.environ['LogBucketName'], os.environ['Account'])
+
+                      # Delete DestinationBucket
+                      delete_bucket(os.environ['DestinationBucketName'], os.environ['Account'])
+
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, "CustomResourcePhysicalID")
+              except Exception as e:
+                  print(f"Error: {str(e)}")
+                  cfnresponse.send(event, context, cfnresponse.FAILED, {}, "CustomResourcePhysicalID")
+
+  DeleteS3CustomResource:
+    Type: Custom::DeleteS3
+    Properties:
+      ServiceToken: !GetAtt DeleteS3LambdaFunction.Arn
+      Timeout: 120
+
+Outputs:
+  Complaints3BucketOutput:
+    Value: !Ref Complaints3Bucket
+    Export:
+      Name: Complaints3BucketExport
+  Complaints3BucketArn:
+    Value: !GetAtt Complaints3Bucket.Arn
+
+  DestinationBucketOutput:
+    Value: !Ref DestinationBucket
+    Export:
+      Name: DestinationBucketExport
+
+  LogBucketOutput:
+    Value: !Ref LogBucket
+    Export:
+      Name: LogBucketExport
+
+  MyKMSKeyOutput:
+    Value: !Ref MyKMSKey
+    Export:
+      Name: MyKMSKeyExport

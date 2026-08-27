@@ -1,0 +1,138 @@
+{
+  "id": "COPS_missing_default_encryption_on_L1_c65ec63a__eoa__20260729_142459",
+  "scenario_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+  "scenario_name": "Missing Default Encryption on Shared Data Stores",
+  "category": "security",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:24:59.849736+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top resources by finding count to identify unencrypted data stores"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand encryption check failures across DynamoDB, SQS, S3"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resources directly to get specific resource IDs for unencrypted stores"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top resources by finding count to identify unencrypted data stores",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand encryption check failures across DynamoDB, SQS, S3",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resources directly to get specific resource IDs for unencrypted stores",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "warf-test-sqs-queue-non-compliant",
+        "war-test-a493",
+        "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+        "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+        "wartestncs3bucketnc03-REDACTED-ACCOUNT-us-east-1"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "warf-test-sqs-queue-non-compliant",
+        "war-test-a493",
+        "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+        "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+        "wartestncs3bucketnc03-REDACTED-ACCOUNT-us-east-1"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Establish the encryption-at-rest posture across S3, SQS, and DynamoDB and produce a per-resource remediation list; capture all must-find items from env:fx/ace-bench/security-risk-com/data-protection-encryption-at-rest/missing-default-encryption-on-shar/l1/v1 | packet:cp/ace-bench/security-risk-com/data-protection-encryption-at-rest/missing-default-encryption-on-shar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Establish the encryption-at-rest posture across S3, SQS, and DynamoDB and produce a per-resource remediation list; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List S3 buckets without default SSE, SQS queues without KmsMasterKeyId, and DynamoDB tables using only AWS-owned keys. Cite resource ARN and region. Recommendation: Specify whether each resource should use SSE-S3, SSE-KMS (CMK), or upgrade from owned-key to managed-key, and note re-encryption cost/latency implications. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+    "description": "AWS data stores \u2014 DynamoDB tables, SQS queues, SNS topics, S3 buckets \u2014 should encrypt data at rest. Server-side encryption (SSE) means the storage service encrypts data automatically using a managed key. Stronger setups use customer-managed KMS keys, giving you control over key rotation and access policy. Without encryption, data is stored in plaintext \u2014 a serious risk if the underlying storage is ever accessed outside of normal AWS access controls. the agent should identify shared data stores with encryption disabled or using insufficiently strong key management.",
+    "objective": "Establish the encryption-at-rest posture across S3, SQS, and DynamoDB and produce a per-resource remediation list; capture all must-find items from env:fx/ace-bench/security-risk-com/data-protection-encryption-at-rest/missing-default-encryption-on-shar/l1/v1 | packet:cp/ace-bench/security-risk-com/data-protection-encryption-at-rest/missing-default-encryption-on-shar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List S3 buckets without default SSE, SQS queues without KmsMasterKeyId, and DynamoDB tables using only AWS-owned keys. Cite resource ARN and region. Recommendation: Specify whether each resource should use SSE-S3, SSE-KMS (CMK), or upgrade from owned-key to managed-key, and note re-encryption cost/latency implications.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+      "warf-test-sqs-queue-non-compliant",
+      "war-test-a493",
+      "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+      "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+      "wartestncs3bucketnc03-REDACTED-ACCOUNT-us-east-1"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify encryption gaps across multiple data store types (DynamoDB, SQS, S3, or SNS) rather than just one service?",
+      "Did the agent identify specific resource names (table names, queue names, bucket names) with encryption disabled or using insufficient key management?",
+      "Did the agent avoid fabricating resource names not present in tool output?",
+      "Did the agent distinguish between no encryption and weak encryption (default SSE vs customer-managed KMS keys)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I only perform **EC2 instance optimization** tasks \u2014 things like identifying underutilized instances, right-sizing recommendations, and flagging stopped instances that are still incurring EBS costs.\n\nThe request you've made \u2014 auditing S3 bucket SSE, SQS KMS key configuration, and DynamoDB encryption \u2014 falls outside my scope. That's a **security/compliance audit** task, not an EC2 optimization task.\n\n---\n\n**Here's what I *can* help you with:**\n\n- \ud83d\udd0d **Scan for underutilized EC2 instances** (low CPU, oversized types)\n- \ud83d\udcd0 **Right-sizing recommendations** with projected monthly savings\n- \ud83d\udcbe **Identify stopped instances** still accruing EBS storage costs\n- \ud83d\udd27 **Resize an instance** (with your explicit confirmation before any change)\n\n---\n\nWould you like me to run a full EC2 optimization scan on your account? Just say the word and I'll get started.",
+  "token_usage": {
+    "estimated": 170,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 5.3,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

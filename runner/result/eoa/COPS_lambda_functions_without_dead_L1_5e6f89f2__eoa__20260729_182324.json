@@ -1,0 +1,118 @@
+{
+  "id": "COPS_lambda_functions_without_dead_L1_5e6f89f2__eoa__20260729_182324",
+  "scenario_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+  "scenario_name": "Lambda Functions Without Dead-Letter Handling",
+  "category": "reliability",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T18:23:24.863807+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface Lambda functions without DLQ"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scale of Lambda dead-letter configuration gaps"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface Lambda functions without DLQ",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scale of Lambda dead-letter configuration gaps",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "HelloWorldFunction2"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "HelloWorldFunction2"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface Lambda functions whose failure paths drop invocations silently; capture all must-find items from env:fx/ace-bench/reliability/failure-recovery-serverless/lambda-functions-without-dead-lett/l1/v1 | packet:cp/ace-bench/reliability/failure-recovery-serverless/lambda-functions-without-dead-lett/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface Lambda functions whose failure paths drop invocations silently; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Enumerate Lambda functions with async/event invocations that lack a DeadLetterConfig (SQS/SNS) or on-failure destination. Cite function name, invocation model, and average error rate from CloudWatch. Recommendation: Add an SQS DLQ per failure domain, configure MaximumEventAgeInSeconds and MaximumRetryAttempts aligned to SLO. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+    "description": "AWS Lambda functions process events asynchronously. When a function fails after all retries, the failed event is discarded unless a Dead-Letter Queue (DLQ) \u2014 an SQS queue \u2014 is configured. Without a DLQ, failed invocations silently disappear: no retry, no alert, no audit trail. This is a common reliability gap in event-driven architectures where silent failures are hard to detect. the agent should identify Lambda functions that have no DLQ configured.",
+    "objective": "Surface Lambda functions whose failure paths drop invocations silently; capture all must-find items from env:fx/ace-bench/reliability/failure-recovery-serverless/lambda-functions-without-dead-lett/l1/v1 | packet:cp/ace-bench/reliability/failure-recovery-serverless/lambda-functions-without-dead-lett/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Enumerate Lambda functions with async/event invocations that lack a DeadLetterConfig (SQS/SNS) or on-failure destination. Cite function name, invocation model, and average error rate from CloudWatch. Recommendation: Add an SQS DLQ per failure domain, configure MaximumEventAgeInSeconds and MaximumRetryAttempts aligned to SLO.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable backup/DR controls without rollback evidence",
+    "wafr_pillar": "Reliability | Operational Excellence",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+      "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+      "HelloWorldFunction2"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is Lambda functions missing a Dead-Letter Queue (DLQ) configuration for failed async invocations?",
+      "Did the agent identify specific Lambda function names \u2014 or, if tools could not surface function names, explicitly acknowledge that rather than fabricating names?",
+      "Did the agent explain the consequence of missing DLQs (failed events silently discarded, no retry or audit trail)?",
+      "Did the agent avoid fabricating Lambda function names or DLQ status details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I appreciate the detailed request, but **this falls outside my scope**.\n\nI am an **EC2 Instance Optimization Agent**. My capabilities are strictly limited to:\n\n| In Scope \u2705 | Out of Scope \u274c |\n|---|---|\n| EC2 underutilized instance analysis (CPU metrics) | **Lambda function analysis** |\n| EC2 right-sizing recommendations | SQS / SNS / DLQ configuration reviews |\n| Stopped EC2 instance cost estimation | Serverless architecture audits |\n| EC2 resize remediation (with confirmation) | CloudWatch log/error-rate analysis for non-EC2 services |\n\n---\n\n**What you're asking for involves:**\n- \ud83d\udd34 AWS Lambda \u2014 not EC2\n- \ud83d\udd34 SQS Dead Letter Queue configuration \u2014 not EC2\n- \ud83d\udd34 Lambda async invocation event-source mapping \u2014 not EC2\n- \ud83d\udd34 Lambda CloudWatch error-rate metrics \u2014 not EC2\n\n---\n\n**What I *can* help you with right now:**\n\n> *\"Analyze my EC2 instances for underutilization, right-sizing opportunities, and stopped instances that are still incurring EBS costs.\"*\n\nFor your Lambda/DLQ audit, I'd recommend using a **dedicated serverless governance tool**, such as:\n- **AWS Compute Optimizer** (covers Lambda alongside EC2)\n- **AWS Security Hub** with Lambda controls enabled\n- **A Lambda-scoped optimization agent**\n\nWould you like me to proceed with an **EC2 optimization scan** instead?",
+  "token_usage": {
+    "estimated": 268,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 8.6,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

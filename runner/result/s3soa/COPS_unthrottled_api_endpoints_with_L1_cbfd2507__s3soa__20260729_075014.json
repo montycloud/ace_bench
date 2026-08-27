@@ -1,0 +1,152 @@
+{
+  "id": "COPS_unthrottled_api_endpoints_with_L1_cbfd2507__s3soa__20260729_075014",
+  "scenario_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+  "scenario_name": "Unthrottled API Endpoints Without Edge Protection",
+  "category": "operations_management",
+  "agent": "s3soa",
+  "model": "bedrock/s3soa",
+  "timestamp": "2026-07-29T07:50:14.171212+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count \u2014 API Gateway edge-hardening gaps surface here"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of API Gateway throttling/WAF gaps"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate API Gateway resource types in assessment to identify unprotected stages"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count \u2014 API Gateway edge-hardening gaps surface here",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of API Gateway throttling/WAF gaps",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate API Gateway resource types in assessment to identify unprotected stages",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "xgkoo1ofg2/UnEncryptCache",
+        "xgkoo1ofg2/UnEncryptCache1",
+        "/restapis/xgkoo1ofg2/stages/UnEncryptCache",
+        "/restapis/xgkoo1ofg2/stages/UnEncryptCache1"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "xgkoo1ofg2/UnEncryptCache",
+        "xgkoo1ofg2/UnEncryptCache1",
+        "/restapis/xgkoo1ofg2/stages/UnEncryptCache",
+        "/restapis/xgkoo1ofg2/stages/UnEncryptCache1"
+      ],
+      "unconfirmed": [
+        "mybookstore-Bookstore/prod",
+        "mybookstore-Bookstore/prod",
+        "mybookstore-Bookstore/prod",
+        "wafrtestsec4/UnEncryptCache",
+        "wafrtestsec4/UnEncryptCache",
+        "wafrtestsec4/UnEncryptCache",
+        "wafrtestsec4/UnEncryptCache1",
+        "wafrtestsec4/UnEncryptCache1",
+        "wafrtestsec4/UnEncryptCache1",
+        "poa-api/$default",
+        "poa-api/$default",
+        "poa-api/$default",
+        "soa-api/$default",
+        "soa-api/$default",
+        "soa-api/$default",
+        "s3soa-api/$default",
+        "s3soa-api/$default",
+        "s3soa-api/$default",
+        "eoa-api/$default",
+        "eoa-api/$default",
+        "eoa-api/$default"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Baseline API Gateway edge-hardening posture and propose per-stage protection settings; capture all must-find items from env:fx/ace-bench/operations-manage/api-edge-hardening/unthrottled-api-endpoints-without-/l1/v1 | packet:cp/ace-bench/operations-manage/api-edge-hardening/unthrottled-api-endpoints-without-/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Baseline API Gateway edge-hardening posture and propose per-stage protection settings; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Enumerate API Gateway stages without method-level throttling, no AWS WAF association, or disabled access logging. Cite stage, route, and recent request volume. Recommendation: Configure usage-plan-backed throttling, associate a managed-rules WAF ACL, and enable JSON access logs. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+    "description": "API Gateway exposes your backend services to the internet via HTTP endpoints. Without throttling limits, a single client or bad actor can flood your API with requests \u2014 crashing downstream services or running up Lambda costs. Without WAF (Web Application Firewall) integration, there's no protection against common attacks like SQL injection, XSS, or bot traffic. Edge-hardening means configuring throttling, WAF, and logging at every API stage. the agent should identify API Gateway stages missing throttling limits and edge protection.",
+    "objective": "Baseline API Gateway edge-hardening posture and propose per-stage protection settings; capture all must-find items from env:fx/ace-bench/operations-manage/api-edge-hardening/unthrottled-api-endpoints-without-/l1/v1 | packet:cp/ace-bench/operations-manage/api-edge-hardening/unthrottled-api-endpoints-without-/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Enumerate API Gateway stages without method-level throttling, no AWS WAF association, or disabled access logging. Cite stage, route, and recent request volume. Recommendation: Configure usage-plan-backed throttling, associate a managed-rules WAF ACL, and enable JSON access logs.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims",
+    "wafr_pillar": "Reliability | Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "xgkoo1ofg2/UnEncryptCache",
+      "xgkoo1ofg2/UnEncryptCache1",
+      "/restapis/xgkoo1ofg2/stages/UnEncryptCache",
+      "/restapis/xgkoo1ofg2/stages/UnEncryptCache1"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is API Gateway stages missing throttling limits and/or WAF integration?",
+      "Did the agent identify specific API Gateway resource names or stage identifiers \u2014 or, if tools could only return type summaries, explicitly acknowledge that rather than fabricating stage names?",
+      "Did the agent address both throttling and WAF protection gaps (not just one of the two)?",
+      "Did the agent avoid fabricating API Gateway resource identifiers or configuration details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Good \u2014 I have all APIs. Now let me deep-dive into every stage, method, WAF association, access logging, usage plans, and CloudWatch metrics in one comprehensive script.I now have a complete picture. Note: HTTP APIs (v2) do not natively support WAFv2 via `GetWebACLForResource` \u2014 WAF can only be attached via a CloudFront distribution in front of HTTP APIs, not directly. The `ListResourcesForWebACL` with `API_GATEWAY` confirmed that the existing WAF ACL (`ExampleWebACL1`) has zero API Gateway stages associated. Let me compile the complete JSON output now.Here is the complete, valid JSON output:\n\n```json\n{\n  \"summary\": \"Security scan of all API Gateway stages in us-east-1 (account REDACTED-ACCOUNT) identified 7 stages across 6 APIs (2 REST/v1, 4 HTTP/v2) with three categories of control gaps: (1) THROTTLING \u2014 all 7 stages lack properly configured usage-plan-backed or route-level throttling; two REST stages in 'wafrtestsec4' have throttle limits explicitly set to 0 (CRITICAL misconfiguration); (2) WAF \u2014 zero stages have an AWS WAF Web ACL associated; the account's only WAF ACL ('ExampleWebACL1') is not associated with any API Gateway resource; s3soa-api/$default is the highest-risk target with 841 confirmed requests in the past 7 days and no WAF or throttle protection; (3) ACCESS LOGGING \u2014 all 7 stages have access logging completely disabled, eliminating the ability to audit caller identity, route usage, latency, and error patterns. Total findings: 21 (3 CRITICAL, 11 HIGH, 7 MEDIUM). Immediate remediation priority: s3soa-api/$default (live traffic, no controls).\",\n  \"findings\": [\n    {\n      \"resource_id\": \"mybookstore-Bookstore/prod\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"No method-level throttling configured; no stage-level default throttle set\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"methodSettings={} (empty \u2014 no per-route overrides); no Usage Plan associated (GetUsagePlans returned 0 items); routes: /cart/{bookId}:GET, /recommendations/{bookId}:GET, /orders:GET+POST, /books:GET, /cart:DELETE+GET+POST+PUT, /books/{id}:GET, /search:GET, /bestsellers:GET, /recommendations:GET; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"mybookstore-Bookstore/prod\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 stage is unprotected against OWASP Top 10, SQLi, XSS, rate abuse\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"WAFv2 GetWebACLForResource returned null for ARN arn:aws:apigateway:us-east-1::/restapis/ls3n9ztyoj/stages/prod; ListResourcesForWebACL on existing ACL 'ExampleWebACL1' returned 0 API Gateway resource ARNs; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"mybookstore-Bookstore/prod\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail (caller identity, latency, status codes, routes)\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"accessLogSettings=null on GetStages response; no CloudWatch Logs or Kinesis destination ARN configured; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"Zero throttle limits (burstLimit=0, rateLimit=0.0) \u2014 misconfigured, all requests effectively rate-limited to zero\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"methodSettings[mock/GET].throttlingBurstLimit=0, throttlingRateLimit=0.0; route: /mock:GET; no Usage Plan in account to override; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 stage is unprotected against OWASP Top 10, SQLi, XSS, rate abuse\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"WAFv2 GetWebACLForResource returned WAFNonexistentItemException for stage ARN; ListResourcesForWebACL on 'ExampleWebACL1' returned 0 API Gateway ARNs; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail (caller identity, latency, status codes, routes)\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"accessLogSettings=null; requests last 7d: 0; additional risk: cache is enabled but cacheDataEncrypted=false\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache1\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"Zero throttle limits (burstLimit=0, rateLimit=0.0) \u2014 misconfigured, all requests effectively rate-limited to zero\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"methodSettings[mock/GET].throttlingBurstLimit=0, throttlingRateLimit=0.0; cachingEnabled=true but cacheDataEncrypted=false; route: /mock:GET; no Usage Plan in account; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache1\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 stage is unprotected against OWASP Top 10, SQLi, XSS, rate abuse\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"WAFv2 GetWebACLForResource returned WAFNonexistentItemException for stage ARN; ListResourcesForWebACL on 'ExampleWebACL1' returned 0 API Gateway ARNs; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache1\",\n      \"resource_type\": \"API Gateway REST (v1) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail (caller identity, latency, status codes, routes)\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"accessLogSettings=null; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"poa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No stage-level throttling configured \u2014 DefaultRouteSettings has no ThrottlingRateLimit or ThrottlingBurstLimit\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"GetStages DefaultRouteSettings={DetailedMetricsEnabled: false} with no ThrottlingRateLimit/BurstLimit keys; no Usage Plans exist (HTTP APIs do not support usage plans natively); routes: all routes on HTTP API 6s96jq1q2k; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"poa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 HTTP API has no direct WAF support; no CloudFront distribution with WAF fronting this API\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"HTTP APIs (v2) do not support direct WAFv2 association; ListResourcesForWebACL on 'ExampleWebACL1' (the only WAF ACL in account) returned 0 ARNs; no CloudFront distribution detected as proxy; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"poa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"GetStages AccessLogSettings=null; DetailedMetricsEnabled=false; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No stage-level throttling configured \u2014 DefaultRouteSettings has no ThrottlingRateLimit or ThrottlingBurstLimit\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"GetStages DefaultRouteSettings={DetailedMetricsEnabled: false}; no ThrottlingRateLimit/BurstLimit; routes: all routes on HTTP API 7xu2wfcu9e; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 HTTP API has no direct WAF support; no CloudFront distribution with WAF fronting this API\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"HTTP APIs (v2) do not support direct WAFv2 association; 'ExampleWebACL1' has 0 associated API Gateway ARNs; no CloudFront proxy detected; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"AccessLogSettings=null; DetailedMetricsEnabled=false; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"s3soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No stage-level throttling configured on ACTIVE stage \u2014 841 live requests in 7 days with no rate control\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"DefaultRouteSettings={DetailedMetricsEnabled: false}; no ThrottlingRateLimit/BurstLimit; routes: all routes on HTTP API r7a9uuotv0; requests last 7d: 841 (CloudWatch Count metric, period=7d)\"\n    },\n    {\n      \"resource_id\": \"s3soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated on ACTIVE stage \u2014 841 requests/7d with zero WAF protection\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"HTTP APIs (v2) do not support direct WAFv2 association; 'ExampleWebACL1' has 0 associated API Gateway ARNs; no CloudFront proxy; this is the only stage with confirmed live traffic (841 requests in 7 days)\"\n    },\n    {\n      \"resource_id\": \"s3soa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"Access logging disabled on ACTIVE stage \u2014 no forensic trail for 841 recent requests\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"AccessLogSettings=null; DetailedMetricsEnabled=false; requests last 7d: 841; no request-level logs available for incident investigation\"\n    },\n    {\n      \"resource_id\": \"eoa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No stage-level throttling configured \u2014 DefaultRouteSettings has no ThrottlingRateLimit or ThrottlingBurstLimit\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"DefaultRouteSettings={DetailedMetricsEnabled: false}; no throttle settings; routes: all routes on HTTP API uuopi1wnhb; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"eoa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"No AWS WAF Web ACL associated \u2014 HTTP API has no direct WAF support; no CloudFront distribution with WAF fronting this API\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"'ExampleWebACL1' has 0 associated API Gateway ARNs; no CloudFront proxy; requests last 7d: 0\"\n    },\n    {\n      \"resource_id\": \"eoa-api/$default\",\n      \"resource_type\": \"API Gateway HTTP (v2) Stage\",\n      \"check\": \"Access logging disabled \u2014 no per-request audit trail\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"AccessLogSettings=null; DetailedMetricsEnabled=false; requests last 7d: 0\"\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"s3soa-api/$default\",\n      \"action\": \"IMMEDIATE \u2014 Enable stage-level throttling: call apigatewayv2:UpdateStage with DefaultRouteSettings={ThrottlingRateLimit: 1000, ThrottlingBurstLimit: 500}. Then front the HTTP API with a CloudFront distribution and associate WAF ACL (AWSManagedRulesCommonRuleSet + AWSManagedRulesKnownBadInputsRuleSet + rate-based rule at 2000 req/5min) to CloudFront. Enable access logging: set AccessLogSettings.DestinationArn to a CloudWatch Logs ARN with JSON format including $context.requestId, $context.identity.sourceIp, $context.routeKey, $context.status, $context.responseLatency.\",\n      \"priority\": \"P1\",\n      \"effort\": \"Medium \u2014 UpdateStage (Low, ~5 min) + CloudFront+WAF setup (Medium, ~2-4 hours)\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache\",\n      \"action\": \"Fix zero-throttle misconfiguration: call apigateway:UpdateStage with patchOperations to set methodSettings/mock~1GET/throttlingBurstLimit=500 and throttlingRateLimit=1000. Create a Usage Plan (apigateway:CreateUsagePlan) with throttle={rateLimit:1000, burstLimit:500}, associate with this stage via CreateUsagePlanKey. Then associate WAF ACL via wafv2:AssociateWebACL with ResourceArn=arn:aws:apigateway:us-east-1::/restapis/xgkoo1ofg2/stages/UnEncryptCache. Enable access logging via UpdateStage accessLogSettings. Also encrypt cache: set cacheDataEncrypted=true.\",\n      \"priority\": \"P1\",\n      \"effort\": \"Low \u2014 UpdateStage patch operations (~10 min); WAF association (~15 min)\"\n    },\n    {\n      \"resource_id\": \"wafrtestsec4/UnEncryptCache1\",\n      \"action\": \"Same as UnEncryptCache: fix throttlingBurstLimit/RateLimit from 0 to non-zero values, create/associate Usage Plan, associate WAF ACL via wafv2:AssociateWebACL, enable access logging, and set cacheDataEncrypted=true (cache is enabled on this stage).\",\n      \"priority\": \"P1\",\n      \"effort\": \"Low \u2014 same operations as UnEncryptCache; batch together\"\n    },\n    {\n      \"resource_id\": \"mybookstore-Bookstore/prod\",\n      \"action\": \"Create a Usage Plan: apigateway:CreateUsagePlan with throttle={rateLimit:1000, burstLimit:500} and quota={limit:100000, period:DAY}. Associate stage ls3n9ztyoj/prod. Optionally add per-route overrides for high-risk routes (/cart, /orders). Associate WAF ACL via wafv2:AssociateWebACL using ARN arn:aws:apigateway:us-east-1::/restapis/ls3n9ztyoj/stages/prod with managed rule groups: AWSManagedRulesCommonRuleSet, AWSManagedRulesSQLiRuleSet. Enable access logging to CloudWatch Logs with JSON format.\",\n      \"priority\": \"P2\",\n      \"effort\": \"Medium \u2014 Usage Plan creation + WAF ACL setup (~1-2 hours total)\"\n    },\n    {\n      \"resource_id\": \"poa-api/$default\",\n      \"action\": \"Enable throttling: apigatewayv2:UpdateStage with DefaultRouteSettings={ThrottlingRateLimit:1000, ThrottlingBurstLimit:500}. For WAF: HTTP APIs require CloudFront fronting \u2014 create a CloudFront distribution pointing to the HTTP API invoke URL as a custom origin, then associate a WAF WebACL (with AWSManagedRulesCommonRuleSet + AWSManagedRulesKnownBadInputsRuleSet) to the distribution. Enable access logging: UpdateStage with AccessLogSettings.DestinationArn.\",\n      \"priority\": \"P2\",\n      \"effort\": \"Medium \u2014 UpdateStage (Low) + CloudFront+WAF (Medium, ~2-4 hours)\"\n    },\n    {\n      \"resource_id\": \"soa-api/$default\",\n      \"action\": \"Same pattern as poa-api: UpdateStage to set DefaultRouteSettings throttle limits, front with CloudFront + WAF ACL, enable access logging with JSON format ($context fields).\",\n      \"priority\": \"P2\",\n      \"effort\": \"Medium \u2014 batch with poa-api for efficiency\"\n    },\n    {\n      \"resource_id\": \"eoa-api/$default\",\n      \"action\": \"Same pattern as poa-api/soa-api: UpdateStage throttle, CloudFront + WAF ACL, access logging. Evaluate if this API handles sensitive data and tighten throttle limits accordingly.\",\n      \"priority\": \"P2\",\n      \"effort\": \"Medium \u2014 batch with other HTTP APIs for efficiency\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Findings at a Glance\n\n| Severity | Count | Root Cause |\n|---|---|---|\n| **CRITICAL** | 3 | `wafrtestsec4` stages have `throttlingBurstLimit=0` (zero-limits); `s3soa-api` has live traffic (841 req/7d) with zero WAF |\n| **HIGH** | 11 | All 7 stages lack proper throttling; all 7 stages have no WAF ACL attached |\n| **MEDIUM** | 7 | All 7 stages have access logging completely disabled |\n\n### Three Top Actionable Items\n\n1. **`s3soa-api/$default` (P1, URGENT)** \u2014 The only stage with live traffic (841 requests in 7 days). Has zero throttle, zero WAF, and zero logging. Front it with CloudFront + WAF ACL immediately and call `UpdateStage` to set `ThrottlingRateLimit=1000`.\n\n2. **`wafrtestsec4/UnEncryptCache` + `UnEncryptCache1` (P1)** \u2014 `throttlingBurstLimit=0` and `throttlingRateLimit=0.0` are explicitly set \u2014 this is a hard misconfiguration (either all traffic is blocked, or the zero-limit is being ignored and the stage is unprotected). Patch via `UpdateStage` and associate a WAF ACL via `wafv2:AssociateWebACL`.\n\n3. **All REST stages (P2)** \u2014 No Usage Plans exist in the account at all (`GetUsagePlans` returned 0). Create at minimum one Usage Plan with sensible throttle/quota defaults and associate all REST stages.",
+  "token_usage": {
+    "estimated": 2389,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 227.4,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

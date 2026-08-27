@@ -1,0 +1,129 @@
+{
+  "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__poa__20260729_165923",
+  "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+  "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+  "category": "performance_efficiency",
+  "agent": "poa",
+  "model": "bedrock/poa",
+  "timestamp": "2026-07-29T16:59:23.471655+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "unconfirmed": [
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+    "description": "AWS Compute Optimizer continuously analyzes EC2 and EBS usage patterns and generates rightsizing recommendations \u2014 for example, migrating from an Intel t3.micro to a Graviton-based t4g.micro (same price, better performance) or upgrading an EBS gp2 volume to gp3 (cheaper and faster). When these recommendations sit unactioned for weeks, it represents pure avoidable waste. the agent should surface aged Compute Optimizer recommendations and propose a sequenced action plan prioritized by savings potential and implementation effort.",
+    "objective": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Performance Efficiency | Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-06286d41ae1218d5e",
+      "i-0ee5fa3508cede8a2",
+      "i-0aa58fe2d137a2f9f",
+      "vol-028f30f6b745e2ae5",
+      "vol-03fc1ecf1ea302655",
+      "vol-0497bec1f1285d97f",
+      "vol-05ced2e45c102a69e"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent use get_saving_opportunities or a similar tool to retrieve actual Compute Optimizer recommendations rather than guessing at recommendations?",
+      "Did the agent identify specific EC2 instance IDs and/or EBS volume IDs with rightsizing recommendations, as returned by tool output?",
+      "Did the agent explain the nature of the recommendations (e.g., instance type migration, storage class upgrade) rather than just noting a generic cost gap?",
+      "Did the agent avoid fabricating instance IDs, volume IDs, or recommendation details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "All data is collected. Now I have the complete picture:\n\n- **4 EC2 instances** (t3.micro, Intel x86_64): launched **105 days ago** (April 15, 2026), **zero remediation** in that window\n- **Average CPU: 0.13\u20130.14%** (idle threshold: <5%) \u2192 all qualify as **IDLE**\n- **Cost Explorer**: all 4 flagged as `Modify` \u2192 `t3.nano` with **~$3.67/mo savings each**\n- **4 EBS gp2 volumes**: not migrated to gp3, **$0.16/mo savings each** \u2014 flagged by Compute Optimizer, unremediated\n- **Graviton opportunity**: t3.micro (Intel) \u2192 t4g.micro (Graviton arm64) = **~20% further cost reduction**\n\n```json\n{\n  \"summary\": \"AWS Compute Optimizer and Cost Explorer scan (account REDACTED-ACCOUNT, us-east-1) identified 8 unremediated findings across 4 EC2 instances and 4 EBS volumes, all persisting >30 days with zero remediation records. All 4 EC2 instances (t3.micro, Intel x86_64) were launched on 2026-04-15 (105 days ago) and have sustained average CPU utilization of 0.13\u20130.14% over 14 days \u2014 well below the 5% idle threshold. Cost Explorer independently corroborates downsizing from t3.micro to t3.nano. Additionally, all 4 attached EBS volumes remain on the legacy gp2 type despite Compute Optimizer recommending gp3 since launch. A Graviton migration path (t3.micro \u2192 t4g.micro) offers a further ~20% cost reduction post-downsizing. Total projected monthly savings across all remediations: ~$15.96 USD. Actions are sequenced from zero-risk (EBS gp2\u2192gp3 online migration) through low-risk (t3.micro\u2192t3.nano downsize) to medium-risk (t3.nano\u2192t4g.nano Graviton architecture migration).\",\n  \"findings\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"IDLE / Over-Provisioned \u2014 105 days without remediation\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Instance 'worker-01' (t3.micro, Intel x86_64) launched 2026-04-15. 14-day CloudWatch CPU avg=0.13%, max=13.13%, min=0.06%. Compute Optimizer finding=OPTIMIZED (no scale-up pressure). Cost Explorer rightsizing type=Modify, recommended target=t3.nano, estimated monthly savings=$3.6712931188 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"IDLE / Over-Provisioned \u2014 105 days without remediation\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Instance 'web-prod-01' (t3.micro, Intel x86_64) launched 2026-04-15. 14-day CloudWatch CPU avg=0.13%, max=11.20%, min=0.06%. Compute Optimizer finding=OPTIMIZED. Cost Explorer rightsizing type=Modify, recommended target=t3.nano, estimated monthly savings=$3.6712711450 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"IDLE / Over-Provisioned \u2014 105 days without remediation\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Instance 'api-prod-01' (t3.micro, Intel x86_64) launched 2026-04-15. 14-day CloudWatch CPU avg=0.13%, max=13.28%, min=0.05%. Compute Optimizer finding=OPTIMIZED. Cost Explorer rightsizing type=Modify, recommended target=t3.nano, estimated monthly savings=$3.6754983412 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"IDLE / Over-Provisioned \u2014 105 days without remediation\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Instance 'web-prod-02' (t3.micro, Intel x86_64) launched 2026-04-15. 14-day CloudWatch CPU avg=0.14%, max=13.35%, min=0.06%. Compute Optimizer finding=OPTIMIZED. Cost Explorer rightsizing type=Modify, recommended target=t3.nano, estimated monthly savings=$3.6638712045 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Sub-optimal volume type \u2014 gp2 not migrated to gp3, 105 days without remediation\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"EBS volume vol-0497bec1f1285d97f (gp2, 8 GiB, in-use) created 2026-04-15. Compute Optimizer recommends migration to gp3. gp3 provides 20% cost reduction ($0.10/GiB/mo \u2192 $0.08/GiB/mo) plus free 3,000 IOPS and 125 MB/s baseline vs gp2's burst model. Estimated monthly savings=$0.16 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Sub-optimal volume type \u2014 gp2 not migrated to gp3, 105 days without remediation\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"EBS volume vol-03fc1ecf1ea302655 (gp2, 8 GiB, in-use) created 2026-04-15. Compute Optimizer recommends migration to gp3. Estimated monthly savings=$0.16 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Sub-optimal volume type \u2014 gp2 not migrated to gp3, 105 days without remediation\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"EBS volume vol-028f30f6b745e2ae5 (gp2, 8 GiB, in-use) created 2026-04-15. Compute Optimizer recommends migration to gp3. Estimated monthly savings=$0.16 USD. No remediation record found. Age: 105 days.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Sub-optimal volume type \u2014 gp2 not migrated to gp3, 105 days without remediation\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"EBS volume vol-05ced2e45c102a69e (gp2, 8 GiB, in-use) created 2026-04-15. Compute Optimizer recommends migration to gp3. Estimated monthly savings=$0.16 USD. No remediation record found. Age: 105 days.\"\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"action\": \"ZERO-RISK | EBS gp2 \u2192 gp3 online migration. Execute: aws ec2 modify-volume --volume-id vol-0497bec1f1285d97f --volume-type gp3. No downtime required \u2014 modification is live and online. Change window: any time. Verify with aws ec2 describe-volumes-modifications. Monthly savings: $0.16 USD.\",\n      \"priority\": 1,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"action\": \"ZERO-RISK | EBS gp2 \u2192 gp3 online migration. Execute: aws ec2 modify-volume --volume-id vol-03fc1ecf1ea302655 --volume-type gp3. No downtime required. Change window: any time. Verify with aws ec2 describe-volumes-modifications. Monthly savings: $0.16 USD.\",\n      \"priority\": 2,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"action\": \"ZERO-RISK | EBS gp2 \u2192 gp3 online migration. Execute: aws ec2 modify-volume --volume-id vol-028f30f6b745e2ae5 --volume-type gp3. No downtime required. Change window: any time. Monthly savings: $0.16 USD.\",\n      \"priority\": 3,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"action\": \"ZERO-RISK | EBS gp2 \u2192 gp3 online migration. Execute: aws ec2 modify-volume --volume-id vol-05ced2e45c102a69e --volume-type gp3. No downtime required. Change window: any time. Monthly savings: $0.16 USD.\",\n      \"priority\": 4,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"action\": \"LOW-RISK | EC2 instance-size downsize: t3.micro \u2192 t3.nano (same Intel x86_64 family, same AMI/OS, same AZ, no architecture change). Procedure: (1) Confirm with application owner that avg 0.13% CPU and burst headroom of t3.nano is sufficient. (2) During approved change window (off-peak, e.g. Sunday 02:00\u201304:00 UTC): aws ec2 stop-instances --instance-ids i-01baa59f318a3c59e. (3) aws ec2 modify-instance-attribute --instance-id i-01baa59f318a3c59e --instance-type t3.nano. (4) aws ec2 start-instances --instance-ids i-01baa59f318a3c59e. (5) Validate application health and CloudWatch alarms for 48h. Rollback: repeat modify back to t3.micro. Monthly savings: $3.67 USD.\",\n      \"priority\": 5,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"action\": \"LOW-RISK | EC2 instance-size downsize: t3.micro \u2192 t3.nano (same Intel x86_64 family). Procedure: (1) Validate application CPU headroom with owner. (2) Change window Sunday 02:00\u201304:00 UTC: stop \u2192 modify --instance-type t3.nano \u2192 start. (3) Monitor for 48h. Rollback: modify back to t3.micro. Monthly savings: $3.67 USD.\",\n      \"priority\": 6,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"action\": \"LOW-RISK | EC2 instance-size downsize: t3.micro \u2192 t3.nano (same Intel x86_64 family). Procedure: (1) Validate CPU headroom. (2) Change window Sunday 02:00\u201304:00 UTC: stop \u2192 modify --instance-type t3.nano \u2192 start. (3) Monitor 48h. Rollback available. Monthly savings: $3.68 USD.\",\n      \"priority\": 7,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"action\": \"LOW-RISK | EC2 instance-size downsize: t3.micro \u2192 t3.nano (same Intel x86_64 family). Procedure: (1) Validate CPU headroom. (2) Change window Sunday 02:00\u201304:00 UTC: stop \u2192 modify --instance-type t3.nano \u2192 start. (3) Monitor 48h. Rollback available. Monthly savings: $3.66 USD.\",\n      \"priority\": 8,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"action\": \"MEDIUM-RISK | Graviton architecture migration (post-downsize): t3.nano \u2192 t4g.nano (ARM64 Graviton2, ~20% cheaper than Intel equivalent). Prerequisites: (1) Validate application binary compatibility with arm64 \u2014 recompile or confirm AMI is arm64-compatible. (2) Verify all dependencies/libraries support arm64. (3) Stage on a test t4g.nano using arm64 AMI. Change window (2-week test cycle): create t4g.nano from arm64 snapshot \u2192 run parallel for 7 days \u2192 cut over \u2192 terminate t3.nano. Additional monthly savings: ~$0.50 USD post-downsize. Rollback: relaunch t3.nano from original snapshot.\",\n      \"priority\": 9,\n      \"effort\": \"MEDIUM\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"action\": \"MEDIUM-RISK | Graviton architecture migration (post-downsize): t3.nano \u2192 t4g.nano (ARM64 Graviton2). Prerequisites: arm64 AMI compatibility validation, dependency audit, staging test. Change window: 2-week parallel run \u2192 cutover \u2192 verify \u2192 decommission x86_64 instance. Additional monthly savings: ~$0.50 USD post-downsize. Rollback: relaunch t3.nano.\",\n      \"priority\": 10,\n      \"effort\": \"MEDIUM\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"action\": \"MEDIUM-RISK | Graviton architecture migration (post-downsize): t3.nano \u2192 t4g.nano (ARM64 Graviton2). Prerequisites: arm64 AMI compatibility validation, dependency audit, staging test. Change window: 2-week parallel run \u2192 cutover \u2192 verify \u2192 decommission x86_64 instance. Additional monthly savings: ~$0.50 USD post-downsize. Rollback: relaunch t3.nano.\",\n      \"priority\": 11,\n      \"effort\": \"MEDIUM\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"action\": \"MEDIUM-RISK | Graviton architecture migration (post-downsize): t3.nano \u2192 t4g.nano (ARM64 Graviton2). Prerequisites: arm64 AMI compatibility validation, dependency audit, staging test. Change window: 2-week parallel run \u2192 cutover \u2192 verify \u2192 decommission x86_64 instance. Additional monthly savings: ~$0.50 USD post-downsize. Rollback: relaunch t3.nano.\",\n      \"priority\": 12,\n      \"effort\": \"MEDIUM\"\n    }\n  ]\n}\n```\n\n---\n\n### \ud83d\udcca Analysis Walkthrough\n\nHere is a human-readable breakdown of what the scan found and how the JSON was constructed:\n\n#### What Was Scanned\n| Source | API Used | Resources Found |\n|---|---|---|\n| Compute Optimizer | `GetEC2InstanceRecommendations` | 4 EC2 instances |\n| Compute Optimizer | `GetEBSVolumeRecommendations` | 4 EBS volumes (gp2 \u2192 gp3) |\n| Cost Explorer | `GetRightsizingRecommendation` | 4 EC2 Modify findings |\n| CloudWatch | `GetMetricStatistics` | 14-day CPU data per instance |\n\n#### Key Evidence: 30-Day No-Remediation Rule\nAll 8 resources were **created on 2026-04-15**, making them **105 days old** with no architecture change \u2014 qualifying under the \">30 days unremediated\" criterion.\n\n| Instance | Avg CPU (14d) | Max CPU | Classification |\n|---|---|---|---|\n| worker-01 (`i-01baa59f318a3c59e`) | **0.13%** | 13.1% | IDLE |\n| web-prod-01 (`i-06286d41ae1218d5e`) | **0.13%** | 11.2% | IDLE |\n| api-prod-01 (`i-0aa58fe2d137a2f9f`) | **0.13%** | 13.3% | IDLE |\n| web-prod-02 (`i-0ee5fa3508cede8a2`) | **0.14%** | 13.4% | IDLE |\n\n#### Remediation Sequence (Risk-Ordered)\n| Priority | Action | Risk | Savings/mo |\n|---|---|---|---|\n| 1\u20134 | EBS gp2 \u2192 gp3 (online, no downtime) | **Zero** | $0.64 total |\n| 5\u20138 | EC2 t3.micro \u2192 t3.nano (same family, change window) | **Low** | $14.68 total |\n| 9\u201312 | EC2 t3.nano \u2192 t4g.nano Graviton (ARM64 migration) | **Medium** | ~$2.00 additional |\n\n**Total projected monthly savings: ~$17.32 USD** across all phases.",
+  "token_usage": {
+    "estimated": 2056,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 158.2,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

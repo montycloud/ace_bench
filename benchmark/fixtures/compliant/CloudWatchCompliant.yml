@@ -1,0 +1,73 @@
+Resources:
+  CWDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub ${AWS::Region}-sampledashboard
+      DashboardBody: |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "metrics": [
+                  [ "AWS/CloudFormation", "ListStacks" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "CloudFormation Stack Count",
+                "period": 300
+              }
+            }
+          ]
+        }
+
+  myLogGroup: 
+    Type: AWS::Logs::LogGroup
+    Properties: 
+        LogGroupName: !Sub ${AWS::Region}-testloggroup
+        RetentionInDays: 7
+
+  InternetMonitor:
+    Type: AWS::InternetMonitor::Monitor
+    Properties:
+      MonitorName: !Sub ${AWS::Region}-testinternetmonitor
+      Status: ACTIVE
+      TrafficPercentageToMonitor: 1
+
+  AnomalyDetectorOnUsedMemory:
+    Type: AWS::CloudWatch::AnomalyDetector
+    Properties:
+      MetricName: JvmMetric
+      Namespace: AWSSDK/Java
+      Stat: Average
+      Dimensions:
+        - Name: Memory
+          Value: UsedMemory
+      Configuration:
+        MetricTimeZone: UTC
+        ExcludedTimeRanges:
+          - StartTime: 2019-07-01T00:00:00
+            EndTime: 2019-07-01T23:59:59
+
+
+Outputs:
+  LogGroupName:
+    Description: log group name.
+    Value: !Ref myLogGroup
+  DashboardName:
+    Description: CW dashboard name
+    Value: !Ref CWDashboard
+  LogGroup:
+    Description: Log group ARN
+    Value: !GetAtt myLogGroup.Arn
+  CWInterneMonitor:
+    Description: CW Internet Monitor ARN
+    Value: !Ref InternetMonitor
+  CWInternertMonitorId:
+    Description: CW Internet Monitor ARN
+    Value: !GetAtt InternetMonitor.MonitorArn

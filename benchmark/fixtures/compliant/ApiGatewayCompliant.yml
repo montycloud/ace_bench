@@ -1,0 +1,532 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates a Complete Set up of API Gateway 
+Parameters:
+  apiGatewayName:
+    Type: "String"
+    AllowedPattern: "^[a-zA-Z0-9_.\\-]+$"
+    Default: "ctwafrtestsec4"
+
+  apiGatewayDescription:
+    Type: "String"
+    AllowedPattern: "^[a-zA-Z0-9_.\\- ]+$"
+    Default: "A REST API"
+
+  apiGatewayStageName:
+    Type: "String"
+    AllowedPattern: "^[a-z0-9]+$"
+    Default: "devsec4"
+
+  apiGatewayName1:
+    Type: "String"
+    AllowedPattern: "^[a-zA-Z0-9_.\\-]+$"
+    Default: "wafrtestsec5"
+  
+
+  apiGatewayDescription1:
+    Type: "String"
+    AllowedPattern: "^[a-zA-Z0-9_.\\- ]+$"
+    Default: "A REST API"
+
+  apiGatewayStageName1:
+    Type: "String"
+    AllowedPattern: "^[a-z0-9]+$"
+    Default: "devsec5"
+
+  apiGatewayStageName2:
+    Type: "String"
+    AllowedPattern: "^[a-z0-9]+$"
+    Default: "devsec6"
+  apiGatewayStageName3:
+    Type: "String"
+    AllowedPattern: "^[a-z0-9]+$"
+    Default: "devsec8"
+Resources:
+  apiRoleArn:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt apiCloudWatchRole.Arn
+  apiCloudWatchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Action: "sts:AssumeRole"
+          Effect: Allow
+          Principal:
+            Service: apigateway.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+  apiGateway:
+    Type: "AWS::ApiGateway::RestApi"
+    DependsOn:
+      - "apiCloudWatchRole"
+    Properties:
+      Name: !Ref "apiGatewayName"
+      Description: !Ref "apiGatewayDescription"
+      EndpointConfiguration:
+        Types:
+          - PRIVATE #for checkid - api_gateway_private_check
+      Policy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal: "*"
+            Action: "execute-api:Invoke"
+            Resource: "execute-api:/*/*/*"
+
+  apiGatewayResource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      ParentId: !GetAtt "apiGateway.RootResourceId"
+      PathPart: "mock"
+      RestApiId: !Ref "apiGateway"
+
+  apiGatewayRootMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      ApiKeyRequired: true #for checkid - api_gateway_key_method_request_check
+      AuthorizationType: "NONE"
+      HttpMethod: "GET"
+      Integration:
+        RequestTemplates:
+          application/json: |
+            {"statusCode": 200}
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{"message": "OK"}'
+            StatusCode: 200
+        Type: "MOCK"
+        TimeoutInMillis: 29000
+      MethodResponses:
+        - ResponseModels:
+            application/json: !Ref "apiGatewayModel"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: 200
+      ResourceId: !Ref "apiGatewayResource"
+      RestApiId: !Ref "apiGateway"
+
+  apiGatewayModel:
+    Type: "AWS::ApiGateway::Model"
+    Properties:
+      ContentType: "application/json"
+      RestApiId: !Ref "apiGateway"
+      Schema: {}
+
+  apiGatewayDeployment:
+    Type: "AWS::ApiGateway::Deployment"
+    DependsOn: "apiGatewayRootMethod"
+    Properties:
+      RestApiId: !Ref "apiGateway"
+
+  apiGatewayStage:
+    Type: "AWS::ApiGateway::Stage"
+    Properties:
+      StageName: !Ref "apiGatewayStageName"
+      RestApiId: !Ref "apiGateway"
+      DeploymentId: !Ref "apiGatewayDeployment"
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: "GET"
+          MetricsEnabled: "true"
+          DataTraceEnabled: "true"
+          LoggingLevel: "INFO"
+      # AccessLogSetting:
+      #   DestinationArn: !GetAtt "apiCloudWatch.Arn"
+      #   Format: "{\"requestId\": \"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\": \"$context.identity.caller\", \"requestTime\": \"$context.requestTimeEpoch\", \"httpMethod\": \"$context.httpMethod\", \"resourcePath\": \"$context.resourcePath\", \"status\": \"$context.status\", \"protocol\": \"$context.protocol\", \"responseLength\": \"$context.responseLength\"}"
+
+  apiGatewayStageCacheNonEncrypt:
+    Type: "AWS::ApiGateway::Stage"
+    Properties:
+      StageName: UnEncryptCache
+      RestApiId: !Ref "apiGateway"
+      DeploymentId: !Ref "apiGatewayDeployment"
+      CacheClusterEnabled: true
+      CacheClusterSize: "0.5"
+      TracingEnabled: true
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: "GET"
+          MetricsEnabled: true
+          DataTraceEnabled: true
+          LoggingLevel: "INFO"
+
+  MyApiKey:
+    Type: 'AWS::ApiGateway::ApiKey'
+    Properties:
+      Name: MyApiKeyName
+      Description: API Key for My API Gateway
+      Enabled: true
+
+  MyUsagePlan:
+    Type: 'AWS::ApiGateway::UsagePlan'
+    DependsOn:
+      - apiGatewayDeployment
+    Properties:
+      Description: Usage plan for My API Gateway
+      ApiStages:
+        - ApiId: !Ref apiGateway
+          Stage: !Ref apiGatewayStage
+          Throttle:
+            '/mock/GET':
+              RateLimit:  50.0
+              BurstLimit:  100
+      Quota:
+        Limit:  1000
+        Period: MONTH
+      Throttle:
+        RateLimit:  100.0
+        BurstLimit:  200
+      UsagePlanName: MyUsagePlanName
+
+  MyUsagePlanKey:
+    Type: 'AWS::ApiGateway::UsagePlanKey'
+    Properties:
+      KeyId: !Ref MyApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref MyUsagePlan
+
+  apiCloudWatch:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Ref "apiGatewayName"
+      RetentionInDays: 7
+#SEC4-apigateway-compliant  
+  apiRoleArn1:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt apiCloudWatchRole.Arn
+  apiCloudWatchRole1:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Action: "sts:AssumeRole"
+          Effect: Allow
+          Principal:
+            Service: apigateway.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+#SEC4-apigateway-compliant
+  apiGateway1:
+    Type: "AWS::ApiGateway::RestApi"
+    DependsOn:
+      - "apiCloudWatchRole"
+    Properties:
+      Name: !Ref "apiGatewayName1"
+      Description: !Ref "apiGatewayDescription1"
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+  GatewayResponse:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseType: DEFAULT_5XX
+      RestApiId: !Ref apiGateway1
+      StatusCode: '500'
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseTemplates:
+        application/json: >
+          {
+            "state": "error",
+            "message": "An error occurred while processing your request"
+          }
+
+  apiGatewayResource1:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      ParentId: !GetAtt "apiGateway1.RootResourceId"
+      PathPart: "mock"
+      RestApiId: !Ref "apiGateway1"
+
+  apiGatewayRootMethod1:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      ApiKeyRequired: false
+      AuthorizationType: "NONE"
+      HttpMethod: "GET"
+      Integration:
+        RequestTemplates:
+          application/json: |
+            {"statusCode": 200}
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{"message": "OK"}'
+            StatusCode: 200
+        Type: "MOCK"
+        TimeoutInMillis: 29000
+      MethodResponses:
+        - ResponseModels:
+            application/json: !Ref "apiGatewayModel1"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: 200
+      ResourceId: !Ref apiGatewayResource1
+      RestApiId: !Ref apiGateway1
+
+  apiGatewayModel1:
+    Type: "AWS::ApiGateway::Model"
+    Properties:
+      ContentType: "application/json"
+      RestApiId: !Ref "apiGateway1"
+      Schema: {}
+
+  apiGatewayDeployment1:
+    Type: "AWS::ApiGateway::Deployment"
+    DependsOn:
+      - apiGatewayRootMethod1
+    Properties:
+      RestApiId: !Ref "apiGateway1"
+
+  apiGatewayStage1:
+    Type: "AWS::ApiGateway::Stage"
+    Properties:
+      StageName: !Ref "apiGatewayStageName1"
+      RestApiId: !Ref "apiGateway1"
+      DeploymentId: !Ref "apiGatewayDeployment1"
+      CacheClusterEnabled: true
+      CacheClusterSize: "0.5"
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          CachingEnabled: true
+          CacheDataEncrypted: true
+          MetricsEnabled: true
+          DataTraceEnabled: true
+          LoggingLevel: "INFO"
+          ThrottlingRateLimit: 1000
+          ThrottlingBurstLimit: 500
+        - ResourcePath: "/mock"
+          CacheDataEncrypted: true
+          HttpMethod: "GET"
+          CachingEnabled: true
+          MetricsEnabled: true
+          DataTraceEnabled: true
+          LoggingLevel: "INFO"
+          ThrottlingRateLimit: 1000
+          ThrottlingBurstLimit: 500
+      AccessLogSetting:
+        DestinationArn: !GetAtt apiCloudWatch.Arn
+        Format: "{\"requestId\": \"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\": \"$context.identity.caller\", \"requestTime\": \"$context.requestTimeEpoch\", \"httpMethod\": \"$context.httpMethod\", \"resourcePath\": \"$context.resourcePath\", \"status\": \"$context.status\", \"protocol\": \"$context.protocol\", \"responseLength\": \"$context.responseLength\"}"
+
+  apiCloudWatch1:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Ref apiGatewayName1
+      RetentionInDays: 7
+#SEC5-ApiGateway-Complaint
+  apiGatewayStage2:
+    Type: "AWS::ApiGateway::Stage"
+    Properties:
+      StageName: !Ref "apiGatewayStageName2"
+      RestApiId: !Ref "apiGateway"
+      DeploymentId: !Ref "apiGatewayDeployment"
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: "GET"
+          MetricsEnabled: "true"
+          DataTraceEnabled: "true"
+          LoggingLevel: "INFO"
+      # AccessLogSetting:
+      #   DestinationArn: !GetAtt "apiCloudWatch.Arn"
+      #   Format: "{\"requestId\": \"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\": \"$context.identity.caller\", \"requestTime\": \"$context.requestTimeEpoch\", \"httpMethod\": \"$context.httpMethod\", \"resourcePath\": \"$context.resourcePath\", \"status\": \"$context.status\", \"protocol\": \"$context.protocol\", \"responseLength\": \"$context.responseLength\"}"
+
+  apiGatewayStageCacheEncrypt2:
+    Type: "AWS::ApiGateway::Stage"
+    DependsOn: apiGatewayStage2
+    Properties:
+      StageName: UnEncryptCache1
+      RestApiId: !Ref "apiGateway"
+      DeploymentId: !Ref "apiGatewayDeployment"
+      CacheClusterEnabled: true
+      CacheClusterSize: "0.5"
+      TracingEnabled: false
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: "GET"
+          MetricsEnabled: false
+          DataTraceEnabled: false
+          LoggingLevel: "INFO"
+
+  ExampleWebACL2:
+    Type: 'AWS::WAFv2::WebACL'
+    Properties:
+      Name: ExampleWebACL1
+      Scope: REGIONAL
+      Description: This is an example WebACL
+      DefaultAction:
+        Allow:
+          CustomRequestHandling:
+            InsertHeaders:
+              - Name: AllowActionHeader1Name
+                Value: AllowActionHeader1Value
+              - Name: AllowActionHeader2Name
+                Value: AllowActionHeader2Value
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: BlockXssAttackMetric
+
+  SampleWebACLAssociation2:
+    Type: 'AWS::WAFv2::WebACLAssociation'
+    Properties:
+      ResourceArn: !Sub arn:aws:apigateway:${AWS::Region}::/restapis/${apiGateway}/stages/${apiGatewayStage2}
+      WebACLArn: !GetAtt ExampleWebACL2.Arn
+#SEC8-ApiGateway-Complaint
+  apiGatewayStage3:
+    Type: "AWS::ApiGateway::Stage"
+    Properties:
+      StageName: !Ref "apiGatewayStageName3"
+      RestApiId: !Ref "apiGateway"
+      DeploymentId: !Ref "apiGatewayDeployment"
+      CacheClusterEnabled: true
+      CacheClusterSize: "0.5"
+      MethodSettings:
+        - ResourcePath: /mock
+          HttpMethod: "GET"
+          MetricsEnabled: true
+          DataTraceEnabled: true
+          LoggingLevel: "INFO"
+          CacheDataEncrypted: true
+          CachingEnabled: true
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          CachingEnabled: true
+          MetricsEnabled: true
+          CacheDataEncrypted: true
+          DataTraceEnabled: true
+          LoggingLevel: "INFO"
+      AccessLogSetting:
+        DestinationArn: !GetAtt apiCloudWatch.Arn
+        Format: "{\"requestId\": \"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\": \"$context.identity.caller\", \"requestTime\": \"$context.requestTimeEpoch\", \"httpMethod\": \"$context.httpMethod\", \"resourcePath\": \"$context.resourcePath\", \"status\": \"$context.status\", \"protocol\": \"$context.protocol\", \"responseLength\": \"$context.responseLength\"}"
+
+Outputs:
+  ResourceId:
+    Value: !Ref apiGateway
+  apiGatewayId:
+    Description: Api Gateway ID
+    # Value: !Ref apiGateway
+    Value:
+      !Join [
+        "",
+        [
+          !Ref apiGateway,
+          "/mock/GET",
+        ],
+      ]
+  apiGatewayStageId:
+    Description: Api Gateway Stage ID
+    Value: !Join [
+        "/",
+        [
+          !Ref apiGateway,
+          !Ref apiGatewayStageName3,
+        ],
+      ]
+  apiGatewayStageArn:
+    Description: Api Gateway Stage Arn
+    Value:
+      !Join [
+        "",
+        [
+          "arn:aws:apigateway:",
+          !Ref AWS::Region,
+          "::/restapis/",
+          !Ref apiGateway,
+          "/stages/",
+          !Ref apiGatewayStage,
+        ],
+      ]
+  apiGatewayStageCacheNonEncryptId:
+    Description: Api GatewayStage ID
+    Value: !Ref apiGatewayStageCacheNonEncrypt
+  apiGatewayIdoutput:
+    Description: Api Gateway ID
+    Value: !Ref apiGateway1
+  apiGatewayId1:
+    Description: Api Gateway ID
+    # Value: !Ref apiGateway1
+    Value:
+      !Join [
+        "",
+        [
+          !Ref apiGateway1,
+          "/mock/GET",
+        ],
+      ]
+  apiGatewayStageId1:
+    Description: In the API Gateway Stage ID, we can find that API Gateway caching,throttling,access_log,stage_metrics,stage_caching,stage_api_logging are enabled in these resources.
+    Value: !Ref apiGatewayStage1
+  apiGatewayRootMethod1:
+    Description: apiGateway Root Method1 has custom responce enabled
+    Value: !Ref apiGatewayRootMethod1 
+  apiGatewayStage1Arn1:
+    Description: Api Gateway Stage Arn
+    Value:
+      !Join [
+        "",
+        [
+          "arn:aws:apigateway:",
+          !Ref AWS::Region,
+          "::/restapis/",
+          !Ref apiGateway1,
+          "/stages/",
+          !Ref apiGatewayStage1,
+          "/mock/GET"
+        ],
+      ]
+  apiGatewayStageId2:
+    Description: Api Gateway Stage ID
+    Value: !Ref apiGatewayStage2
+  apiGatewayStageArn2:
+    Description: Api Gateway Stage Arn
+    Value:
+      !Join [
+        "",
+        [
+          "arn:aws:apigateway:",
+          !Ref AWS::Region,
+          "::/restapis/",
+          !Ref apiGateway,
+          "/stages/",
+          !Ref apiGatewayStage2,
+        ],
+      ]
+  apiGatewayStageCacheEncryptId2:
+    Description: Api GatewayStage2 ID and it is stage_protected_by_a_waf_wacl.
+    Value: !Ref apiGatewayStageCacheEncrypt2
+  WebACLName2:
+    Description: WebACL Name
+    Value: !Ref ExampleWebACL2
+  WebACLAssociation2:
+    Description: WebACL Association
+    Value: !Ref SampleWebACLAssociation2
+
+  apiGatewayStageId3:
+    Description: Api Gateway Stage ID and it has apigateway_cache_encryption enabled.
+    Value: !Ref apiGatewayStage3
+  apiGatewayStageArn3:
+    Description: Api Gateway Stage Arn
+    Value:
+      !Join [
+        "",
+        [
+          "arn:aws:apigateway:",
+          !Ref AWS::Region,
+          "::/restapis/",
+          !Ref apiGateway,
+          "/stages/",
+          !Ref apiGatewayStage3,
+        ],
+      ]
+      

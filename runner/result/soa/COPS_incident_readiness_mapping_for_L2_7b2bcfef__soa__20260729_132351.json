@@ -1,0 +1,139 @@
+{
+  "id": "COPS_incident_readiness_mapping_for_L2_7b2bcfef__soa__20260729_132351",
+  "scenario_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+  "scenario_name": "Incident-Readiness Mapping for Critical Alarms",
+  "category": "monitoring_&_observability",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T13:23:51.555732+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top alarm/monitoring resources with findings"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand scope of alarm coverage and notification gaps"
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable"
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top alarm/monitoring resources with findings",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand scope of alarm coverage and notification gaps",
+          "found": false
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable",
+          "found": false
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every task in a single run without pausing. Do not say 'Ready to continue?' or ask for confirmation \u2014 proceed through all steps automatically. Always scope your work to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources. The assessment contains automated compliance findings that exist independently of WAFR questionnaire completion \u2014 a PENDING questionnaire does NOT mean there are no findings. Use get_findings_summary and list_assessment_top_entities to surface compliance findings. Cite specific evidence from tool output for every recommendation. You MUST output the final JSON block at the end of your response no matter what.",
+    "objective_raw": "Validate incident readiness (runbook linkage, escalation, auto-ticketing) for critical alarms; capture all must-find items from env:fx/ace-bench/monitoring-observ/incident-readiness/incident-readiness-mapping-for-cri/l2/v1 | packet:cp/ace-bench/monitoring-observ/incident-readiness/incident-readiness-mapping-for-cri/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Validate incident readiness (runbook linkage, escalation, auto-ticketing) for critical alarms; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: For every Severity-1/2 alarm, verify there is a linked runbook, an on-call escalation target, and an SNS/incident-management destination. Recommendation: Propose a runbook-linkage plan with gaps enumerated and a draft alarm \u2192 runbook URL map committed via change ticket. Return your answer as JSON with keys: summary (string), observations (array \u2014 each item has area, finding, evidence, severity), platform_gaps (array of strings describing what could not be assessed), plan (array \u2014 each item has action, scope, priority, effort, rationale). Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+    "description": "the agent should identify critical alarms that fire silently (no SNS action) from WAFR findings and produce an incident readiness plan. The LogMetricsNonCompliant metric filters are confirmed in WAFR as failing alarm checks. Runbook linkage and on-call routing are platform gaps.",
+    "objective": "Validate incident readiness (runbook linkage, escalation, auto-ticketing) for critical alarms; capture all must-find items from env:fx/ace-bench/monitoring-observ/incident-readiness/incident-readiness-mapping-for-cri/l2/v1 | packet:cp/ace-bench/monitoring-observ/incident-readiness/incident-readiness-mapping-for-cri/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: For every Severity-1/2 alarm, verify there is a linked runbook, an on-call escalation target, and an SNS/incident-management destination. Recommendation: Propose a runbook-linkage plan with gaps enumerated and a draft alarm \u2192 runbook URL map committed via change ticket.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable mandatory logging or audit controls",
+    "wafr_pillar": "Operational Excellence | Reliability",
+    "wafr_phase": "Review",
+    "correct_resources": [
+      "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+      "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+      "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify the specific alarm/metric filter resources from tool output that lack SNS notification actions?",
+      "Did the agent produce an incident readiness plan that maps alarms to remediation actions grounded in what tools surfaced?",
+      "Did the agent explicitly acknowledge that runbook linkage, on-call targets, and SNS destinations are not accessible through available tools?",
+      "Did the agent avoid fabricating alarm names, SNS topic ARNs, or runbook URLs not present in tool output?",
+      "Did the agent retrieve WA Tool questions (list_questions) and submit answers via answer_question, grounded in the assessment findings it surfaced?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Now I have all the data I need. Let me compile the comprehensive JSON response.\n\n```json\n{\n  \"summary\": \"Five CloudWatch MetricAlarms were found in us-east-1, all provisioned by the CloudFormation stack 'LogMetricsNonCompliant'. Every alarm monitors security-relevant CloudTrail metrics (unauthorized API calls, CloudTrail configuration changes, MFA-less console sign-ins, S3 bucket config changes, VPC network changes) and should be treated as Severity-1 or Severity-2. Three of the five alarms have an SNS action pointing to 'Sample-Topic-bec2b3a0', which fans out exclusively to a single Lambda function (Lambda-bec2b3a0) with no human-readable runbook URL in its description or tags, no on-call escalation path (PagerDuty/OpsGenie/SSM On-Call), and no AWS Incident Manager response plan. Two alarms (ConsoleSignInWithoutMfaAlarmNC, S3BucketConfigChangesAlarmNC) have zero alarm actions\u2014no SNS, no Lambda, no incident destination of any kind. No alarm carries a 'runbook' tag or encodes a runbook URL in its AlarmDescription field. All five alarms are in INSUFFICIENT_DATA state, indicating either the CloudTrail metric filters are not publishing data or the alarms have never fired, raising additional signal-integrity concerns. The overall posture has critical gaps: missing runbooks on every alarm, missing on-call escalation targets on every alarm, missing incident-management destinations on two alarms, and no AWS Incident Manager response plans anywhere in the account.\",\n\n  \"observations\": [\n    {\n      \"area\": \"Runbook Linkage\",\n      \"finding\": \"Zero alarms carry a runbook URL. No alarm has a 'runbook', 'wiki', or 'playbook' tag, and no AlarmDescription field contains a URL. Responders have no documented procedure to follow when any alarm fires.\",\n      \"evidence\": \"ListTagsForResource for all five alarm ARNs returned only aws:cloudformation:* system tags. AlarmDescription values are plain English sentences with no hyperlinks. Alarm ARNs: AWSAuthorizationFailureAlarmNC, CloudTrailChangesAlarmNC, ConsoleSignInWithoutMfaAlarmNC, S3BucketConfigChangesAlarmNC, VPCNetworkConfigChangesAlarmNC.\",\n      \"severity\": \"CRITICAL\"\n    },\n    {\n      \"area\": \"On-Call Escalation Target\",\n      \"finding\": \"No alarm is wired to an on-call escalation system. The single SNS topic (Sample-Topic-bec2b3a0) has one confirmed subscription\u2014a Lambda function\u2014with no email, SMS, HTTP/HTTPS (PagerDuty/OpsGenie webhook), or AWS Chatbot endpoint. SSM Incident Manager has zero response plans. AWS Chatbot could not be enumerated due to an endpoint connectivity error.\",\n      \"evidence\": \"SNS ListSubscriptionsByTopic: Protocol=lambda, Endpoint=arn:aws:lambda:us-east-1:REDACTED-ACCOUNT:function:Lambda-bec2b3a0. SubscriptionsConfirmed=1, SubscriptionsPending=0. SSM Incident Manager ListResponsePlans returned responsePlanSummaries=[]. AWS Chatbot DescribeSlackChannelConfigurations: EndpointConnectionError.\",\n      \"severity\": \"CRITICAL\"\n    },\n    {\n      \"area\": \"SNS / Incident-Management Destination\",\n      \"finding\": \"Two alarms have NO alarm actions whatsoever. ConsoleSignInWithoutMfaAlarmNC and S3BucketConfigChangesAlarmNC will fire silently\u2014no notification of any kind is delivered. The remaining three alarms route to a Lambda-only SNS subscription, which provides no durable incident record, no paging, and no ticket creation.\",\n      \"evidence\": \"DescribeAlarms: ConsoleSignInWithoutMfaAlarmNC AlarmActions=[], OKActions=[], InsufficientDataActions=[]. S3BucketConfigChangesAlarmNC AlarmActions=[], OKActions=[], InsufficientDataActions=[]. SSM OpsCenter DescribeOpsItems returned OpsItemSummaries=[].\",\n      \"severity\": \"CRITICAL\"\n    },\n    {\n      \"area\": \"Alarm State / Signal Integrity\",\n      \"finding\": \"All five alarms are in INSUFFICIENT_DATA state. This means either the CloudTrail metric filters are not emitting data points, the metric namespace 'CloudTrailMetrics' has no recent data, or CloudTrail itself is not forwarding logs to CloudWatch Logs. Alarms in this state will not transition to ALARM even if a real security event occurs.\",\n      \"evidence\": \"DescribeAlarms: StateValue=INSUFFICIENT_DATA for all five alarms. Namespace=CloudTrailMetrics for all five. No CloudWatch metric data verification was performed in this scan, but sustained INSUFFICIENT_DATA across all alarms is a strong indicator of a broken metric-filter pipeline.\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"Lambda SNS Consumer\",\n      \"finding\": \"The sole SNS subscriber is Lambda-bec2b3a0 (nodejs18.x, 276 bytes of code). The function has no description, no runbook tag, X-Ray tracing is disabled (PassThrough), and its only tags are CloudFormation system tags. It is unclear whether this function creates tickets, pages on-call staff, or simply logs to CloudWatch Logs. Without code inspection or documentation, it cannot be counted as a valid escalation path.\",\n      \"evidence\": \"GetFunction: Description='', TracingConfig.Mode=PassThrough, Tags contain only aws:cloudformation:* keys. LogGroup=/aws/lambda/Lambda-bec2b3a0. CodeSize=276 bytes (minimal placeholder size).\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"Alarm Severity Classification\",\n      \"finding\": \"None of the five alarms carry an explicit severity tag (e.g., Severity=1, Priority=P1). All five monitor security-control metrics that industry frameworks (CIS AWS Foundations Benchmark) classify as high/critical, yet the alarms are indistinguishable by metadata from low-severity operational alarms.\",\n      \"evidence\": \"ListTagsForResource for all five alarms: only aws:cloudformation:stack-name, aws:cloudformation:stack-id, aws:cloudformation:logical-id tags present. No 'Severity', 'Priority', 'Team', or 'Service' tags.\",\n      \"severity\": \"MEDIUM\"\n    },\n    {\n      \"area\": \"AWS Incident Manager\",\n      \"finding\": \"AWS Incident Manager (SSM Incidents) is not configured. Zero response plans exist. Incident Manager provides automated escalation, runbook execution, and post-incident analysis. Its absence means there is no automated incident lifecycle management for any alarm in this account.\",\n      \"evidence\": \"ssm-incidents ListResponsePlans: responsePlanSummaries=[].\",\n      \"severity\": \"HIGH\"\n    },\n    {\n      \"area\": \"OKActions / Recovery Notifications\",\n      \"finding\": \"No alarm has OKActions configured. When an alarm recovers, no notification is sent. This prevents responders from knowing when an incident has auto-resolved and increases the risk of over-response or missed recovery confirmation.\",\n      \"evidence\": \"DescribeAlarms: OKActions=[] for all five alarms.\",\n      \"severity\": \"MEDIUM\"\n    }\n  ],\n\n  \"platform_gaps\": [\n    \"AWS Chatbot configuration could not be enumerated (EndpointConnectionError on chatbot.us-east-1.amazonaws.com) \u2014 Slack/Teams on-call channel linkage unverifiable.\",\n    \"PagerDuty, OpsGenie, and VictorOps integrations are third-party SaaS systems; their on-call schedule and escalation policy configurations are not accessible via AWS APIs and were not assessed.\",\n    \"Lambda function source code (Lambda-bec2b3a0) was not inspected. It is unknown whether the function creates ServiceNow/Jira tickets, calls a webhook, or is a no-op stub. Code review required.\",\n    \"CloudTrail metric filter definitions and CloudWatch Logs log group associations were not verified in this scan. The INSUFFICIENT_DATA state may indicate a broken pipeline upstream of the alarms.\",\n    \"Alarm severity classification (Sev-1 vs Sev-2) was inferred from CIS AWS Foundations Benchmark guidance because no explicit severity tags exist on the alarms. Actual organizational severity assignments may differ.\",\n    \"Multi-region alarm coverage was not assessed. Only us-east-1 was scanned. CloudTrail may be multi-region; corresponding alarms in other regions were not checked.\",\n    \"AWS Organizations integration and delegated Security Hub / GuardDuty findings were not inspected as a complementary signal source.\",\n    \"Change management / ITSM system (ServiceNow, Jira) was not accessible via AWS APIs; no change ticket workflows could be directly verified.\"\n  ],\n\n  \"plan\": [\n    {\n      \"action\": \"Create and publish runbooks for all five security alarms\",\n      \"scope\": \"AWSAuthorizationFailureAlarmNC \u2192 runbook: investigate-unauthorized-api-calls.md; CloudTrailChangesAlarmNC \u2192 runbook: investigate-cloudtrail-config-change.md; ConsoleSignInWithoutMfaAlarmNC \u2192 runbook: investigate-mfa-bypass-signin.md; S3BucketConfigChangesAlarmNC \u2192 runbook: investigate-s3-bucket-config-change.md; VPCNetworkConfigChangesAlarmNC \u2192 runbook: investigate-vpc-network-change.md\",\n      \"priority\": \"P0 \u2014 Immediate\",\n      \"effort\": \"Medium (2\u20133 days authoring + peer review per runbook; 5 runbooks total ~2 sprints)\",\n      \"rationale\": \"Zero runbooks exist for any security alarm. Every alarm monitors a CIS Benchmark control. Without runbooks, mean-time-to-respond (MTTR) is undefined and responders make ad-hoc decisions under pressure, increasing risk of incorrect remediation.\"\n    },\n    {\n      \"action\": \"Embed runbook URLs into each alarm via AlarmDescription and a 'runbook' tag using CloudFormation stack update\",\n      \"scope\": \"Update CloudFormation stack 'LogMetricsNonCompliant' to add: (1) AlarmDescription field appended with 'Runbook: https://<wiki-base>/<runbook-slug>', (2) Tags block with Key=runbook, Value=<url> and Key=Severity, Value=1 or 2 per alarm. Raise a change ticket (CHG-XXXX) before applying.\",\n      \"priority\": \"P0 \u2014 Immediate (after runbooks are published)\",\n      \"effort\": \"Low (< 1 day CloudFormation template change + change ticket)\",\n      \"rationale\": \"Runbook URL must be discoverable directly from the alarm without context-switching. CloudFormation-managed alarms must be updated via the stack to avoid drift. Draft alarm\u2192runbook URL map: { AWSAuthorizationFailureAlarmNC: '/runbooks/unauthorized-api-calls', CloudTrailChangesAlarmNC: '/runbooks/cloudtrail-config-change', ConsoleSignInWithoutMfaAlarmNC: '/runbooks/mfa-bypass-signin', S3BucketConfigChangesAlarmNC: '/runbooks/s3-bucket-config-change', VPCNetworkConfigChangesAlarmNC: '/runbooks/vpc-network-change' }\"\n    },\n    {\n      \"action\": \"Add on-call escalation subscriptions to SNS topic Sample-Topic-bec2b3a0\",\n      \"scope\": \"Subscribe a PagerDuty/OpsGenie HTTPS webhook endpoint and at least one security-team email DL to the SNS topic. Confirm subscriptions. Validate that the on-call rotation covers 24\u00d77. Remove or document the Lambda subscriber once its purpose is confirmed.\",\n      \"priority\": \"P0 \u2014 Immediate\",\n      \"effort\": \"Low (< 4 hours configuration + on-call schedule verification)\",\n      \"rationale\": \"Currently the SNS topic fans out only to an undocumented Lambda function. No human is paged when an alarm fires. Adding a PagerDuty/OpsGenie subscription directly to the SNS topic is the fastest path to human escalation.\"\n    },\n    {\n      \"action\": \"Add AlarmActions (SNS) to ConsoleSignInWithoutMfaAlarmNC and S3BucketConfigChangesAlarmNC\",\n      \"scope\": \"Update the two silent alarms in CloudFormation stack 'LogMetricsNonCompliant' to include AlarmActions: [arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0]. Raise a change ticket before applying.\",\n      \"priority\": \"P0 \u2014 Immediate\",\n      \"effort\": \"Low (< 1 hour CloudFormation change)\",\n      \"rationale\": \"These two alarms will never notify anyone in their current state. MFA-bypass sign-ins and S3 config changes are both CIS Benchmark Level 1 controls and must page on-call staff immediately.\"\n    },\n    {\n      \"action\": \"Configure AWS Incident Manager with response plans for Sev-1 alarms\",\n      \"scope\": \"Create SSM Incident Manager response plans for: (1) UnauthorizedAPICalls, (2) MFABypassSignIn. Each plan should define: escalation contacts, runbook SSM document (or external URL), chat channel (Slack/Teams via AWS Chatbot), and PagerDuty engagement. Wire the two highest-severity CloudWatch alarms to publish to an SNS topic that triggers the Incident Manager response plan.\",\n      \"priority\": \"P1 \u2014 Within 2 weeks\",\n      \"effort\": \"Medium (1\u20132 days configuration + testing)\",\n      \"rationale\": \"AWS Incident Manager provides automated incident lifecycle: auto-page, timeline, runbook execution, and post-incident analysis. It removes manual coordination overhead for Sev-1 events and produces an audit trail.\"\n    },\n    {\n      \"action\": \"Investigate and remediate INSUFFICIENT_DATA state on all five alarms\",\n      \"scope\": \"Verify: (1) CloudTrail is enabled and writing to a CloudWatch Logs log group, (2) metric filters exist on the log group for each metric (UAuthorizationAPICallFailure, CloudTrailEventCount, ConsoleSignInWithoutMfaCount, S3BucketConfigChanges, VpcEventCount), (3) the metric namespace 'CloudTrailMetrics' is receiving data points. Fix any broken filters or log group associations.\",\n      \"priority\": \"P0 \u2014 Immediate (alarms are currently non-functional)\",\n      \"effort\": \"Medium (4\u20138 hours investigation and remediation)\",\n      \"rationale\": \"An alarm in INSUFFICIENT_DATA will not transition to ALARM state even during a real security incident. All five alarms are currently deaf. This is the most operationally critical gap after runbook absence.\"\n    },\n    {\n      \"action\": \"Add OKActions to all five alarms for recovery notification\",\n      \"scope\": \"Update CloudFormation stack to add OKActions: [arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0] on all five alarms so responders are notified when an alarm auto-recovers.\",\n      \"priority\": \"P2 \u2014 Within 1 month\",\n      \"effort\": \"Low (< 1 hour CloudFormation change)\",\n      \"rationale\": \"Without OKActions, incident responders have no automated signal that an alarm has recovered. Manual polling is required, increasing responder toil and risking missed recoveries.\"\n    },\n    {\n      \"action\": \"Audit and document Lambda-bec2b3a0 function purpose and replace or formalize it\",\n      \"scope\": \"Review Lambda-bec2b3a0 source code. If it is a no-op or stub, remove it and replace with a documented integration. If it performs a useful function (e.g., ticket creation), add description, a runbook tag, X-Ray active tracing, and a dead-letter queue (DLQ) to surface invocation failures.\",\n      \"priority\": \"P1 \u2014 Within 2 weeks\",\n      \"effort\": \"Low-Medium (2\u20134 hours)\",\n      \"rationale\": \"A 276-byte Lambda with no description, no DLQ, and no tracing is likely a placeholder. It is the only subscriber to the SNS topic and therefore the only notification path for three alarms. Its reliability and purpose must be established.\"\n    },\n    {\n      \"action\": \"Apply consistent severity and ownership tagging to all alarms\",\n      \"scope\": \"Add tags: Severity (1 or 2), Team (security-ops), Service (cloudtrail-monitoring), OncallRotation (<rotation-name>), Runbook (<url>) to all five alarms via CloudFormation stack update.\",\n      \"priority\": \"P2 \u2014 Within 1 month\",\n      \"effort\": \"Low (< 1 hour CloudFormation change)\",\n      \"rationale\": \"Without severity and ownership tags, alarms cannot be filtered or prioritized programmatically. Automated compliance checks (e.g., AWS Config rules, Security Hub custom controls) cannot enforce runbook-linkage requirements without machine-readable metadata.\"\n    },\n    {\n      \"action\": \"Establish a recurring alarm-hygiene review process\",\n      \"scope\": \"Schedule a monthly review to: (1) verify all Sev-1/2 alarms have runbook tags with valid URLs, (2) confirm SNS subscriptions are active and on-call rotations are staffed, (3) check no alarm has been in INSUFFICIENT_DATA for > 24 hours, (4) validate Incident Manager response plans are current. Codify checks as AWS Config custom rules or a Lambda-based compliance scanner.\",\n      \"priority\": \"P2 \u2014 Within 1 month\",\n      \"effort\": \"Medium (1\u20132 days to build automation + process documentation)\",\n      \"rationale\": \"The current gaps likely accumulated due to absence of ongoing hygiene checks. A recurring automated process prevents regression and provides audit evidence for compliance frameworks (SOC 2, ISO 27001, CIS AWS Benchmark).\"\n    }\n  ]\n}\n```\n\n---\n\n**How to read this output:**\n\n| Section | What it tells you |\n|---|---|\n| `summary` | Executive one-paragraph narrative of the full posture |\n| `observations` | Eight discrete findings, each with `area`, `finding`, `evidence` (direct API response data), and `severity` (CRITICAL / HIGH / MEDIUM) |\n| `platform_gaps` | Eight things that *could not* be assessed with AWS APIs alone (third-party SaaS, Lambda source code, multi-region, etc.) |\n| `plan` | Ten ordered actions \u2014 four are **P0/Immediate** because the alarms are currently non-functional or completely silent |\n\n**The three most urgent P0 actions:**\n1. **Remediate INSUFFICIENT_DATA** \u2014 all five alarms are deaf right now; no alert fires even during a real incident.\n2. **Add SNS AlarmActions** to the two completely silent alarms (`ConsoleSignInWithoutMfaAlarmNC`, `S3BucketConfigChangesAlarmNC`).\n3. **Add on-call escalation** (PagerDuty/OpsGenie webhook) to `Sample-Topic-bec2b3a0` \u2014 no human is currently paged by any alarm.",
+  "token_usage": {
+    "estimated": 2758,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 134.4,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

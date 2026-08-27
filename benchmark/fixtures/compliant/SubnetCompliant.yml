@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 198.16.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCVPC1
+
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.1.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: false #for checkid - subnet_public_ip_assignment_check 
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET1
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.2.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET2
+  SubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.3.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [2, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: false 
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET3
+
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCIG1
+
+  VPCGatewayAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCROUTE1
+
+  SubnetARouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetA
+      RouteTableId: !Ref RouteTable
+
+  SubnetBRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetB
+      RouteTableId: !Ref RouteTable
+
+  InternetRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+
+  SecurityGroup1:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG1
+
+  SecurityGroup2:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG2
+Outputs:
+  SecurityGroupID1:
+    Description: Security Group -1 ID
+    Value:
+      Ref: SecurityGroup1
+    Export:
+      Name: SecurityGroupID11
+  SecurityGroupID2:
+    Description: Security Group -2 ID
+    Value:
+      Ref: SecurityGroup2
+    Export:
+      Name: SecurityGroupID12
+  VPCID:
+    Description: VPC ID
+    Value:
+      Ref: VPC
+    Export:
+      Name: VPCID1
+  SubnetAID:
+    Description: Subnet A ID
+    Value:
+      Ref: SubnetA
+    Export:
+      Name: SubnetAID1
+  SubnetBID:
+    Description: Subnet B ID
+    Value:
+      Ref: SubnetB
+    Export:
+      Name: SubnetBID1
+  SubnetCID:
+    Description: Subnet B ID
+    Value:
+      Ref: SubnetC
+    Export:
+      Name: SubnetCID1
+  InternetGatewayID:
+    Description: Internetgateway ID
+    Value:
+      Ref: InternetGateway
+    Export:
+      Name: InternetGatewayID1
+  RouteTableID:
+    Description: RouteTable ID
+    Value:
+      Ref: RouteTable
+    Export:
+      Name: RouteTableID1

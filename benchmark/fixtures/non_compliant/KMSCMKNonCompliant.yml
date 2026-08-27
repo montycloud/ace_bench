@@ -1,0 +1,115 @@
+Resources:
+  WartestkmsKey1:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: kms key rotation disabled
+      EnableKeyRotation: false
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "kms:*"
+            Resource: "*"
+  WartestkmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS Key for wartestKinesisStreamNonCompliant
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "kms:*"
+            Resource: "*"
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: ["sts:AssumeRole"]
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kms:*
+                  - "logs:CreateLogStream"
+                  - "logs:DescribeLogGroups"
+                  - "logs:PutMetricData"
+                  - "logs:CreateLogGroup"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  KMSDisableLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !Sub "${LambdaExecutionRole.Arn}"
+      Handler: index.handler
+      Timeout: 300
+      Runtime: python3.12
+      Environment:
+        Variables:
+          kmskey_id: !Ref WartestkmsKey
+      Code:
+        ZipFile: !Sub |
+          import json
+          import os
+          import boto3
+          import datetime
+          import time
+          import cfnresponse
+          def handler(event, context):
+            print(event)
+            if event["RequestType"] == "Create":
+              print("inside function")
+              client = boto3.client("kms", region_name="${AWS::Region}")
+              start_date = str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+              kmskey_id=os.environ['kmskey_id']
+              name= "Lambda for "+kmskey_id+" from "+start_date
+              is_disabled = client.disable_key(KeyId=kmskey_id)
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+            elif (event["RequestType"] == "Update" or event["RequestType"] == "Delete"):
+              print("Update or delete Create Logic")
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+              return
+  KMSDisableCustomResource:
+    DependsOn:
+      - WartestkmsKey
+    Type: Custom::KMSDisable
+    Properties:
+      ServiceToken: !GetAtt [KMSDisableLambdaFunction, Arn]
+  WartestkmsKeyAlias:
+    Type: "AWS::KMS::Alias"
+    Properties:
+      AliasName: alias/test4321
+      TargetKeyId: !Ref WartestkmsKey
+Outputs:
+  WartestkmsKeyId:
+    Description: WartestkmsKey ID
+    Value:
+      Ref: WartestkmsKey
+  WartestkmsKeyArn:
+    Description: WartestkmsKey Arn
+    Value: !GetAtt WartestkmsKey.Arn
+  WartestkmsKeyId1:
+    Description: WartestkmsKey ID
+    Value:
+      Ref: WartestkmsKey1
+  WartestkmsKeyArn1:
+    Description: WartestkmsKey Arn
+    Value: !GetAtt WartestkmsKey1.Arn

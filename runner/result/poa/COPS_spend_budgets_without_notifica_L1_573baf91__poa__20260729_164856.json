@@ -1,0 +1,136 @@
+{
+  "id": "COPS_spend_budgets_without_notifica_L1_573baf91__poa__20260729_164856",
+  "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+  "scenario_name": "Spend Budgets Without Notification Thresholds",
+  "category": "cloud_financial_management",
+  "agent": "poa",
+  "model": "bedrock/poa",
+  "timestamp": "2026-07-29T16:48:56.773180+00:00",
+  "total_score": 0.75,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources \u2014 budget notification gaps surface as check-level findings"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of budget notification configuration gaps"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources \u2014 budget notification gaps surface as check-level findings",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of budget notification configuration gaps",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": [
+        "MyBudget-us-east-1-1776721863771-GApmwotGB9CW",
+        "MyBudget-us-east-1-1776721863771-GApmwotGB9CW",
+        "MyBudget-us-east-1-1776721863771-GApmwotGB9CW",
+        "MyBudget-us-east-1-1776721863771-GApmwotGB9CW",
+        "MyBudget-us-east-1-1776721863771-GApmwotGB9CW",
+        "REDACTED-ACCOUNT",
+        "REDACTED-ACCOUNT",
+        "arn:aws:sns:us-east-1:REDACTED-ACCOUNT:MontyCloud-Automation-Task-Notification-Topic-dev1",
+        "arn:aws:sns:us-east-1:REDACTED-ACCOUNT:war-test-a493"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [
+        "AWS_BUDGET_ACCOUNT_LEVEL",
+        "AWS_SNS_BUDGET_NOTIFICATIONS",
+        "AWS_COST_ANOMALY_DETECTION",
+        "CHECK_49577",
+        "CHECK_24953",
+        "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+        "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+        "REDACTED-ACCOUNT/us-east-1",
+        "i-01baa59f318a3c59e",
+        "vol-028f30f6b745e2ae5"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items from env:fx/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/l1/v1 | packet:cp/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify AWS Budgets without NotificationsWithSubscribers, budgets without forecasted-spend alerts, and accounts with zero budget coverage. Recommendation: Establish 50%/80%/100%/forecast thresholds routed to workload-owner SNS topics and a FinOps distribution list. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+    "description": "AWS Budgets lets you set spending limits on your account or specific services and receive alerts when thresholds are crossed. A budget with no notification thresholds configured is functionally useless \u2014 costs can exceed the budget limit and nobody gets alerted until the monthly bill arrives. This is a common FinOps gap where budgets are created for visibility but the alert wiring is forgotten. the agent should identify AWS Budgets that exist but have no notification actions configured.",
+    "objective": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items from env:fx/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/l1/v1 | packet:cp/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify AWS Budgets without NotificationsWithSubscribers, budgets without forecasted-spend alerts, and accounts with zero budget coverage. Recommendation: Establish 50%/80%/100%/forecast thresholds routed to workload-owner SNS topics and a FinOps distribution list.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [],
+    "should_not_flag": [
+      "AWS_BUDGET_ACCOUNT_LEVEL",
+      "AWS_SNS_BUDGET_NOTIFICATIONS",
+      "AWS_COST_ANOMALY_DETECTION",
+      "CHECK_49577",
+      "CHECK_24953",
+      "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+      "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+      "REDACTED-ACCOUNT/us-east-1",
+      "i-01baa59f318a3c59e",
+      "vol-028f30f6b745e2ae5"
+    ],
+    "judge_criteria": [
+      "Did the agent identify that the issue is AWS Budgets configured without notification thresholds or alert actions (not just budgets being absent)?",
+      "Did the agent identify specific budget names \u2014 or, if the fixture is not deployed and tools cannot surface them, explicitly acknowledge that rather than fabricating budget names?",
+      "Did the agent avoid hallucinating out-of-scope resources (S3 buckets, EC2 instances, etc.) as budget violation findings?",
+      "Did the agent distinguish between a budget existing and a budget being correctly configured with cost alert notifications?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'll start by gathering all the AWS Budgets information needed for a comprehensive analysis. Let me make parallel calls to get budgets, account info, and SNS topics.Now let me get the budget notifications and subscribers for the existing budget, plus SNS topic subscriptions:I now have all the data needed for a comprehensive analysis. Let me compile the full JSON response:\n\n```json\n{\n  \"summary\": \"Account REDACTED-ACCOUNT has exactly 1 configured AWS Budget ('MyBudget-us-east-1-1776721863771-GApmwotGB9CW', $1,000/month, scoped to Amazon S3). That budget carries ZERO notification rules and ZERO subscribers, meaning no alert will ever fire regardless of spend. No budget exists for any other service, region, or account-wide spend, leaving the vast majority of cloud expenditure completely uncovered. Four SNS topics exist in us-east-1 (MontyCloud-Automation-Task-Notification-Topic-dev1, MontyCloud-OnBoarding-Topic-dev1, Sample-Topic-bec2b3a0, war-test-a493) but none is wired to any budget alert. The account is effectively flying blind on cost control: no 50 %, 80 %, or 100 % actual-spend thresholds, no forecasted-spend alert, and no FinOps distribution list is in place. Immediate remediation is required to establish the recommended 50/80/100/forecast threshold suite routed to workload-owner SNS topics and a FinOps distribution list.\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"resource_type\": \"AWS::Budgets::Budget\",\n      \"check\": \"Budget has zero NotificationsWithSubscribers\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"DescribeNotificationsForBudget returned Notifications: [] for budget 'MyBudget-us-east-1-1776721863771-GApmwotGB9CW'. No notification rule of any kind (actual or forecasted) is attached. DescribeSubscribersForNotification was not callable because no notifications exist. Budget limit is $1,000 USD/month on Amazon S3; current actual spend $0.308, forecasted $0.336 \u2014 alerts will never trigger regardless of future spend growth.\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"resource_type\": \"AWS::Budgets::Budget\",\n      \"check\": \"Budget missing FORECASTED spend alert\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"No notification with NotificationType=FORECASTED exists on this budget. The CalculatedSpend object does contain ForecastedSpend ($0.336) confirming the budget engine is producing forecasts, yet no threshold notification is configured to act on that forecast. A forecasted-spend alert at 100 % of budget limit would provide early warning before actual charges breach the limit.\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"resource_type\": \"AWS::Budgets::Budget\",\n      \"check\": \"Budget missing 50% actual-spend threshold alert\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"No notification with ComparisonOperator=GREATER_THAN, ThresholdType=PERCENTAGE, Threshold=50, NotificationType=ACTUAL exists. An early-warning 50 % threshold gives workload owners lead time to investigate anomalous spend before approaching the budget ceiling.\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"resource_type\": \"AWS::Budgets::Budget\",\n      \"check\": \"Budget missing 80% actual-spend threshold alert\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"No notification with ComparisonOperator=GREATER_THAN, ThresholdType=PERCENTAGE, Threshold=80, NotificationType=ACTUAL exists. An 80 % threshold is the standard escalation gate before budget exhaustion and is absent from this budget.\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"resource_type\": \"AWS::Budgets::Budget\",\n      \"check\": \"Budget missing 100% actual-spend threshold alert\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"No notification with Threshold=100, NotificationType=ACTUAL exists. Without a 100 % alert, the budget owner receives no notification when the budget is fully consumed, defeating the primary purpose of budget monitoring.\"\n    },\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"resource_type\": \"AWS::Account\",\n      \"check\": \"Zero account-wide (all-services) budget coverage\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": \"DescribeBudgets returned exactly 1 budget. That budget is scoped to CostFilters: {Service: ['Amazon Simple Storage Service']} only. There is no COST budget with empty CostFilters covering total account spend. All non-S3 services (EC2, RDS, Lambda, data transfer, support, etc.) run with zero budget coverage and will generate unchecked spend.\"\n    },\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"resource_type\": \"AWS::Account\",\n      \"check\": \"No SNS topic dedicated to FinOps / budget alerting\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"Four SNS topics found: MontyCloud-Automation-Task-Notification-Topic-dev1, MontyCloud-OnBoarding-Topic-dev1, Sample-Topic-bec2b3a0, war-test-a493. None is named or documented as a FinOps distribution list or budget alert topic. Existing subscriptions are HTTPS (MontyCloud onboarding webhook) and Lambda \u2014 neither represents a FinOps email distribution list or workload-owner paging channel.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:MontyCloud-Automation-Task-Notification-Topic-dev1\",\n      \"resource_type\": \"AWS::SNS::Topic\",\n      \"check\": \"SNS topic not subscribed to any budget notification\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"Topic MontyCloud-Automation-Task-Notification-Topic-dev1 exists and \u2014 by name \u2014 is the most appropriate candidate for automation/alerting, but ListSubscriptions and DescribeNotificationsForBudget confirm it is not wired to any budget alert. Zero budget notifications reference any SNS ARN.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:war-test-a493\",\n      \"resource_type\": \"AWS::SNS::Topic\",\n      \"check\": \"SNS topic not subscribed to any budget notification\",\n      \"severity\": \"LOW\",\n      \"evidence\": \"Topic war-test-a493 has no subscriptions visible in ListSubscriptions and is not referenced by any budget notification. Appears to be a test/WAR (Well-Architected Review) artifact with no active FinOps routing.\"\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"action\": \"Create a dedicated SNS topic 'finops-budget-alerts' with email subscriptions for the FinOps distribution list (e.g. finops@company.com) and workload-owner addresses. Confirm subscriptions before wiring to budgets. Tag with Environment=production, Owner=FinOps, Purpose=BudgetAlerting.\",\n      \"priority\": \"P0 \u2014 Do First\",\n      \"effort\": \"Low (15 min): aws sns create-topic --name finops-budget-alerts; aws sns subscribe --topic-arn <arn> --protocol email --notification-endpoint finops@company.com\"\n    },\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"action\": \"Create an account-wide total-spend COST budget (e.g. $5,000/month with no CostFilters) to cover all services not currently scoped by any budget. This closes the zero-coverage gap for all non-S3 services.\",\n      \"priority\": \"P0 \u2014 Do First\",\n      \"effort\": \"Low (20 min): aws budgets create-budget with BudgetType=COST, TimeUnit=MONTHLY, no CostFilters, and NotificationsWithSubscribers at 50/80/100 % actual + 100 % forecasted thresholds pointing to finops-budget-alerts SNS topic.\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"action\": \"Add a 50% ACTUAL-spend notification with subscriber pointing to the finops-budget-alerts SNS topic ARN. Command: aws budgets create-notification --account-id REDACTED-ACCOUNT --budget-name 'MyBudget-us-east-1-1776721863771-GApmwotGB9CW' --notification '{\\\"NotificationType\\\":\\\"ACTUAL\\\",\\\"ComparisonOperator\\\":\\\"GREATER_THAN\\\",\\\"Threshold\\\":50,\\\"ThresholdType\\\":\\\"PERCENTAGE\\\"}' --subscribers '[{\\\"SubscriptionType\\\":\\\"SNS\\\",\\\"Address\\\":\\\"<finops-budget-alerts-arn>\\\"}]'\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (5 min)\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"action\": \"Add an 80% ACTUAL-spend notification with subscriber pointing to finops-budget-alerts SNS topic. This is the standard escalation gate before budget exhaustion. Same command pattern as above with Threshold=80.\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (5 min)\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"action\": \"Add a 100% ACTUAL-spend notification with subscriber pointing to finops-budget-alerts SNS topic AND workload-owner SNS topic. Threshold=100 is the budget-breach gate and should have the widest subscriber list.\",\n      \"priority\": \"P0 \u2014 Do First\",\n      \"effort\": \"Low (5 min)\"\n    },\n    {\n      \"resource_id\": \"MyBudget-us-east-1-1776721863771-GApmwotGB9CW\",\n      \"action\": \"Add a 100% FORECASTED-spend notification (NotificationType=FORECASTED, Threshold=100) with subscriber pointing to finops-budget-alerts SNS topic. This provides pre-breach early warning based on AWS's spend trajectory model, complementing the actual-spend alerts.\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"Low (5 min)\"\n    },\n    {\n      \"resource_id\": \"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:MontyCloud-Automation-Task-Notification-Topic-dev1\",\n      \"action\": \"Evaluate whether this automation topic should also receive budget breach notifications (100% threshold) for automated remediation workflows (e.g., triggering a Lambda to apply SCP spend controls). If yes, add as a second SNS subscriber on the 100% actual-spend notification for both the existing S3 budget and the new account-wide budget.\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"Medium (30 min): Requires Lambda or automation target review before wiring to avoid unintended automated actions on false positives.\"\n    },\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"action\": \"Expand budget coverage with service-level budgets for the top spend drivers (EC2, RDS, Lambda, Data Transfer). Each service budget should carry the same 50/80/100 actual + 100 forecasted threshold suite routed to both the finops-budget-alerts topic and the relevant workload-owner SNS topic. Maintain the account-wide budget as a catch-all in addition to service budgets.\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"Medium (2 hrs): Create one budget + notification set per service; parameterise limits from the last 3-month Cost Explorer average spend per service.\"\n    },\n    {\n      \"resource_id\": \"REDACTED-ACCOUNT\",\n      \"action\": \"Implement a detective control via AWS Config or an EventBridge rule that fires when a new budget is created without notifications, or when an existing budget's notification count drops to zero. This prevents regression and ensures all future budgets comply with the 50/80/100/forecast alerting standard.\",\n      \"priority\": \"P3 \u2014 Low\",\n      \"effort\": \"High (4 hrs): Requires custom Config rule (Lambda evaluator) or EventBridge + Lambda to call DescribeNotificationsForBudget and publish to finops-budget-alerts on violation.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:sns:us-east-1:REDACTED-ACCOUNT:war-test-a493\",\n      \"action\": \"Audit the war-test-a493 SNS topic: if it was created for a Well-Architected Review and is no longer needed, delete it to reduce noise and attack surface. If retained, add a clear Name tag and Purpose tag to distinguish it from operational topics.\",\n      \"priority\": \"P3 \u2014 Low\",\n      \"effort\": \"Low (10 min)\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Takeaways\n\n| Severity | Count | Description |\n|---|---|---|\n| \ud83d\udd34 **CRITICAL** | 3 | Budget has 0 notifications, no 100% actual alert, and 0 account-wide coverage |\n| \ud83d\udfe0 **HIGH** | 3 | Missing 50%, 80% actual-spend, and 100% forecasted-spend alerts |\n| \ud83d\udfe1 **MEDIUM** | 2 | No FinOps SNS topic; existing topics not wired to any budget |\n| \ud83d\udfe2 **LOW** | 1 | Orphan test SNS topic needs tagging/cleanup |\n\n**The single most impactful two-step fix:** \u2460 Create `finops-budget-alerts` SNS topic \u2192 \u2461 Add 50/80/100/forecast notifications to the existing budget **and** create an account-wide catch-all budget \u2014 both achievable in under 1 hour with the CLI commands shown in the improvement plan above.",
+  "token_usage": {
+    "estimated": 1850,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 80.4,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

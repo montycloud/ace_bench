@@ -1,0 +1,238 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Processor Optimization Agent (POA)
+  API Gateway HTTP API → Lambda Dispatcher (sync) → Lambda Agent (async) → DynamoDB
+  Client polls GET /result/{jobId}. DynamoDB items auto-expire after 1 hour (TTL).
+
+Parameters:
+  DeploymentBucket:
+    Type: String
+  DeploymentKey:
+    Type: String
+    Default: poa/lambda.zip
+  BedrockModelId:
+    Type: String
+    Default: us.anthropic.claude-sonnet-4-6
+
+Resources:
+
+  # ── Bearer token ─────────────────────────────────────────────────────────────
+  BearerTokenSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${AWS::StackName}/bearer-token"
+      GenerateSecretString:
+        SecretStringTemplate: '{}'
+        GenerateStringKey: token
+        PasswordLength: 48
+        ExcludeCharacters: '"@/\=+!#$%^&*()'
+
+  # ── DynamoDB — job results, 1-hour TTL ───────────────────────────────────────
+  JobsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-jobs"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: jobId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: jobId
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  # ── IAM role (shared by all three Lambdas) ────────────────────────────────────
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-lambda-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: lambda.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Policies:
+        - PolicyName: AgentPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Lambda infrastructure — always needed
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref BearerTokenSecret
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: !GetAtt JobsTable.Arn
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-agent"
+              # Write actions — allowed by IAM, but agent system prompt requires user approval before use
+              - Effect: Allow
+                Action:
+                  - ec2:StopInstances
+                  - ec2:StartInstances
+                  - ec2:ModifyInstanceAttribute
+                Resource: "*"
+
+  # ── Lambda: Dispatcher — handles POST /chat, returns jobId in <1s ─────────────
+  DispatcherFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-dispatcher"
+      Runtime: python3.12
+      Handler: handler.dispatcher
+      Role: !GetAtt ExecutionRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref DeploymentKey
+      Environment:
+        Variables:
+          AGENT_REGION: !Ref AWS::Region
+          BEDROCK_MODEL_ID: !Ref BedrockModelId
+          BEARER_TOKEN_SECRET_ARN: !Ref BearerTokenSecret
+          JOBS_TABLE_NAME: !Ref JobsTable
+          AGENT_FUNCTION_NAME: !Sub "${AWS::StackName}-agent"
+          MCP_ENDPOINT: !Sub "https://aws-mcp.${AWS::Region}.api.aws/mcp"
+
+  # ── Lambda: Agent — invoked async, runs for up to 15 min ─────────────────────
+  AgentFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-agent"
+      Runtime: python3.12
+      Handler: handler.agent
+      Role: !GetAtt ExecutionRole.Arn
+      Timeout: 900
+      MemorySize: 1024
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref DeploymentKey
+      Environment:
+        Variables:
+          AGENT_REGION: !Ref AWS::Region
+          BEDROCK_MODEL_ID: !Ref BedrockModelId
+          BEARER_TOKEN_SECRET_ARN: !Ref BearerTokenSecret
+          JOBS_TABLE_NAME: !Ref JobsTable
+          AGENT_FUNCTION_NAME: !Sub "${AWS::StackName}-agent"
+          MCP_ENDPOINT: !Sub "https://aws-mcp.${AWS::Region}.api.aws/mcp"
+
+  # ── Lambda: Poller — handles GET /result/{jobId} ──────────────────────────────
+  PollerFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-poller"
+      Runtime: python3.12
+      Handler: handler.poller
+      Role: !GetAtt ExecutionRole.Arn
+      Timeout: 10
+      MemorySize: 256
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref DeploymentKey
+      Environment:
+        Variables:
+          AGENT_REGION: !Ref AWS::Region
+          BEARER_TOKEN_SECRET_ARN: !Ref BearerTokenSecret
+          JOBS_TABLE_NAME: !Ref JobsTable
+          AGENT_FUNCTION_NAME: !Sub "${AWS::StackName}-agent"
+          MCP_ENDPOINT: !Sub "https://aws-mcp.${AWS::Region}.api.aws/mcp"
+
+  # ── API Gateway HTTP API ──────────────────────────────────────────────────────
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "${AWS::StackName}-api"
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: [GET, POST, OPTIONS]
+        AllowHeaders: [Authorization, Content-Type]
+
+  # POST /chat → Dispatcher
+  ChatIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DispatcherFunction.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+      TimeoutInMillis: 29000
+
+  ChatRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: "POST /chat"
+      Target: !Sub "integrations/${ChatIntegration}"
+
+  # GET /result/{jobId} → Poller
+  ResultIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PollerFunction.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+      TimeoutInMillis: 10000
+
+  ResultRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: "GET /result/{jobId}"
+      Target: !Sub "integrations/${ResultIntegration}"
+
+  # Auto-deploy stage
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: "$default"
+      AutoDeploy: true
+
+  # Lambda permissions for API Gateway
+  DispatcherPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt DispatcherFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/chat"
+
+  PollerPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt PollerFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/result/*"
+
+Outputs:
+  AgentUrl:
+    Description: "POST /chat to submit, GET /result/{jobId} to poll"
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+
+  BearerTokenSecretArn:
+    Value: !Ref BearerTokenSecret
+
+  GetTokenCommand:
+    Value: !Sub >-
+      aws secretsmanager get-secret-value --secret-id ${BearerTokenSecret}
+      --region ${AWS::Region} --query SecretString --output text
+      | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])"

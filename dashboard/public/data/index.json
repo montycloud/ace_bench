@@ -1,0 +1,3044 @@
+{
+  "runs": [
+    {
+      "id": "COPS_audit_evidence_readiness_postu_L2_92fd3942__eoa__20260729_161444",
+      "scenario_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+      "scenario_name": "Audit-Evidence Readiness Posture",
+      "category": "security",
+      "timestamp": "2026-07-29T16:14:44.272656+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_aws_health_event_impact_mappin_L2_9bb50cb2__eoa__20260729_160852",
+      "scenario_id": "COPS-aws-health-event-impact-mappin-L2-9bb50cb2",
+      "scenario_name": "AWS Health Event Impact Mapping Across Workloads",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:08:52.161702+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_baseline_drift_detection_acros_L2_bf4a658d__eoa__20260729_160905",
+      "scenario_id": "COPS-baseline-drift-detection-acros-L2-bf4a658d",
+      "scenario_name": "Baseline-Drift Detection Across Environments",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:09:05.368267+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_blast_radius_review_of_interne_L2_1eb31509__eoa__20260729_152022",
+      "scenario_id": "COPS-blast-radius-review-of-interne-L2-1eb31509",
+      "scenario_name": "Blast-Radius Review of Internet-Facing Assets",
+      "category": "security",
+      "timestamp": "2026-07-29T15:20:22.296998+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_cloudwatch_log_groups_without_L1_fedcd002__eoa__20260729_142701",
+      "scenario_id": "COPS-cloudwatch-log-groups-without-L1-fedcd002",
+      "scenario_name": "CloudWatch Log Groups Without Retention",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T14:27:01.575732+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_cost_anomaly_and_allocation_up_L2_035b015f__eoa__20260729_155933",
+      "scenario_id": "COPS-cost-anomaly-and-allocation-up-L2-035b015f",
+      "scenario_name": "Cost Anomaly and Allocation Uplift Across Business Units",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T15:59:33.467694+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_critical_metrics_without_alarm_L1_b35f5df1__eoa__20260729_142714",
+      "scenario_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+      "scenario_name": "Critical Metrics Without Alarm Coverage",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T14:27:14.472717+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_detective_control_baseline_mis_L1_7c75d427__eoa__20260729_145134",
+      "scenario_id": "COPS-detective-control-baseline-mis-L1-7c75d427",
+      "scenario_name": "Detective-Control Baseline Missing in Active Regions",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T14:51:34.570449+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_efficiency_review_for_request_L2_30d1c7a0__eoa__20260729_160918",
+      "scenario_id": "COPS-efficiency-review-for-request-L2-30d1c7a0",
+      "scenario_name": "Efficiency Review for Request-Driven Workloads",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T16:09:18.561885+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_executive_wafr_review_six_pill_L2_614af9b6__eoa__20260729_161458",
+      "scenario_id": "COPS-executive-wafr-review-six-pill-L2-614af9b6",
+      "scenario_name": "Executive WAFR Review \u2014 Six-Pillar Summary",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:14:58.299312+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_incident_readiness_mapping_for_L2_7b2bcfef__eoa__20260729_153630",
+      "scenario_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+      "scenario_name": "Incident-Readiness Mapping for Critical Alarms",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T15:36:30.835873+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_kms_keys_with_rotation_disable_L1_f8c2675f__eoa__20260729_142512",
+      "scenario_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+      "scenario_name": "KMS Keys With Rotation Disabled and Unbounded Access",
+      "category": "security",
+      "timestamp": "2026-07-29T14:25:12.919806+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_kms_rotation_and_key_policy_ha_L2_5983bf47__eoa__20260729_151353",
+      "scenario_id": "COPS-kms-rotation-and-key-policy-ha-L2-5983bf47",
+      "scenario_name": "KMS Rotation and Key-Policy Hardening Roadmap",
+      "category": "security",
+      "timestamp": "2026-07-29T15:13:53.805366+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_lambda_functions_without_dead_L1_5e6f89f2__eoa__20260729_182324",
+      "scenario_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+      "scenario_name": "Lambda Functions Without Dead-Letter Handling",
+      "category": "reliability",
+      "timestamp": "2026-07-29T18:23:24.863807+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_missing_default_encryption_on_L1_c65ec63a__eoa__20260729_142459",
+      "scenario_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+      "scenario_name": "Missing Default Encryption on Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T14:24:59.849736+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_missing_detective_metric_filte_L1_de40af00__eoa__20260729_143647",
+      "scenario_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+      "scenario_name": "Missing Detective Metric Filters for Account Events",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T14:36:47.873420+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_missing_flow_log_visibility_on_L1_42611021__eoa__20260729_145514",
+      "scenario_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+      "scenario_name": "Missing Flow Log Visibility on Production VPCs",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T14:55:14.535272+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_multi_account_portfolio_health_L2_31144309__eoa__20260729_160330",
+      "scenario_id": "COPS-multi-account-portfolio-health-L2-31144309",
+      "scenario_name": "Multi-Account Portfolio Health Rollup",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T16:03:30.305281+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_network_tiering_and_egress_con_L2_c4df527d__eoa__20260729_152848",
+      "scenario_id": "COPS-network-tiering-and-egress-con-L2-c4df527d",
+      "scenario_name": "Network Tiering and Egress Control Uplift",
+      "category": "security",
+      "timestamp": "2026-07-29T15:28:48.148620+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_observability_baseline_uplift_L2_637c29d9__eoa__20260729_153407",
+      "scenario_id": "COPS-observability-baseline-uplift-L2-637c29d9",
+      "scenario_name": "Observability Baseline Uplift for Production Workloads",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T15:34:07.539468+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_over_permissive_nacl_rules_acr_L1_ab47360a__eoa__20260729_142450",
+      "scenario_id": "COPS-over-permissive-nacl-rules-acr-L1-ab47360a",
+      "scenario_name": "Over-Permissive NACL Rules Across Tiers",
+      "category": "security",
+      "timestamp": "2026-07-29T14:24:50.904161+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__eoa__20260729_142140",
+      "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+      "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+      "category": "security",
+      "timestamp": "2026-07-29T14:21:40.143140+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_point_in_time_recovery_disable_L1_952c1416__eoa__20260729_143657",
+      "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+      "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+      "category": "reliability",
+      "timestamp": "2026-07-29T14:36:57.890264+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_preventive_control_guardrail_u_L2_5c06ddd1__eoa__20260729_160343",
+      "scenario_id": "COPS-preventive-control-guardrail-u-L2-5c06ddd1",
+      "scenario_name": "Preventive-Control Guardrail Uplift",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T16:03:43.327858+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_public_container_images_in_pri_L1_813626da__eoa__20260729_142647",
+      "scenario_id": "COPS-public-container-images-in-pri-L1-813626da",
+      "scenario_name": "Public Container Images in Private Pipelines",
+      "category": "security",
+      "timestamp": "2026-07-29T14:26:47.120693+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_ranked_savings_roadmap_from_ri_L2_182929a6__eoa__20260729_155555",
+      "scenario_id": "COPS-ranked-savings-roadmap-from-ri-L2-182929a6",
+      "scenario_name": "Ranked Savings Roadmap From Rightsizing and Storage Tiering",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T15:55:55.754932+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_refactor_wildcard_policies_int_L2_d485fab8__eoa__20260729_150939",
+      "scenario_id": "COPS-refactor-wildcard-policies-int-L2-d485fab8",
+      "scenario_name": "Refactor Wildcard Policies Into Scoped Workload Roles",
+      "category": "security",
+      "timestamp": "2026-07-29T15:09:39.775703+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_rto_and_rpo_convergence_across_L2_76e47be0__eoa__20260729_154056",
+      "scenario_id": "COPS-rto-and-rpo-convergence-across-L2-76e47be0",
+      "scenario_name": "RTO and RPO Convergence Across Critical Data Stores",
+      "category": "reliability",
+      "timestamp": "2026-07-29T15:40:56.045104+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__eoa__20260729_150441",
+      "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+      "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T15:04:41.832748+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_serverless_event_path_reliabil_L2_ffc06f96__eoa__20260729_154728",
+      "scenario_id": "COPS-serverless-event-path-reliabil-L2-ffc06f96",
+      "scenario_name": "Serverless Event-Path Reliability Review",
+      "category": "reliability",
+      "timestamp": "2026-07-29T15:47:28.450509+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_spend_budgets_without_notifica_L1_573baf91__eoa__20260729_144734",
+      "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+      "scenario_name": "Spend Budgets Without Notification Thresholds",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T14:47:34.120334+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_storage_sprawl_across_non_tier_L1_acb3db34__eoa__20260729_144720",
+      "scenario_id": "COPS-storage-sprawl-across-non-tier-L1-acb3db34",
+      "scenario_name": "Storage Sprawl Across Non-Tiered Buckets",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T14:47:20.275227+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_sustainability_improvement_roa_L2_5a54662a__eoa__20260729_161429",
+      "scenario_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+      "scenario_name": "Sustainability Improvement Roadmap",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T16:14:29.476374+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_tag_compliance_drift_on_revenu_L1_532a6305__eoa__20260729_144747",
+      "scenario_id": "COPS-tag-compliance-drift-on-revenu-L1-532a6305",
+      "scenario_name": "Tag Compliance Drift on Revenue-Impacting Workloads",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T14:47:47.348862+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__eoa__20260729_150132",
+      "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+      "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T15:01:32.573077+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_unblocked_public_access_on_sha_L1_a31fe63c__eoa__20260729_142126",
+      "scenario_id": "COPS-unblocked-public-access-on-sha-L1-a31fe63c",
+      "scenario_name": "Unblocked Public Access on Shared Data Buckets",
+      "category": "security",
+      "timestamp": "2026-07-29T14:21:26.680615+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_unify_encryption_posture_acros_L2_34cc7d74__eoa__20260729_151340",
+      "scenario_id": "COPS-unify-encryption-posture-acros-L2-34cc7d74",
+      "scenario_name": "Unify Encryption Posture Across Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T15:13:40.401937+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_unrestricted_inbound_access_on_L1_6235afe3__eoa__20260729_142437",
+      "scenario_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+      "scenario_name": "Unrestricted Inbound Access on Management Ports",
+      "category": "security",
+      "timestamp": "2026-07-29T14:24:37.693636+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 0.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_unthrottled_api_endpoints_with_L1_cbfd2507__eoa__20260729_145911",
+      "scenario_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+      "scenario_name": "Unthrottled API Endpoints Without Edge Protection",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T14:59:11.672110+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_wafr_critical_and_high_finding_L2_e24003d9__eoa__20260729_160356",
+      "scenario_id": "COPS-wafr-critical-and-high-finding-L2-e24003d9",
+      "scenario_name": "WAFR Critical and High Finding Triage Sprint Plan",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:03:56.227464+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/eoa",
+      "agent": "eoa"
+    },
+    {
+      "id": "COPS_audit_evidence_readiness_postu_L2_92fd3942__poa__20260729_181413",
+      "scenario_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+      "scenario_name": "Audit-Evidence Readiness Posture",
+      "category": "security",
+      "timestamp": "2026-07-29T18:14:13.186519+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_aws_health_event_impact_mappin_L2_9bb50cb2__poa__20260729_175808",
+      "scenario_id": "COPS-aws-health-event-impact-mappin-L2-9bb50cb2",
+      "scenario_name": "AWS Health Event Impact Mapping Across Workloads",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T17:58:08.618866+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_baseline_drift_detection_acros_L2_bf4a658d__poa__20260729_175826",
+      "scenario_id": "COPS-baseline-drift-detection-acros-L2-bf4a658d",
+      "scenario_name": "Baseline-Drift Detection Across Environments",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T17:58:26.025683+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_blast_radius_review_of_interne_L2_1eb31509__poa__20260729_172108",
+      "scenario_id": "COPS-blast-radius-review-of-interne-L2-1eb31509",
+      "scenario_name": "Blast-Radius Review of Internet-Facing Assets",
+      "category": "security",
+      "timestamp": "2026-07-29T17:21:08.590993+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_cloudwatch_log_groups_without_L1_fedcd002__poa__20260729_163503",
+      "scenario_id": "COPS-cloudwatch-log-groups-without-L1-fedcd002",
+      "scenario_name": "CloudWatch Log Groups Without Retention",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T16:35:03.917642+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_cost_anomaly_and_allocation_up_L2_035b015f__poa__20260729_174454",
+      "scenario_id": "COPS-cost-anomaly-and-allocation-up-L2-035b015f",
+      "scenario_name": "Cost Anomaly and Allocation Uplift Across Business Units",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T17:44:54.192910+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_critical_metrics_without_alarm_L1_b35f5df1__poa__20260729_164019",
+      "scenario_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+      "scenario_name": "Critical Metrics Without Alarm Coverage",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T16:40:19.615491+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_detective_control_baseline_mis_L1_7c75d427__poa__20260729_165205",
+      "scenario_id": "COPS-detective-control-baseline-mis-L1-7c75d427",
+      "scenario_name": "Detective-Control Baseline Missing in Active Regions",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T16:52:05.598503+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_efficiency_review_for_request_L2_30d1c7a0__poa__20260729_180729",
+      "scenario_id": "COPS-efficiency-review-for-request-L2-30d1c7a0",
+      "scenario_name": "Efficiency Review for Request-Driven Workloads",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T18:07:29.775991+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_executive_wafr_review_six_pill_L2_614af9b6__poa__20260729_181427",
+      "scenario_id": "COPS-executive-wafr-review-six-pill-L2-614af9b6",
+      "scenario_name": "Executive WAFR Review \u2014 Six-Pillar Summary",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T18:14:27.874834+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_incident_readiness_mapping_for_L2_7b2bcfef__poa__20260729_173040",
+      "scenario_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+      "scenario_name": "Incident-Readiness Mapping for Critical Alarms",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T17:30:40.793241+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_kms_keys_with_rotation_disable_L1_f8c2675f__poa__20260729_163123",
+      "scenario_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+      "scenario_name": "KMS Keys With Rotation Disabled and Unbounded Access",
+      "category": "security",
+      "timestamp": "2026-07-29T16:31:23.661662+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_kms_rotation_and_key_policy_ha_L2_5983bf47__poa__20260729_171434",
+      "scenario_id": "COPS-kms-rotation-and-key-policy-ha-L2-5983bf47",
+      "scenario_name": "KMS Rotation and Key-Policy Hardening Roadmap",
+      "category": "security",
+      "timestamp": "2026-07-29T17:14:34.960859+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_lambda_functions_without_dead_L1_5e6f89f2__poa__20260729_164714",
+      "scenario_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+      "scenario_name": "Lambda Functions Without Dead-Letter Handling",
+      "category": "reliability",
+      "timestamp": "2026-07-29T16:47:14.963502+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_missing_default_encryption_on_L1_c65ec63a__poa__20260729_162942",
+      "scenario_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+      "scenario_name": "Missing Default Encryption on Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T16:29:42.702779+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_missing_detective_metric_filte_L1_de40af00__poa__20260729_164149",
+      "scenario_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+      "scenario_name": "Missing Detective Metric Filters for Account Events",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T16:41:49.432365+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_missing_flow_log_visibility_on_L1_42611021__poa__20260729_165350",
+      "scenario_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+      "scenario_name": "Missing Flow Log Visibility on Production VPCs",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:53:50.042907+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_multi_account_portfolio_health_L2_31144309__poa__20260729_174949",
+      "scenario_id": "COPS-multi-account-portfolio-health-L2-31144309",
+      "scenario_name": "Multi-Account Portfolio Health Rollup",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T17:49:49.106799+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_network_tiering_and_egress_con_L2_c4df527d__poa__20260729_172434",
+      "scenario_id": "COPS-network-tiering-and-egress-con-L2-c4df527d",
+      "scenario_name": "Network Tiering and Egress Control Uplift",
+      "category": "security",
+      "timestamp": "2026-07-29T17:24:34.104620+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_observability_baseline_uplift_L2_637c29d9__poa__20260729_172743",
+      "scenario_id": "COPS-observability-baseline-uplift-L2-637c29d9",
+      "scenario_name": "Observability Baseline Uplift for Production Workloads",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T17:27:43.028628+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_over_permissive_nacl_rules_acr_L1_ab47360a__poa__20260729_162710",
+      "scenario_id": "COPS-over-permissive-nacl-rules-acr-L1-ab47360a",
+      "scenario_name": "Over-Permissive NACL Rules Across Tiers",
+      "category": "security",
+      "timestamp": "2026-07-29T16:27:10.126445+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__poa__20260729_162247",
+      "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+      "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+      "category": "security",
+      "timestamp": "2026-07-29T16:22:47.795351+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_point_in_time_recovery_disable_L1_952c1416__poa__20260729_164256",
+      "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+      "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+      "category": "reliability",
+      "timestamp": "2026-07-29T16:42:56.774068+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_preventive_control_guardrail_u_L2_5c06ddd1__poa__20260729_175343",
+      "scenario_id": "COPS-preventive-control-guardrail-u-L2-5c06ddd1",
+      "scenario_name": "Preventive-Control Guardrail Uplift",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T17:53:43.710413+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_public_container_images_in_pri_L1_813626da__poa__20260729_163232",
+      "scenario_id": "COPS-public-container-images-in-pri-L1-813626da",
+      "scenario_name": "Public Container Images in Private Pipelines",
+      "category": "security",
+      "timestamp": "2026-07-29T16:32:32.474905+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_ranked_savings_roadmap_from_ri_L2_182929a6__poa__20260729_174201",
+      "scenario_id": "COPS-ranked-savings-roadmap-from-ri-L2-182929a6",
+      "scenario_name": "Ranked Savings Roadmap From Rightsizing and Storage Tiering",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T17:42:01.547254+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_refactor_wildcard_policies_int_L2_d485fab8__poa__20260729_171018",
+      "scenario_id": "COPS-refactor-wildcard-policies-int-L2-d485fab8",
+      "scenario_name": "Refactor Wildcard Policies Into Scoped Workload Roles",
+      "category": "security",
+      "timestamp": "2026-07-29T17:10:18.665893+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_rto_and_rpo_convergence_across_L2_76e47be0__poa__20260729_173324",
+      "scenario_id": "COPS-rto-and-rpo-convergence-across-L2-76e47be0",
+      "scenario_name": "RTO and RPO Convergence Across Critical Data Stores",
+      "category": "reliability",
+      "timestamp": "2026-07-29T17:33:24.324146+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__poa__20260729_170248",
+      "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+      "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T17:02:48.585536+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_serverless_event_path_reliabil_L2_ffc06f96__poa__20260729_173717",
+      "scenario_id": "COPS-serverless-event-path-reliabil-L2-ffc06f96",
+      "scenario_name": "Serverless Event-Path Reliability Review",
+      "category": "reliability",
+      "timestamp": "2026-07-29T17:37:17.559217+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_spend_budgets_without_notifica_L1_573baf91__poa__20260729_164856",
+      "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+      "scenario_name": "Spend Budgets Without Notification Thresholds",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T16:48:56.773180+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_storage_sprawl_across_non_tier_L1_acb3db34__poa__20260729_164732",
+      "scenario_id": "COPS-storage-sprawl-across-non-tier-L1-acb3db34",
+      "scenario_name": "Storage Sprawl Across Non-Tiered Buckets",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T16:47:32.596053+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_sustainability_improvement_roa_L2_5a54662a__poa__20260729_181131",
+      "scenario_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+      "scenario_name": "Sustainability Improvement Roadmap",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T18:11:31.746960+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_tag_compliance_drift_on_revenu_L1_532a6305__poa__20260729_164911",
+      "scenario_id": "COPS-tag-compliance-drift-on-revenu-L1-532a6305",
+      "scenario_name": "Tag Compliance Drift on Revenue-Impacting Workloads",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T16:49:11.907526+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__poa__20260729_165923",
+      "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+      "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T16:59:23.471655+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_unblocked_public_access_on_sha_L1_a31fe63c__poa__20260729_161615",
+      "scenario_id": "COPS-unblocked-public-access-on-sha-L1-a31fe63c",
+      "scenario_name": "Unblocked Public Access on Shared Data Buckets",
+      "category": "security",
+      "timestamp": "2026-07-29T16:16:15.298419+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_unify_encryption_posture_acros_L2_34cc7d74__poa__20260729_171421",
+      "scenario_id": "COPS-unify-encryption-posture-acros-L2-34cc7d74",
+      "scenario_name": "Unify Encryption Posture Across Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T17:14:21.773029+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_unrestricted_inbound_access_on_L1_6235afe3__poa__20260729_162452",
+      "scenario_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+      "scenario_name": "Unrestricted Inbound Access on Management Ports",
+      "category": "security",
+      "timestamp": "2026-07-29T16:24:52.504375+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 0.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_unthrottled_api_endpoints_with_L1_cbfd2507__poa__20260729_165639",
+      "scenario_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+      "scenario_name": "Unthrottled API Endpoints Without Edge Protection",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T16:56:39.228884+00:00",
+      "total_score": 0.62,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.5,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_wafr_critical_and_high_finding_L2_e24003d9__poa__20260729_175355",
+      "scenario_id": "COPS-wafr-critical-and-high-finding-L2-e24003d9",
+      "scenario_name": "WAFR Critical and High Finding Triage Sprint Plan",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T17:53:55.174253+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/poa",
+      "agent": "poa"
+    },
+    {
+      "id": "COPS_audit_evidence_readiness_postu_L2_92fd3942__s3soa__20260729_100215",
+      "scenario_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+      "scenario_name": "Audit-Evidence Readiness Posture",
+      "category": "security",
+      "timestamp": "2026-07-29T10:02:15.164783+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_aws_health_event_impact_mappin_L2_9bb50cb2__s3soa__20260729_095354",
+      "scenario_id": "COPS-aws-health-event-impact-mappin-L2-9bb50cb2",
+      "scenario_name": "AWS Health Event Impact Mapping Across Workloads",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T09:53:54.123326+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_baseline_drift_detection_acros_L2_bf4a658d__s3soa__20260729_095747",
+      "scenario_id": "COPS-baseline-drift-detection-acros-L2-bf4a658d",
+      "scenario_name": "Baseline-Drift Detection Across Environments",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T09:57:47.360135+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_blast_radius_review_of_interne_L2_1eb31509__s3soa__20260729_081202",
+      "scenario_id": "COPS-blast-radius-review-of-interne-L2-1eb31509",
+      "scenario_name": "Blast-Radius Review of Internet-Facing Assets",
+      "category": "security",
+      "timestamp": "2026-07-29T08:12:02.041889+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_cloudwatch_log_groups_without_L1_fedcd002__s3soa__20260729_071938",
+      "scenario_id": "COPS-cloudwatch-log-groups-without-L1-fedcd002",
+      "scenario_name": "CloudWatch Log Groups Without Retention",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T07:19:38.322623+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_cost_anomaly_and_allocation_up_L2_035b015f__s3soa__20260729_093324",
+      "scenario_id": "COPS-cost-anomaly-and-allocation-up-L2-035b015f",
+      "scenario_name": "Cost Anomaly and Allocation Uplift Across Business Units",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T09:33:24.966019+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_critical_metrics_without_alarm_L1_b35f5df1__s3soa__20260729_071951",
+      "scenario_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+      "scenario_name": "Critical Metrics Without Alarm Coverage",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T07:19:51.938756+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_detective_control_baseline_mis_L1_7c75d427__s3soa__20260729_074302",
+      "scenario_id": "COPS-detective-control-baseline-mis-L1-7c75d427",
+      "scenario_name": "Detective-Control Baseline Missing in Active Regions",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T07:43:02.838504+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_efficiency_review_for_request_L2_30d1c7a0__s3soa__20260729_095802",
+      "scenario_id": "COPS-efficiency-review-for-request-L2-30d1c7a0",
+      "scenario_name": "Efficiency Review for Request-Driven Workloads",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T09:58:02.006339+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_executive_wafr_review_six_pill_L2_614af9b6__s3soa__20260729_102834",
+      "scenario_id": "COPS-executive-wafr-review-six-pill-L2-614af9b6",
+      "scenario_name": "Executive WAFR Review \u2014 Six-Pillar Summary",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T10:28:34.086235+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_incident_readiness_mapping_for_L2_7b2bcfef__s3soa__20260729_091042",
+      "scenario_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+      "scenario_name": "Incident-Readiness Mapping for Critical Alarms",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T09:10:42.065989+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_kms_keys_with_rotation_disable_L1_f8c2675f__s3soa__20260729_071435",
+      "scenario_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+      "scenario_name": "KMS Keys With Rotation Disabled and Unbounded Access",
+      "category": "security",
+      "timestamp": "2026-07-29T07:14:35.962778+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_kms_rotation_and_key_policy_ha_L2_5983bf47__s3soa__20260729_080653",
+      "scenario_id": "COPS-kms-rotation-and-key-policy-ha-L2-5983bf47",
+      "scenario_name": "KMS Rotation and Key-Policy Hardening Roadmap",
+      "category": "security",
+      "timestamp": "2026-07-29T08:06:53.411292+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_lambda_functions_without_dead_L1_5e6f89f2__s3soa__20260729_072706",
+      "scenario_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+      "scenario_name": "Lambda Functions Without Dead-Letter Handling",
+      "category": "reliability",
+      "timestamp": "2026-07-29T07:27:06.816656+00:00",
+      "total_score": 0.58,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.33,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_missing_default_encryption_on_L1_c65ec63a__s3soa__20260729_071317",
+      "scenario_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+      "scenario_name": "Missing Default Encryption on Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T07:13:17.311064+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_missing_detective_metric_filte_L1_de40af00__s3soa__20260729_072321",
+      "scenario_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+      "scenario_name": "Missing Detective Metric Filters for Account Events",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T07:23:21.137427+00:00",
+      "total_score": 0.58,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.33,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_missing_flow_log_visibility_on_L1_42611021__s3soa__20260729_074621",
+      "scenario_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+      "scenario_name": "Missing Flow Log Visibility on Production VPCs",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T07:46:21.982280+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_multi_account_portfolio_health_L2_31144309__s3soa__20260729_093732",
+      "scenario_id": "COPS-multi-account-portfolio-health-L2-31144309",
+      "scenario_name": "Multi-Account Portfolio Health Rollup",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T09:37:32.173598+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_network_tiering_and_egress_con_L2_c4df527d__s3soa__20260729_081515",
+      "scenario_id": "COPS-network-tiering-and-egress-con-L2-c4df527d",
+      "scenario_name": "Network Tiering and Egress Control Uplift",
+      "category": "security",
+      "timestamp": "2026-07-29T08:15:15.953771+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_observability_baseline_uplift_L2_637c29d9__s3soa__20260729_090813",
+      "scenario_id": "COPS-observability-baseline-uplift-L2-637c29d9",
+      "scenario_name": "Observability Baseline Uplift for Production Workloads",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T09:08:13.074930+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_over_permissive_nacl_rules_acr_L1_ab47360a__s3soa__20260729_071049",
+      "scenario_id": "COPS-over-permissive-nacl-rules-acr-L1-ab47360a",
+      "scenario_name": "Over-Permissive NACL Rules Across Tiers",
+      "category": "security",
+      "timestamp": "2026-07-29T07:10:49.879091+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__s3soa__20260729_070420",
+      "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+      "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+      "category": "security",
+      "timestamp": "2026-07-29T07:04:20.366626+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_point_in_time_recovery_disable_L1_952c1416__s3soa__20260729_072422",
+      "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+      "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+      "category": "reliability",
+      "timestamp": "2026-07-29T07:24:22.574061+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_preventive_control_guardrail_u_L2_5c06ddd1__s3soa__20260729_094233",
+      "scenario_id": "COPS-preventive-control-guardrail-u-L2-5c06ddd1",
+      "scenario_name": "Preventive-Control Guardrail Uplift",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T09:42:33.656648+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_public_container_images_in_pri_L1_813626da__s3soa__20260729_071554",
+      "scenario_id": "COPS-public-container-images-in-pri-L1-813626da",
+      "scenario_name": "Public Container Images in Private Pipelines",
+      "category": "security",
+      "timestamp": "2026-07-29T07:15:54.186800+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_ranked_savings_roadmap_from_ri_L2_182929a6__s3soa__20260729_092817",
+      "scenario_id": "COPS-ranked-savings-roadmap-from-ri-L2-182929a6",
+      "scenario_name": "Ranked Savings Roadmap From Rightsizing and Storage Tiering",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T09:28:17.580403+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_refactor_wildcard_policies_int_L2_d485fab8__s3soa__20260729_075855",
+      "scenario_id": "COPS-refactor-wildcard-policies-int-L2-d485fab8",
+      "scenario_name": "Refactor Wildcard Policies Into Scoped Workload Roles",
+      "category": "security",
+      "timestamp": "2026-07-29T07:58:55.318734+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_rto_and_rpo_convergence_across_L2_76e47be0__s3soa__20260729_091758",
+      "scenario_id": "COPS-rto-and-rpo-convergence-across-L2-76e47be0",
+      "scenario_name": "RTO and RPO Convergence Across Critical Data Stores",
+      "category": "reliability",
+      "timestamp": "2026-07-29T09:17:58.915086+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__s3soa__20260729_075241",
+      "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+      "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T07:52:41.026980+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_serverless_event_path_reliabil_L2_ffc06f96__s3soa__20260729_092746",
+      "scenario_id": "COPS-serverless-event-path-reliabil-L2-ffc06f96",
+      "scenario_name": "Serverless Event-Path Reliability Review",
+      "category": "reliability",
+      "timestamp": "2026-07-29T09:27:46.333074+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_spend_budgets_without_notifica_L1_573baf91__s3soa__20260729_073128",
+      "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+      "scenario_name": "Spend Budgets Without Notification Thresholds",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T07:31:28.439693+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_storage_sprawl_across_non_tier_L1_acb3db34__s3soa__20260729_073035",
+      "scenario_id": "COPS-storage-sprawl-across-non-tier-L1-acb3db34",
+      "scenario_name": "Storage Sprawl Across Non-Tiered Buckets",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T07:30:35.090420+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_sustainability_improvement_roa_L2_5a54662a__s3soa__20260729_095816",
+      "scenario_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+      "scenario_name": "Sustainability Improvement Roadmap",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T09:58:16.014245+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_tag_compliance_drift_on_revenu_L1_532a6305__s3soa__20260729_090232",
+      "scenario_id": "COPS-tag-compliance-drift-on-revenu-L1-532a6305",
+      "scenario_name": "Tag Compliance Drift on Revenue-Impacting Workloads",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T09:02:32.611147+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__s3soa__20260729_075228",
+      "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+      "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T07:52:28.126186+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_unblocked_public_access_on_sha_L1_a31fe63c__s3soa__20260729_065953",
+      "scenario_id": "COPS-unblocked-public-access-on-sha-L1-a31fe63c",
+      "scenario_name": "Unblocked Public Access on Shared Data Buckets",
+      "category": "security",
+      "timestamp": "2026-07-29T06:59:53.714485+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_unify_encryption_posture_acros_L2_34cc7d74__s3soa__20260729_080302",
+      "scenario_id": "COPS-unify-encryption-posture-acros-L2-34cc7d74",
+      "scenario_name": "Unify Encryption Posture Across Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T08:03:02.920913+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_unrestricted_inbound_access_on_L1_6235afe3__s3soa__20260729_070546",
+      "scenario_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+      "scenario_name": "Unrestricted Inbound Access on Management Ports",
+      "category": "security",
+      "timestamp": "2026-07-29T07:05:46.996619+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 0.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_unthrottled_api_endpoints_with_L1_cbfd2507__s3soa__20260729_075014",
+      "scenario_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+      "scenario_name": "Unthrottled API Endpoints Without Edge Protection",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T07:50:14.171212+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_wafr_critical_and_high_finding_L2_e24003d9__s3soa__20260729_094955",
+      "scenario_id": "COPS-wafr-critical-and-high-finding-L2-e24003d9",
+      "scenario_name": "WAFR Critical and High Finding Triage Sprint Plan",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T09:49:55.685359+00:00",
+      "total_score": 0.69,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.75
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/s3soa",
+      "agent": "s3soa"
+    },
+    {
+      "id": "COPS_audit_evidence_readiness_postu_L2_92fd3942__soa__20260729_142051",
+      "scenario_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+      "scenario_name": "Audit-Evidence Readiness Posture",
+      "category": "security",
+      "timestamp": "2026-07-29T14:20:51.690468+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_aws_health_event_impact_mappin_L2_9bb50cb2__soa__20260729_135934",
+      "scenario_id": "COPS-aws-health-event-impact-mappin-L2-9bb50cb2",
+      "scenario_name": "AWS Health Event Impact Mapping Across Workloads",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T13:59:34.686470+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_baseline_drift_detection_acros_L2_bf4a658d__soa__20260729_140543",
+      "scenario_id": "COPS-baseline-drift-detection-acros-L2-bf4a658d",
+      "scenario_name": "Baseline-Drift Detection Across Environments",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T14:05:43.426853+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_blast_radius_review_of_interne_L2_1eb31509__soa__20260729_131331",
+      "scenario_id": "COPS-blast-radius-review-of-interne-L2-1eb31509",
+      "scenario_name": "Blast-Radius Review of Internet-Facing Assets",
+      "category": "security",
+      "timestamp": "2026-07-29T13:13:31.326226+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_cloudwatch_log_groups_without_L1_fedcd002__soa__20260729_104238",
+      "scenario_id": "COPS-cloudwatch-log-groups-without-L1-fedcd002",
+      "scenario_name": "CloudWatch Log Groups Without Retention",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T10:42:38.654382+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_cost_anomaly_and_allocation_up_L2_035b015f__soa__20260729_133907",
+      "scenario_id": "COPS-cost-anomaly-and-allocation-up-L2-035b015f",
+      "scenario_name": "Cost Anomaly and Allocation Uplift Across Business Units",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T13:39:07.139670+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_critical_metrics_without_alarm_L1_b35f5df1__soa__20260729_104302",
+      "scenario_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+      "scenario_name": "Critical Metrics Without Alarm Coverage",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T10:43:02.806013+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_detective_control_baseline_mis_L1_7c75d427__soa__20260729_110309",
+      "scenario_id": "COPS-detective-control-baseline-mis-L1-7c75d427",
+      "scenario_name": "Detective-Control Baseline Missing in Active Regions",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T11:03:09.546728+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_efficiency_review_for_request_L2_30d1c7a0__soa__20260729_140558",
+      "scenario_id": "COPS-efficiency-review-for-request-L2-30d1c7a0",
+      "scenario_name": "Efficiency Review for Request-Driven Workloads",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T14:05:58.273805+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_executive_wafr_review_six_pill_L2_614af9b6__soa__20260729_142109",
+      "scenario_id": "COPS-executive-wafr-review-six-pill-L2-614af9b6",
+      "scenario_name": "Executive WAFR Review \u2014 Six-Pillar Summary",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T14:21:09.013723+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_incident_readiness_mapping_for_L2_7b2bcfef__soa__20260729_132351",
+      "scenario_id": "COPS-incident-readiness-mapping-for-L2-7b2bcfef",
+      "scenario_name": "Incident-Readiness Mapping for Critical Alarms",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T13:23:51.555732+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_kms_keys_with_rotation_disable_L1_f8c2675f__soa__20260729_103717",
+      "scenario_id": "COPS-kms-keys-with-rotation-disable-L1-f8c2675f",
+      "scenario_name": "KMS Keys With Rotation Disabled and Unbounded Access",
+      "category": "security",
+      "timestamp": "2026-07-29T10:37:17.715828+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_kms_rotation_and_key_policy_ha_L2_5983bf47__soa__20260729_130833",
+      "scenario_id": "COPS-kms-rotation-and-key-policy-ha-L2-5983bf47",
+      "scenario_name": "KMS Rotation and Key-Policy Hardening Roadmap",
+      "category": "security",
+      "timestamp": "2026-07-29T13:08:33.273723+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_lambda_functions_without_dead_L1_5e6f89f2__soa__20260729_105137",
+      "scenario_id": "COPS-lambda-functions-without-dead-L1-5e6f89f2",
+      "scenario_name": "Lambda Functions Without Dead-Letter Handling",
+      "category": "reliability",
+      "timestamp": "2026-07-29T10:51:37.378122+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_missing_default_encryption_on_L1_c65ec63a__soa__20260729_103607",
+      "scenario_id": "COPS-missing-default-encryption-on-L1-c65ec63a",
+      "scenario_name": "Missing Default Encryption on Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T10:36:07.502214+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_missing_detective_metric_filte_L1_de40af00__soa__20260729_104541",
+      "scenario_id": "COPS-missing-detective-metric-filte-L1-de40af00",
+      "scenario_name": "Missing Detective Metric Filters for Account Events",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T10:45:41.341271+00:00",
+      "total_score": 0.58,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.33,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_missing_flow_log_visibility_on_L1_42611021__soa__20260729_110445",
+      "scenario_id": "COPS-missing-flow-log-visibility-on-L1-42611021",
+      "scenario_name": "Missing Flow Log Visibility on Production VPCs",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T11:04:45.602373+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_multi_account_portfolio_health_L2_31144309__soa__20260729_134457",
+      "scenario_id": "COPS-multi-account-portfolio-health-L2-31144309",
+      "scenario_name": "Multi-Account Portfolio Health Rollup",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T13:44:57.671511+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_network_tiering_and_egress_con_L2_c4df527d__soa__20260729_131740",
+      "scenario_id": "COPS-network-tiering-and-egress-con-L2-c4df527d",
+      "scenario_name": "Network Tiering and Egress Control Uplift",
+      "category": "security",
+      "timestamp": "2026-07-29T13:17:40.196776+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_observability_baseline_uplift_L2_637c29d9__soa__20260729_132130",
+      "scenario_id": "COPS-observability-baseline-uplift-L2-637c29d9",
+      "scenario_name": "Observability Baseline Uplift for Production Workloads",
+      "category": "monitoring_&_observability",
+      "timestamp": "2026-07-29T13:21:30.512936+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_over_permissive_nacl_rules_acr_L1_ab47360a__soa__20260729_103311",
+      "scenario_id": "COPS-over-permissive-nacl-rules-acr-L1-ab47360a",
+      "scenario_name": "Over-Permissive NACL Rules Across Tiers",
+      "category": "security",
+      "timestamp": "2026-07-29T10:33:11.280009+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__soa__20260729_103019",
+      "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+      "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+      "category": "security",
+      "timestamp": "2026-07-29T10:30:19.336554+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_point_in_time_recovery_disable_L1_952c1416__soa__20260729_104637",
+      "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+      "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+      "category": "reliability",
+      "timestamp": "2026-07-29T10:46:37.136022+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_preventive_control_guardrail_u_L2_5c06ddd1__soa__20260729_134855",
+      "scenario_id": "COPS-preventive-control-guardrail-u-L2-5c06ddd1",
+      "scenario_name": "Preventive-Control Guardrail Uplift",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T13:48:55.619435+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_public_container_images_in_pri_L1_813626da__soa__20260729_103820",
+      "scenario_id": "COPS-public-container-images-in-pri-L1-813626da",
+      "scenario_name": "Public Container Images in Private Pipelines",
+      "category": "security",
+      "timestamp": "2026-07-29T10:38:20.062289+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_ranked_savings_roadmap_from_ri_L2_182929a6__soa__20260729_133643",
+      "scenario_id": "COPS-ranked-savings-roadmap-from-ri-L2-182929a6",
+      "scenario_name": "Ranked Savings Roadmap From Rightsizing and Storage Tiering",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T13:36:43.271967+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_refactor_wildcard_policies_int_L2_d485fab8__soa__20260729_130038",
+      "scenario_id": "COPS-refactor-wildcard-policies-int-L2-d485fab8",
+      "scenario_name": "Refactor Wildcard Policies Into Scoped Workload Roles",
+      "category": "security",
+      "timestamp": "2026-07-29T13:00:38.371435+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_rto_and_rpo_convergence_across_L2_76e47be0__soa__20260729_132735",
+      "scenario_id": "COPS-rto-and-rpo-convergence-across-L2-76e47be0",
+      "scenario_name": "RTO and RPO Convergence Across Critical Data Stores",
+      "category": "reliability",
+      "timestamp": "2026-07-29T13:27:35.919609+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__soa__20260729_111103",
+      "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+      "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T11:11:03.377659+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 0.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_serverless_event_path_reliabil_L2_ffc06f96__soa__20260729_143434",
+      "scenario_id": "COPS-serverless-event-path-reliabil-L2-ffc06f96",
+      "scenario_name": "Serverless Event-Path Reliability Review",
+      "category": "reliability",
+      "timestamp": "2026-07-29T14:34:34.147263+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_spend_budgets_without_notifica_L1_573baf91__soa__20260729_105400",
+      "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+      "scenario_name": "Spend Budgets Without Notification Thresholds",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T10:54:00.078209+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_storage_sprawl_across_non_tier_L1_acb3db34__soa__20260729_125406",
+      "scenario_id": "COPS-storage-sprawl-across-non-tier-L1-acb3db34",
+      "scenario_name": "Storage Sprawl Across Non-Tiered Buckets",
+      "category": "cloud_financial_management",
+      "timestamp": "2026-07-29T12:54:06.148381+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_sustainability_improvement_roa_L2_5a54662a__soa__20260729_142034",
+      "scenario_id": "COPS-sustainability-improvement-roa-L2-5a54662a",
+      "scenario_name": "Sustainability Improvement Roadmap",
+      "category": "sustainability",
+      "timestamp": "2026-07-29T14:20:34.968213+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_tag_compliance_drift_on_revenu_L1_532a6305__soa__20260729_105927",
+      "scenario_id": "COPS-tag-compliance-drift-on-revenu-L1-532a6305",
+      "scenario_name": "Tag Compliance Drift on Revenue-Impacting Workloads",
+      "category": "cloud_governance",
+      "timestamp": "2026-07-29T10:59:27.757677+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__soa__20260729_111045",
+      "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+      "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+      "category": "performance_efficiency",
+      "timestamp": "2026-07-29T11:10:45.440487+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_unblocked_public_access_on_sha_L1_a31fe63c__soa__20260729_103001",
+      "scenario_id": "COPS-unblocked-public-access-on-sha-L1-a31fe63c",
+      "scenario_name": "Unblocked Public Access on Shared Data Buckets",
+      "category": "security",
+      "timestamp": "2026-07-29T10:30:01.526856+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_unify_encryption_posture_acros_L2_34cc7d74__soa__20260729_130506",
+      "scenario_id": "COPS-unify-encryption-posture-acros-L2-34cc7d74",
+      "scenario_name": "Unify Encryption Posture Across Shared Data Stores",
+      "category": "security",
+      "timestamp": "2026-07-29T13:05:06.763444+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_unrestricted_inbound_access_on_L1_6235afe3__soa__20260729_103257",
+      "scenario_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+      "scenario_name": "Unrestricted Inbound Access on Management Ports",
+      "category": "security",
+      "timestamp": "2026-07-29T10:32:57.451909+00:00",
+      "total_score": 0.25,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 0.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_unthrottled_api_endpoints_with_L1_cbfd2507__soa__20260729_110855",
+      "scenario_id": "COPS-unthrottled-api-endpoints-with-L1-cbfd2507",
+      "scenario_name": "Unthrottled API Endpoints Without Edge Protection",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T11:08:55.674193+00:00",
+      "total_score": 0.5,
+      "scores": {
+        "tools": 0.0,
+        "answer": 0.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    },
+    {
+      "id": "COPS_wafr_critical_and_high_finding_L2_e24003d9__soa__20260729_135520",
+      "scenario_id": "COPS-wafr-critical-and-high-finding-L2-e24003d9",
+      "scenario_name": "WAFR Critical and High Finding Triage Sprint Plan",
+      "category": "operations_management",
+      "timestamp": "2026-07-29T13:55:20.417662+00:00",
+      "total_score": 0.75,
+      "scores": {
+        "tools": 0.0,
+        "answer": 1.0,
+        "safety": 1.0,
+        "output": 1.0
+      },
+      "has_judge": false,
+      "judge_met": null,
+      "judge_total": null,
+      "model": "bedrock/soa",
+      "agent": "soa"
+    }
+  ]
+}

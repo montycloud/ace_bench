@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: sns wafr template for compliant checks
+Resources:
+  WartestkmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS Key for wartestKinesisStreamNonCompliant
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - "kms:*"
+            Resource: "*"
+
+  SNSTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      DisplayName: "MySNSTopic"
+      TopicName: !Join
+        - "-"
+        - - "wafr-sns-compliant"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      KmsMasterKeyId: !Ref WartestkmsKey
+  SNSTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref SNSTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowSpecificRoot
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: sns:Publish
+            Resource: !Ref SNSTopic
+
+  SNSSubscriptionLambda:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref SNSTopic
+      Protocol: "lambda"
+      Endpoint: !GetAtt MyLambdaFunction.Arn
+
+  # Example Lambda function (used for the Lambda subscription)
+  MyLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Runtime: python3.11
+      Handler: "index.handler"
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          def handler(event, context):
+            echo "Hello World"
+
+  MyLambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Join
+        - "-"
+        - - "lambda-execution-role"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+Outputs:
+  SNSTopicId:
+    Description: SNSTopic Arn as ID
+    Value:
+      Ref: SNSTopic

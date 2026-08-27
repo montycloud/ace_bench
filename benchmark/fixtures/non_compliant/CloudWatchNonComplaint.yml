@@ -1,0 +1,79 @@
+Resources:
+  myLogGroup: 
+    Type: AWS::Logs::LogGroup
+    Properties: 
+        LogGroupName: 'testloggroup'
+
+  InternetMonitor:
+    Type: AWS::InternetMonitor::Monitor
+    Properties:
+      MonitorName: 'testinternetmonitor'
+      Status: INACTIVE
+      TrafficPercentageToMonitor: 1
+
+  lambda:
+    DependsOn: InternetMonitor
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !Sub "${IAMRole.Arn}"
+      Handler: index.handler
+      Timeout: 20
+      Runtime: python3.12
+      Code:
+        ZipFile: !Sub |
+          import boto3
+          import os
+          import cfnresponse
+          client = boto3.client('internetmonitor')
+          def handler(event, context):
+              res = {}
+              try:
+                  response = client.update_monitor(
+                      MonitorName='testinternetmonitor',
+                      Status='INACTIVE'
+                  )
+                  res['data'] = 'Success'
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, res)
+              except Exception as e:
+                  print(e)
+                  res['data'] = 'Failed'
+                  cfnresponse.send(event, context, cfnresponse.FAILED, res)
+  lambdatrigger:
+    DependsOn: lambda
+    Type: Custom::lambda
+    Properties:
+      ServiceToken: !Sub "${lambda.Arn}"
+
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: ["sts:AssumeRole"]
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "*"
+                Resource: "*"
+
+Outputs:
+  LogGroupName:
+    Description: log group name.
+    Value: !Ref myLogGroup
+  CWInterneMonitor:
+    Description: CW Internet Monitor name
+    Value: !Ref InternetMonitor
+  CWInternertMonitorId:
+    Description: CW Internet Monitor ARN
+    Value: !GetAtt InternetMonitor.MonitorArn
+

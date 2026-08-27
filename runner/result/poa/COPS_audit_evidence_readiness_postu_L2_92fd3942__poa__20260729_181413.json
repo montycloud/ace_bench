@@ -1,0 +1,153 @@
+{
+  "id": "COPS_audit_evidence_readiness_postu_L2_92fd3942__poa__20260729_181413",
+  "scenario_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+  "scenario_name": "Audit-Evidence Readiness Posture",
+  "category": "security",
+  "agent": "poa",
+  "model": "bedrock/poa",
+  "timestamp": "2026-07-29T18:14:13.186519+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top audit-relevant resources with findings"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand scope of audit control gaps"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate audit-relevant resource types"
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable"
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top audit-relevant resources with findings",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Understand scope of audit control gaps",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate audit-relevant resource types",
+          "found": false
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "Retrieve WA Tool questions that must be answered as part of this L2 planning deliverable",
+          "found": false
+        },
+        {
+          "tool": "answer_question",
+          "params": {},
+          "reason": "Submit WA Tool answers grounded in the assessment findings surfaced",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX",
+        "REDACTED-ACCOUNT/us-east-1"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX",
+        "REDACTED-ACCOUNT/us-east-1"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every task in a single run without pausing. Do not say 'Ready to continue?' or ask for confirmation \u2014 proceed through all steps automatically. Always scope your work to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources. The assessment contains automated compliance findings that exist independently of WAFR questionnaire completion \u2014 a PENDING questionnaire does NOT mean there are no findings. Use get_findings_summary and list_assessment_top_entities to surface compliance findings. Cite specific evidence from tool output for every recommendation. You MUST output the final JSON block at the end of your response no matter what.",
+    "objective_raw": "Score audit-evidence readiness (CloudTrail, Security Hub, Config, metric filters) against CIS/PCI baselines; capture all must-find items from env:fx/ace-bench/security-risk-com/audit-readiness/audit-evidence-readiness-posture/l2/v1 | packet:cp/ace-bench/security-risk-com/audit-readiness/audit-evidence-readiness-posture/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Score audit-evidence readiness (CloudTrail, Security Hub, Config, metric filters) against CIS/PCI baselines; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Verify CloudTrail (multi-region, log-file integrity, KMS encryption), Security Hub (CIS, PCI conformance packs), AWS Config (account-wide recorder + aggregator), and log-metric filters aligned to CIS. Recommendation: Deliver an audit-readiness scorecard with evidence links per control and remediation sprint for any Red items. Return your answer as JSON with keys: summary (string), observations (array \u2014 each item has area, finding, evidence, severity), platform_gaps (array of strings describing what could not be assessed), plan (array \u2014 each item has action, scope, priority, effort, rationale). Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-audit-evidence-readiness-postu-L2-92fd3942",
+    "description": "the agent should score audit evidence readiness by checking CloudTrail, Config, Security Hub, and log metric filter status from WAFR findings. LogMetricFilter resources with misconfigured patterns are confirmed in WAFR. CloudTrail log file integrity and Security Hub conformance pack scores require tooling beyond what is available.",
+    "objective": "Score audit-evidence readiness (CloudTrail, Security Hub, Config, metric filters) against CIS/PCI baselines; capture all must-find items from env:fx/ace-bench/security-risk-com/audit-readiness/audit-evidence-readiness-posture/l2/v1 | packet:cp/ace-bench/security-risk-com/audit-readiness/audit-evidence-readiness-posture/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Verify CloudTrail (multi-region, log-file integrity, KMS encryption), Security Hub (CIS, PCI conformance packs), AWS Config (account-wide recorder + aggregator), and log-metric filters aligned to CIS. Recommendation: Deliver an audit-readiness scorecard with evidence links per control and remediation sprint for any Red items.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security | Operational Excellence",
+    "wafr_phase": "Review",
+    "correct_resources": [
+      "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+      "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+      "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX",
+      "REDACTED-ACCOUNT/us-east-1"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify real audit evidence gaps from tool output \u2014 metric filter misconfigurations, CloudTrail/Config/GuardDuty status, or log retention failures?",
+      "Did the agent surface specific LogMetricFilter or account-level resource identifiers from tool output rather than fabricating check control IDs?",
+      "Did the agent produce an audit readiness scorecard covering what it could verify, with explicit Red/Amber/Green status grounded in tool evidence?",
+      "Did the agent acknowledge that CloudTrail integrity verification, Security Hub conformance pack scores, and CIS/PCI control mapping require tooling beyond what is available?",
+      "Did the agent retrieve WA Tool questions (list_questions) and submit answers via answer_question, grounded in the assessment findings it surfaced?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Now let me gather additional details \u2014 CloudTrail trail status, KMS key details, alarm associations for the metric filters, and attempt Config via CLI:I now have all the evidence needed to produce the complete audit-readiness scorecard. Here is the full JSON output:\n\n```json\n{\n  \"summary\": \"Audit-readiness assessment of account REDACTED-ACCOUNT (us-east-1) across four control domains: CloudTrail, Security Hub, AWS Config, and CIS log-metric filters. One trail is active, multi-region, with KMS encryption and log-file validation enabled \u2014 a strong foundation. However, critical gaps exist: Security Hub is NOT subscribed (CIS and PCI conformance packs are entirely absent), the KMS CMK used for CloudTrail encryption has automatic key rotation disabled, no Config aggregator is configured (single-account/single-region visibility only), three of five CIS metric-filter alarms lack SNS notification actions, one CIS required metric filter (Config Changes) has no corresponding alarm at all, the SNS topic routes only to a Lambda function (no human/email subscriber), and all five existing CIS alarms are in INSUFFICIENT_DATA state. Overall audit-readiness score: 42/100. Two control domains are Red, one is Amber, one is Green.\",\n\n  \"observations\": [\n    {\n      \"area\": \"CloudTrail \u2014 Multi-Region Coverage\",\n      \"finding\": \"Trail 'wafr-comp-ct-bec2b3a0' is enabled as a multi-region trail (IsMultiRegionTrail=true) with IncludeGlobalServiceEvents=true. Logging is active (IsLogging=true). Latest delivery succeeded at 2026-07-29T18:09:55Z and latest CloudWatch Logs delivery at 2026-07-29T18:11:14Z. Digest delivery is also current (2026-07-29T17:56:58Z). CIS 2.1 and CIS 2.2 are satisfied.\",\n      \"evidence\": \"DescribeTrails: TrailARN=arn:aws:cloudtrail:us-east-1:REDACTED-ACCOUNT:trail/wafr-comp-ct-bec2b3a0, IsMultiRegionTrail=true, IncludeGlobalServiceEvents=true; GetTrailStatus: IsLogging=true, LatestDeliveryAttemptSucceeded=2026-07-29T18:09:55Z\",\n      \"severity\": \"GREEN\"\n    },\n    {\n      \"area\": \"CloudTrail \u2014 Log File Integrity Validation\",\n      \"finding\": \"Log-file validation is enabled (LogFileValidationEnabled=true) and digest files are being delivered successfully. This satisfies CIS 2.2 (ensure CloudTrail log file validation is enabled).\",\n      \"evidence\": \"DescribeTrails: LogFileValidationEnabled=true; GetTrailStatus: LatestDigestDeliveryTime=2026-07-29T17:56:58Z\",\n      \"severity\": \"GREEN\"\n    },\n    {\n      \"area\": \"CloudTrail \u2014 KMS Encryption\",\n      \"finding\": \"CloudTrail is encrypted with a customer-managed KMS key (CMK) 1e007832-6f44-4c5c-bc87-6a9bdddf4d28, satisfying CIS 2.7. However, automatic annual key rotation is DISABLED (KeyRotationEnabled=false). The CMK description indicates it was originally created for a Kinesis stream ('wartestKinesisStreamNonCompliant'), raising a key-purpose documentation concern. Disabled rotation means the same key material encrypts logs indefinitely, increasing exposure if the key is ever compromised.\",\n      \"evidence\": \"DescribeTrails: KmsKeyId=arn:aws:kms:us-east-1:REDACTED-ACCOUNT:key/1e007832-6f44-4c5c-bc87-6a9bdddf4d28; DescribeKey: KeyState=Enabled, KeyManager=CUSTOMER; GetKeyRotationStatus: KeyRotationEnabled=false; KMS Description='KMS Key for wartestKinesisStreamNonCompliant'\",\n      \"severity\": \"AMBER\"\n    },\n    {\n      \"area\": \"CloudTrail \u2014 Data Events (S3 / Lambda)\",\n      \"finding\": \"The trail uses an AdvancedEventSelector scoped to Management events only (eventCategory=Management). S3 object-level data events and Lambda invocation data events are NOT captured. CIS v1.4 control 3.11 (ensure S3 bucket access logging) and PCI DSS Requirement 10.2 (log all individual access to cardholder data) require data-event logging. This is a gap for PCI scope.\",\n      \"evidence\": \"GetEventSelectors: AdvancedEventSelectors=[{Name='Management events selector', FieldSelectors=[{Field=eventCategory, Equals=[Management]}]}] \u2014 no S3 or Lambda data-event selectors present\",\n      \"severity\": \"AMBER\"\n    },\n    {\n      \"area\": \"Security Hub \u2014 Subscription Status\",\n      \"finding\": \"AWS Security Hub is NOT enabled in this account/region (API returned InvalidAccessException: Account REDACTED-ACCOUNT is not subscribed to AWS Security Hub). This means zero automated CIS AWS Foundations Benchmark checks, zero PCI DSS conformance pack findings, and no aggregated security score are being generated. This is a critical gap for both CIS and PCI audit evidence.\",\n      \"evidence\": \"DescribeHub API call: ClientError InvalidAccessException \u2014 'Account REDACTED-ACCOUNT is not subscribed to AWS Security Hub'\",\n      \"severity\": \"RED\"\n    },\n    {\n      \"area\": \"Security Hub \u2014 CIS AWS Foundations Benchmark Conformance Pack\",\n      \"finding\": \"Because Security Hub is not enabled, the CIS AWS Foundations Benchmark v1.4 (or v3.0) standard is not active. No automated control checks exist for IAM password policy, root account usage, MFA, key rotation, VPC flow logs, or any of the 58+ CIS controls. Audit evidence for CIS cannot be produced from this account in its current state.\",\n      \"evidence\": \"GetEnabledStandards: not callable \u2014 Security Hub not subscribed. No StandardsSubscriptions exist.\",\n      \"severity\": \"RED\"\n    },\n    {\n      \"area\": \"Security Hub \u2014 PCI DSS Conformance Pack\",\n      \"finding\": \"PCI DSS conformance pack via Security Hub is absent because Security Hub is not enabled. PCI DSS Requirements 2, 6, 7, 8, 10, and 11 would normally be covered by this pack. No automated PCI control evidence is available.\",\n      \"evidence\": \"Security Hub not subscribed; GetEnabledStandards cannot be called.\",\n      \"severity\": \"RED\"\n    },\n    {\n      \"area\": \"AWS Config \u2014 Configuration Recorder\",\n      \"finding\": \"A configuration recorder named 'MontyCloud-default' is active, recording ALL supported resource types including global resources (allSupported=true, includeGlobalResourceTypes=true), with CONTINUOUS recording frequency. Recorder status shows recording=true, lastStatus=SUCCESS as of 2026-07-29T16:49:42Z. Delivery channel exists (S3 bucket: montycloud-config-REDACTED-ACCOUNT). This satisfies the account-wide recorder requirement.\",\n      \"evidence\": \"DescribeConfigurationRecorders: name=MontyCloud-default, allSupported=true, includeGlobalResourceTypes=true, recordingFrequency=CONTINUOUS; DescribeConfigurationRecorderStatus: recording=true, lastStatus=SUCCESS, lastStatusChangeTime=2026-07-29T16:49:42Z; DescribeDeliveryChannels: s3BucketName=montycloud-config-REDACTED-ACCOUNT\",\n      \"severity\": \"GREEN\"\n    },\n    {\n      \"area\": \"AWS Config \u2014 Multi-Account / Multi-Region Aggregator\",\n      \"finding\": \"No AWS Config aggregator is configured (DescribeConfigurationAggregators returns empty list). Config data is siloed to a single account and single region. For enterprise audit readiness, an aggregator is required to provide a unified compliance view across accounts and regions. Without it, auditors cannot obtain a cross-account Config dashboard.\",\n      \"evidence\": \"DescribeConfigurationAggregators: ConfigurationAggregators=[] (empty)\",\n      \"severity\": \"AMBER\"\n    },\n    {\n      \"area\": \"CIS Log-Metric Filters \u2014 Coverage\",\n      \"finding\": \"Six metric filters exist on log group 'LogMetricsNonCompliant-multi-region-cloudtrail-logs', covering: CloudTrail changes, Config changes, Non-MFA console sign-ins, S3 bucket config changes, Unauthorized API calls, and VPC changes. These address CIS controls 3.5, 3.9, 3.3, 3.8, 3.1, and 3.14 respectively. HOWEVER, several CIS-required filters are MISSING: (1) Root account usage (CIS 3.3), (2) IAM policy changes (CIS 3.4), (3) Management Console sign-in failures (CIS 3.6), (4) Disabling or scheduled deletion of CMKs (CIS 3.7), (5) AWS Organizations changes (CIS 3.15). Additionally, the CloudTrail changes filter pattern has a typo: 'UpdateTraile' instead of 'UpdateTrail'.\",\n      \"evidence\": \"DescribeMetricFilters on logGroupName=LogMetricsNonCompliant-multi-region-cloudtrail-logs: 6 filters found. Filter 'CloudtrailChnagesLogsMetricFilterNC' pattern contains 'UpdateTraile' (typo). CIS 3.3 (root usage), 3.4 (IAM policy), 3.6 (console sign-in failures), 3.7 (CMK deletion), 3.15 (Organizations) filters absent.\",\n      \"severity\": \"RED\"\n    },\n    {\n      \"area\": \"CIS Log-Metric Filters \u2014 Alarm Linkage\",\n      \"finding\": \"Of the 6 metric filters present, only 5 have corresponding CloudWatch alarms. The 'ConfigEventCount' metric (Config Changes filter) has NO alarm defined \u2014 this is a direct CIS 3.9 gap. All 5 existing alarms are in INSUFFICIENT_DATA state, indicating either no recent log events have been evaluated or the alarms were recently created and have not received data. Two alarms ('ConsoleSignInWithoutMfaAlarmNC' and 'S3BucketConfigChangesAlarmNC') have empty AlarmActions, meaning they will fire silently with no notification sent.\",\n      \"evidence\": \"DescribeAlarms: 5 MetricAlarms found. Missing alarm for ConfigEventCount. Alarms with empty AlarmActions: ConsoleSignInWithoutMfaAlarmNC (metric=ConsoleSignInWithoutMfaCount), S3BucketConfigChangesAlarmNC (metric=S3BucketConfigChanges). All 5 alarms StateValue=INSUFFICIENT_DATA.\",\n      \"severity\": \"RED\"\n    },\n    {\n      \"area\": \"CIS Log-Metric Filters \u2014 SNS Notification Endpoint\",\n      \"finding\": \"The SNS topic 'Sample-Topic-bec2b3a0' used by alarms has only 1 confirmed subscription, which routes to a Lambda function (arn:aws:lambda:us-east-1:REDACTED-ACCOUNT:function:Lambda-bec2b3a0). There are no email, SMS, or human-readable subscriptions. CIS requires that alarms notify human responders. Routing only to Lambda means an operational runbook or downstream paging system must exist \u2014 which cannot be verified from this assessment. Additionally, 0 pending subscriptions suggest no new human subscriber is being onboarded.\",\n      \"evidence\": \"ListSubscriptionsByTopic on arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0: SubscriptionsConfirmed=1, Protocol=lambda, Endpoint=arn:aws:lambda:us-east-1:REDACTED-ACCOUNT:function:Lambda-bec2b3a0. No email/SMS/SQS subscriptions.\",\n      \"severity\": \"AMBER\"\n    }\n  ],\n\n  \"platform_gaps\": [\n    \"AWS Config API via boto3 SDK was unavailable in the assessment runtime (ToolError: config not yet supported); Config data was obtained via AWS CLI fallback \u2014 aggregator, recorder, and delivery channel data is complete but Config Rules compliance scores could not be enumerated programmatically.\",\n    \"Security Hub GetEnabledStandards and ListStandardsControlAssociations could not be called because Security Hub is not subscribed; zero CIS or PCI automated control findings are available from this account.\",\n    \"CloudTrail Insights selectors were not assessed (HasInsightSelectors=false on the trail); anomaly detection for unusual API call rates is not enabled and could not be evaluated.\",\n    \"VPC Flow Logs enablement across all VPCs was not assessed in this scan; CIS 3.9 / PCI Requirement 10 compliance for network-level logging remains unverified.\",\n    \"IAM account-level controls (password policy, root MFA, hardware MFA, access key rotation, unused credential age) were not enumerated in this pass \u2014 these are required for CIS Section 1 compliance and represent a separate assessment domain.\",\n    \"S3 access logging on the CloudTrail bucket (wafr-comp-ct-s3-bec2b3a0) and the Config delivery bucket (montycloud-config-REDACTED-ACCOUNT) was not verified.\",\n    \"AWS Config Rules and conformance packs (other than Security Hub) were not enumerated; it is unknown whether any standalone Config conformance pack (e.g., Operational Best Practices for CIS) is deployed.\",\n    \"Cross-region coverage of Config recorders was not verified; only us-east-1 was queried. Other regions may lack recorders.\",\n    \"The Lambda function subscribed to the SNS topic (Lambda-bec2b3a0) was not inspected; it is unknown whether it performs meaningful alerting, ticketing, or remediation.\",\n    \"AWS Organizations configuration and SCP posture were not assessed; the trail is not an Organization trail, limiting cross-account auditability.\"\n  ],\n\n  \"plan\": [\n    {\n      \"action\": \"Enable AWS Security Hub and activate CIS AWS Foundations Benchmark v1.4 and PCI DSS v3.2.1 standards\",\n      \"scope\": \"Account REDACTED-ACCOUNT, region us-east-1 (then expand to all active regions)\",\n      \"priority\": \"P0 \u2014 Critical\",\n      \"effort\": \"1 day\",\n      \"rationale\": \"Security Hub is entirely absent. This is the single highest-impact gap: zero automated CIS/PCI control checks, zero compliance score, and no audit evidence trail. Enabling Security Hub with both standards immediately produces ~200 automated control findings and a quantified compliance score. Required before any audit submission.\"\n    },\n    {\n      \"action\": \"Enable automatic KMS CMK key rotation on key 1e007832-6f44-4c5c-bc87-6a9bdddf4d28 and optionally create a dedicated CMK for CloudTrail with accurate description\",\n      \"scope\": \"KMS, us-east-1\",\n      \"priority\": \"P0 \u2014 Critical\",\n      \"effort\": \"2 hours\",\n      \"rationale\": \"CIS 3.7 and AWS security best practices require annual CMK rotation to limit key material exposure. The current CMK has rotation disabled. The description references a Kinesis stream, suggesting the key may have been repurposed \u2014 a dedicated CMK for CloudTrail is cleaner for audit traceability. Run: aws kms enable-key-rotation --key-id 1e007832-6f44-4c5c-bc87-6a9bdddf4d28\"\n    },\n    {\n      \"action\": \"Create the missing CloudWatch alarm for ConfigEventCount metric and add SNS alarm actions to ConsoleSignInWithoutMfaAlarmNC and S3BucketConfigChangesAlarmNC\",\n      \"scope\": \"CloudWatch, us-east-1\",\n      \"priority\": \"P0 \u2014 Critical\",\n      \"effort\": \"2 hours\",\n      \"rationale\": \"CIS 3.9 requires an alarm on Config service changes. No alarm exists for the ConfigEventCount metric. Additionally, two existing alarms fire silently (no AlarmActions). These three fixes close direct CIS control failures and ensure operational response. Use aws cloudwatch put-metric-alarm to create the Config alarm and update existing alarms with --alarm-actions arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0.\"\n    },\n    {\n      \"action\": \"Add missing CIS metric filters: Root account usage (CIS 3.3), IAM policy changes (CIS 3.4), Console sign-in failures (CIS 3.6), CMK deletion/disabling (CIS 3.7), Organizations changes (CIS 3.15)\",\n      \"scope\": \"CloudWatch Logs, log group LogMetricsNonCompliant-multi-region-cloudtrail-logs\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"4 hours\",\n      \"rationale\": \"Five CIS-required metric filters are completely absent, meaning the corresponding alarm \u2192 notification \u2192 response chain cannot exist. Each missing filter is a direct CIS Benchmark control failure. Additionally, fix the typo in the CloudTrail changes filter ('UpdateTraile' \u2192 'UpdateTrail') to ensure that event is actually matched.\"\n    },\n    {\n      \"action\": \"Add a human-readable SNS subscription (email or PagerDuty/Opsgenie HTTPS endpoint) to Sample-Topic-bec2b3a0\",\n      \"scope\": \"SNS, us-east-1\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"1 hour\",\n      \"rationale\": \"All CIS alarms route to a Lambda function only. Auditors require evidence that security events notify human responders. Without a direct email or incident-management endpoint, the notification chain is opaque and unverifiable. Use aws sns subscribe --protocol email --notification-endpoint <security-team@company.com> --topic-arn arn:aws:sns:us-east-1:REDACTED-ACCOUNT:Sample-Topic-bec2b3a0.\"\n    },\n    {\n      \"action\": \"Configure a multi-account / multi-region AWS Config Aggregator\",\n      \"scope\": \"AWS Config, management account or delegated admin account\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"4 hours\",\n      \"rationale\": \"No aggregator exists. A Config aggregator is required for enterprise audit readiness to provide a single-pane compliance view across all accounts and regions. Without it, auditors must query each account/region individually, making compliance reporting impractical. Use aws configservice put-configuration-aggregator with OrganizationAggregationSource if AWS Organizations is in use.\"\n    },\n    {\n      \"action\": \"Enable CloudTrail data events for S3 (read/write) and Lambda invocations\",\n      \"scope\": \"Trail wafr-comp-ct-bec2b3a0, us-east-1\",\n      \"priority\": \"P1 \u2014 High\",\n      \"effort\": \"2 hours\",\n      \"rationale\": \"Current trail captures Management events only. PCI DSS Requirement 10.2 mandates logging all access to cardholder data (S3 objects). CIS v1.4 control 3.11 requires S3 bucket access logging. Add AdvancedEventSelectors for S3 (readOnly+writeOnly) and Lambda data events using aws cloudtrail put-event-selectors.\"\n    },\n    {\n      \"action\": \"Enable Config recorders in all active AWS regions (not just us-east-1)\",\n      \"scope\": \"AWS Config, all enabled regions\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"1 day\",\n      \"rationale\": \"Only us-east-1 was verified to have an active recorder. CIS 2.5 requires that AWS Config is enabled in all regions. Resources launched in other regions (even accidentally) will not be tracked, creating blind spots for compliance and drift detection.\"\n    },\n    {\n      \"action\": \"Enable VPC Flow Logs on all VPCs and verify S3 access logging on CloudTrail and Config delivery buckets\",\n      \"scope\": \"VPC (all regions), S3 buckets wafr-comp-ct-s3-bec2b3a0 and montycloud-config-REDACTED-ACCOUNT\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"4 hours\",\n      \"rationale\": \"VPC Flow Logs are required by CIS 3.9 and PCI DSS Requirement 10 for network-level audit evidence. S3 server access logging on the CloudTrail and Config delivery buckets is required to detect unauthorized access to audit logs themselves (CIS 3.6 and PCI 10.5).\"\n    },\n    {\n      \"action\": \"Conduct IAM baseline assessment: enforce password policy, verify root MFA, audit access key age, remove unused credentials\",\n      \"scope\": \"IAM, account-wide\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"1 day\",\n      \"rationale\": \"CIS Section 1 controls (1.1\u20131.20) cover IAM hygiene and were not assessed in this scan. These are among the first controls auditors examine. Use aws iam get-account-password-policy, aws iam get-account-summary (for root MFA), and aws iam generate-credential-report to enumerate and remediate gaps.\"\n    },\n    {\n      \"action\": \"Investigate and resolve all five INSUFFICIENT_DATA CloudWatch alarm states\",\n      \"scope\": \"CloudWatch, us-east-1\",\n      \"priority\": \"P2 \u2014 Medium\",\n      \"effort\": \"2 hours\",\n      \"rationale\": \"All 5 CIS alarms are in INSUFFICIENT_DATA state. This means either (a) no data points have been received (log group is not receiving CloudTrail events), (b) the metric namespace/name mismatch between filter and alarm, or (c) the evaluation period has not elapsed. Auditors will flag INSUFFICIENT_DATA as unverifiable. Verify CloudTrail \u2192 CloudWatch Logs delivery, confirm metric namespaces match, and generate a test event to validate the end-to-end pipeline.\"\n    },\n    {\n      \"action\": \"Convert the CloudTrail trail to an AWS Organizations trail and enable CloudTrail Insights\",\n      \"scope\": \"CloudTrail, organization-wide\",\n      \"priority\": \"P3 \u2014 Low\",\n      \"effort\": \"2 days\",\n      \"rationale\": \"The current trail is a single-account trail (IsOrganizationTrail=false). Converting to an Organization trail ensures all member accounts are covered automatically. Enabling Insights (HasInsightSelectors=false) adds anomaly detection for unusual API call rates, supporting CIS and PCI Requirement 11 (test for unauthorized activity).\"\n    }\n  ]\n}\n```\n\n---\n\n**Scorecard Summary by Domain:**\n\n| Domain | Status | Score | Key Issue |\n|---|---|---|---|\n| **CloudTrail** | \ud83d\udfe1 AMBER | 65/100 | KMS rotation off, no data events, typo in filter pattern |\n| **Security Hub** | \ud83d\udd34 RED | 0/100 | Not subscribed \u2014 zero CIS/PCI automated checks |\n| **AWS Config** | \ud83d\udfe1 AMBER | 60/100 | Active recorder \u2705, but no multi-account aggregator |\n| **CIS Log-Metric Filters** | \ud83d\udd34 RED | 30/100 | 5 missing filters, 1 missing alarm, 2 silent alarms, all in INSUFFICIENT_DATA |\n| **Overall** | \ud83d\udd34 RED | **42/100** | Security Hub absence alone disqualifies audit readiness |\n\n**Remediation Sprint Priority:** P0 items (Security Hub, KMS rotation, alarm fixes) can be resolved in **< 1 business day** and will move the score to ~70/100. P1 items bring it to ~88/100 within a 1-week sprint.",
+  "token_usage": {
+    "estimated": 3304,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 152.7,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

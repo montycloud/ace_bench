@@ -1,0 +1,130 @@
+{
+  "id": "COPS_critical_metrics_without_alarm_L1_b35f5df1__eoa__20260729_142714",
+  "scenario_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+  "scenario_name": "Critical Metrics Without Alarm Coverage",
+  "category": "monitoring_&_observability",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:27:14.472717+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface alarms without SNS actions"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status counts to understand scale of alarm coverage gaps"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface alarms without SNS actions",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status counts to understand scale of alarm coverage gaps",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+        "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+        "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [
+        "check-9577",
+        "check-4953",
+        "check-8082",
+        "check-7413",
+        "check-9147"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Identify workload-critical metrics lacking actionable alarm coverage and propose evidence-based thresholds; capture all must-find items from env:fx/ace-bench/monitoring-observ/alarm-coverage/critical-metrics-without-alarm-cov/l1/v1 | packet:cp/ace-bench/monitoring-observ/alarm-coverage/critical-metrics-without-alarm-cov/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Identify workload-critical metrics lacking actionable alarm coverage and propose evidence-based thresholds; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Enumerate workload-critical metrics (API 5XX, Lambda Errors/Throttles, DynamoDB ThrottledRequests, SQS ApproximateAgeOfOldestMessage, RDS DatabaseConnections/CPU) that have no CloudWatch alarm or no alarm actions. Recommendation: Propose alarm thresholds derived from 30-day percentiles and connect each to an SNS topic/runbook. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-critical-metrics-without-alarm-L1-b35f5df1",
+    "description": "CloudWatch Alarms monitor metrics and can trigger SNS notifications to alert on-call teams when a threshold is crossed. If an alarm exists but has no SNS action attached, it fires silently \u2014 the threshold is breached but nobody gets paged. This is a common misconfiguration: alarms are created but the notification wiring is forgotten. the agent should surface alarms that are monitoring critical metrics but have no notification actions configured.",
+    "objective": "Identify workload-critical metrics lacking actionable alarm coverage and propose evidence-based thresholds; capture all must-find items from env:fx/ace-bench/monitoring-observ/alarm-coverage/critical-metrics-without-alarm-cov/l1/v1 | packet:cp/ace-bench/monitoring-observ/alarm-coverage/critical-metrics-without-alarm-cov/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Enumerate workload-critical metrics (API 5XX, Lambda Errors/Throttles, DynamoDB ThrottledRequests, SQS ApproximateAgeOfOldestMessage, RDS DatabaseConnections/CPU) that have no CloudWatch alarm or no alarm actions. Recommendation: Propose alarm thresholds derived from 30-day percentiles and connect each to an SNS topic/runbook.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable mandatory logging or audit controls",
+    "wafr_pillar": "Operational Excellence | Reliability",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "NonMFASignInLogsMetricFilterNC-iD6CVapxFVRk",
+      "ConfigChangesLogsMetricFilterNC-utPQ1meP3L0Z",
+      "S3ChangesLogsMetricFilterNC-IldAMGdF8rAX"
+    ],
+    "should_not_flag": [
+      "check-9577",
+      "check-4953",
+      "check-8082",
+      "check-7413",
+      "check-9147"
+    ],
+    "judge_criteria": [
+      "Did the agent identify that the issue is CloudWatch Alarms with no SNS notification actions configured (silent alarms), not just alarms being absent entirely?",
+      "Did the agent identify specific alarm or metric filter names \u2014 or, if tools could not surface them, explicitly acknowledge that limitation rather than reporting synthetic check IDs like 'check-9577'?",
+      "Did the agent avoid hallucinating synthetic check IDs (e.g., 'check-9577', 'check-4953') as real resource identifiers?",
+      "Did the agent recommend adding SNS notification actions to existing silent alarms rather than just suggesting new alarms be created?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I need to stay within my scope. I'm an **EC2 Optimization Agent** \u2014 I only perform EC2 instance optimization tasks, which include:\n\n1. **Underutilized instance detection** (CPU metrics)\n2. **Right-sizing recommendations** (instance type + cost savings)\n3. **Stopped instance analysis** (EBS cost impact)\n\n---\n\nThe request you submitted asks me to audit **CloudWatch alarms across multiple AWS services** (API Gateway, Lambda, DynamoDB, SQS, RDS). That falls **outside my scope**.\n\nFor that task, you would need a:\n\n| Needed Capability | Appropriate Tool/Agent |\n|---|---|\n| CloudWatch alarm coverage audit | CloudWatch Observability Agent |\n| Lambda error/throttle monitoring | Serverless Operations Agent |\n| DynamoDB throttle detection | Database Optimization Agent |\n| SQS queue health checks | Messaging/Queue Agent |\n| RDS connection/CPU alarms | RDS Monitoring Agent |\n| SNS topic + runbook wiring | Incident Management Agent |\n\n---\n\n**What I *can* do for you right now:**\n\n- Scan your **running EC2 instances** for CPU underutilization\n- Recommend **right-sized instance types** with projected monthly savings\n- Identify **stopped EC2 instances** that are still incurring EBS storage costs\n\nWould you like me to run a full **EC2 optimization scan** on your account? If so, just say the word and I'll get started immediately.",
+  "token_usage": {
+    "estimated": 273,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 7.5,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

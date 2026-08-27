@@ -1,0 +1,138 @@
+{
+  "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__s3soa__20260729_075241",
+  "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+  "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+  "category": "sustainability",
+  "agent": "s3soa",
+  "model": "bedrock/s3soa",
+  "timestamp": "2026-07-29T07:52:41.026980+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [
+        "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+    "description": "EC2 instances require you to manage patching, scaling, capacity planning, and OS maintenance. AWS Lambda and other managed services handle all of that automatically. When a workload is simple enough to run as a Lambda function \u2014 short-lived, event-driven, stateless \u2014 running it on EC2 instead adds unnecessary operational overhead and cost. the agent should identify cases where self-managed compute (EC2) is used where a managed serverless service like Lambda would be more appropriate.",
+    "objective": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Sustainability | Performance Efficiency",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-0ee5fa3508cede8a2",
+      "i-06286d41ae1218d5e",
+      "i-0aa58fe2d137a2f9f"
+    ],
+    "should_not_flag": [
+      "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+      "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+    ],
+    "judge_criteria": [
+      "Did the agent identify specific compute resources (Lambda functions or EC2 workloads) that are candidates for migration to managed/serverless alternatives?",
+      "Did the agent correctly avoid recommending EC2-to-Lambda migration for workloads that are clearly stateful, long-running, or otherwise unsuitable for Lambda?",
+      "Did the agent avoid fabricating Lambda function names or EC2 instance details not present in tool output?",
+      "Did the agent provide actionable reasoning for why the identified workloads are better suited to managed services (reduced operational overhead, auto-scaling, no patching)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I need to decline this request.\n\n**This task is outside my security scope.**\n\nThe request you've submitted is a **cloud cost optimization / sustainability / workload modernization analysis** \u2014 it asks me to:\n\n- Identify EC2/ECS workloads suitable for migration to Lambda, Fargate, EKS, or RDS\n- Analyze instance types and utilization percentages\n- Rank candidates by carbon-per-request reduction\n- Produce a migration effort/priority plan\n\nThese are **FinOps, sustainability, and architecture** concerns \u2014 **not security tasks**.\n\n---\n\n## What I *can* do (security scope):\n\n| Area | Examples |\n|---|---|\n| **S3** | Public buckets, misconfigured ACLs, missing encryption |\n| **EBS** | Public snapshots, unencrypted volumes |\n| **GuardDuty** | Missing detectors per region |\n| **Security Groups** | Open SSH (22) / RDP (3389) to 0.0.0.0/0 |\n| **Security Hub / Detective** | Not enabled |\n| **IAM** | Overly permissive policies, unused credentials, public roles |\n| **CloudTrail / Config** | Logging gaps, compliance drift |\n| **Encryption** | At-rest and in-transit gaps across services |\n\n---\n\nWould you like me to run a **full security scan** across your AWS environment instead? I'll cover all five standard areas (S3, EBS, GuardDuty, Security Groups, Security Hub & Detective) and return findings with severity ratings and remediation steps.",
+  "token_usage": {
+    "estimated": 278,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 8.3,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

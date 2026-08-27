@@ -1,0 +1,25 @@
+# Local Ollama for the ACE Bench offline test.
+# Brings up an Ollama server and pulls a tool-capable model.
+#
+#   docker compose up -d
+#   docker compose exec ollama ollama pull llama3.2:3b   # if not auto-pulled
+#   OLLAMA_MODEL=llama3.2:3b python -m local_test.run_local
+#
+# If you already run Ollama on the host (localhost:11434) you can skip this file
+# entirely — run_local.py talks to whatever is at OLLAMA_URL (default host:11434).
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ace-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    # For GPU: uncomment (NVIDIA container toolkit required)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices: [{ capabilities: [gpu] }]
+
+volumes:
+  ollama:

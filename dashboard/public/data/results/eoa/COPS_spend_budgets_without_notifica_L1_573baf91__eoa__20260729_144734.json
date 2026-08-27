@@ -1,0 +1,128 @@
+{
+  "id": "COPS_spend_budgets_without_notifica_L1_573baf91__eoa__20260729_144734",
+  "scenario_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+  "scenario_name": "Spend Budgets Without Notification Thresholds",
+  "category": "cloud_financial_management",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:47:34.120334+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources \u2014 budget notification gaps surface as check-level findings"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of budget notification configuration gaps"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources \u2014 budget notification gaps surface as check-level findings",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of budget notification configuration gaps",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [
+        "AWS_BUDGET_ACCOUNT_LEVEL",
+        "AWS_SNS_BUDGET_NOTIFICATIONS",
+        "AWS_COST_ANOMALY_DETECTION",
+        "CHECK_49577",
+        "CHECK_24953",
+        "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+        "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+        "REDACTED-ACCOUNT/us-east-1",
+        "i-01baa59f318a3c59e",
+        "vol-028f30f6b745e2ae5"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items from env:fx/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/l1/v1 | packet:cp/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify AWS Budgets without NotificationsWithSubscribers, budgets without forecasted-spend alerts, and accounts with zero budget coverage. Recommendation: Establish 50%/80%/100%/forecast thresholds routed to workload-owner SNS topics and a FinOps distribution list. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-spend-budgets-without-notifica-L1-573baf91",
+    "description": "AWS Budgets lets you set spending limits on your account or specific services and receive alerts when thresholds are crossed. A budget with no notification thresholds configured is functionally useless \u2014 costs can exceed the budget limit and nobody gets alerted until the monthly bill arrives. This is a common FinOps gap where budgets are created for visibility but the alert wiring is forgotten. the agent should identify AWS Budgets that exist but have no notification actions configured.",
+    "objective": "Establish AWS Budgets notification-coverage baseline across accounts and workloads; capture all must-find items from env:fx/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/l1/v1 | packet:cp/ace-bench/cloud-financial-m/budget-guardrails/spend-budgets-without-notification/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify AWS Budgets without NotificationsWithSubscribers, budgets without forecasted-spend alerts, and accounts with zero budget coverage. Recommendation: Establish 50%/80%/100%/forecast thresholds routed to workload-owner SNS topics and a FinOps distribution list.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [],
+    "should_not_flag": [
+      "AWS_BUDGET_ACCOUNT_LEVEL",
+      "AWS_SNS_BUDGET_NOTIFICATIONS",
+      "AWS_COST_ANOMALY_DETECTION",
+      "CHECK_49577",
+      "CHECK_24953",
+      "s3noncompliant-s3bucket1-vaeopnyvk0ru",
+      "s3noncompliant-s3bucket2-uaefqzdhl7fg",
+      "REDACTED-ACCOUNT/us-east-1",
+      "i-01baa59f318a3c59e",
+      "vol-028f30f6b745e2ae5"
+    ],
+    "judge_criteria": [
+      "Did the agent identify that the issue is AWS Budgets configured without notification thresholds or alert actions (not just budgets being absent)?",
+      "Did the agent identify specific budget names \u2014 or, if the fixture is not deployed and tools cannot surface them, explicitly acknowledge that rather than fabricating budget names?",
+      "Did the agent avoid hallucinating out-of-scope resources (S3 buckets, EC2 instances, etc.) as budget violation findings?",
+      "Did the agent distinguish between a budget existing and a budget being correctly configured with cost alert notifications?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I need to stay within my defined scope. I'm an **EC2 Optimization Agent**, and the task you've described \u2014 auditing AWS Budgets for missing notifications, forecasted-spend alerts, and budget coverage \u2014 falls outside my scope.\n\n## What I Can Help With\n\nMy scope is strictly limited to **EC2 instance optimization**, which includes:\n\n| Task | Description |\n|------|-------------|\n| \ud83d\udd0d Underutilized Instances | Flag instances with Average CPU < 10% (severely < 5%) |\n| \ud83d\udcd0 Right-Sizing Recommendations | Suggest smaller instance types with projected monthly savings |\n| \ud83d\udcbe Stopped Instances | Identify stopped instances still incurring EBS storage costs |\n\n## What You Asked For (Out of Scope)\n\nYour request involves:\n- \u274c **AWS Budgets** \u2014 a billing/cost management service, not EC2\n- \u274c **Budget notifications & subscribers** \u2014 FinOps governance, not EC2 optimization\n- \u274c **Forecasted-spend alerts** \u2014 cost alerting infrastructure\n- \u274c **SNS topic routing for FinOps** \u2014 notification/alerting architecture\n\n## What You Should Do\n\nFor AWS Budgets auditing, consider using:\n- A **FinOps/Cost Optimization Agent** or **AWS Cost Management tooling**\n- AWS Config rules (e.g., `BUDGET_ACTION_CONFIGURED`)\n- AWS Security Hub with cost governance plugins\n- AWS Trusted Advisor for budget coverage checks\n\n---\n\nWould you like me to run an **EC2 optimization scan** instead? I can analyze your running and stopped instances for CPU utilization, right-sizing opportunities, and EBS cost exposure \u2014 and return results in structured format.",
+  "token_usage": {
+    "estimated": 310,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 8.1,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

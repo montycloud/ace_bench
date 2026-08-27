@@ -1,0 +1,136 @@
+{
+  "id": "COPS_unrestricted_inbound_access_on_L1_6235afe3__s3soa__20260729_070546",
+  "scenario_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+  "scenario_name": "Unrestricted Inbound Access on Management Ports",
+  "category": "security",
+  "agent": "s3soa",
+  "model": "bedrock/s3soa",
+  "timestamp": "2026-07-29T07:05:46.996619+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 0.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface non-compliant security groups"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate SecurityGroup resource types in assessment to identify exposed instances"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of unrestricted inbound access violations"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks by findings count to surface non-compliant security groups",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate SecurityGroup resource types in assessment to identify exposed instances",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of unrestricted inbound access violations",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "sg-0c9d922a6676b8021",
+        "sg-07aebdd225b47ba16"
+      ],
+      "found": [
+        "sg-0c9d922a6676b8021",
+        "sg-07aebdd225b47ba16"
+      ],
+      "found_in_response": [
+        "sg-0c9d922a6676b8021",
+        "sg-07aebdd225b47ba16"
+      ],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": [
+        "sg-07be30eb18350e8b9",
+        "sg-07b547f30ea078058"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [
+        "default"
+      ],
+      "false_positives": [
+        "default"
+      ]
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Detect unrestricted inbound access to sensitive management ports and attribute each exposure to owning workload; capture all must-find items from env:fx/ace-bench/security-risk-com/network-ingress-exposure/unrestricted-inbound-access-on-man/l1/v1 | packet:cp/ace-bench/security-risk-com/network-ingress-exposure/unrestricted-inbound-access-on-man/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Detect unrestricted inbound access to sensitive management ports and attribute each exposure to owning workload; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Enumerate every Security Group rule allowing 22, 3389, 3306, 5432, 1433, 6379, 27017, or 9200 from 0.0.0.0/0 or ::/0; include SG ID, VPC, attached ENIs, and the specific rule. Recommendation: Replace each open rule with a scoped source (bastion SG, corporate CIDR, VPN, or Session Manager) and mark as Critical severity. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unrestricted-inbound-access-on-L1-6235afe3",
+    "description": "Security groups are virtual firewalls attached to EC2 instances and other AWS resources. A rule allowing inbound traffic from 0.0.0.0/0 (the entire internet) on port 22 (SSH) or port 3389 (RDP) exposes the instance to brute-force attacks, credential stuffing, and exploitation of any SSH/RDP vulnerabilities \u2014 from anyone on the internet, at all times. These management ports should only be reachable from trusted IPs (e.g., a VPN or bastion host). the agent should identify security groups with unrestricted inbound rules on management ports.",
+    "objective": "Detect unrestricted inbound access to sensitive management ports and attribute each exposure to owning workload; capture all must-find items from env:fx/ace-bench/security-risk-com/network-ingress-exposure/unrestricted-inbound-access-on-man/l1/v1 | packet:cp/ace-bench/security-risk-com/network-ingress-exposure/unrestricted-inbound-access-on-man/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Enumerate every Security Group rule allowing 22, 3389, 3306, 5432, 1433, 6379, 27017, or 9200 from 0.0.0.0/0 or ::/0; include SG ID, VPC, attached ENIs, and the specific rule. Recommendation: Replace each open rule with a scoped source (bastion SG, corporate CIDR, VPN, or Session Manager) and mark as Critical severity.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "sg-0c9d922a6676b8021",
+      "sg-07aebdd225b47ba16"
+    ],
+    "should_not_flag": [
+      "default"
+    ],
+    "judge_criteria": [
+      "Did the agent identify that the issue is unrestricted inbound access (0.0.0.0/0 or ::/0) on sensitive management ports such as 22 (SSH) or 3389 (RDP)?",
+      "Did the agent identify specific security group IDs \u2014 or, if tools could not surface them, explicitly acknowledge that rather than fabricating security group names?",
+      "Did the agent avoid inventing resource IDs, evidence, or findings it could not verify from tool output?",
+      "Did the agent avoid flagging out-of-scope resources or making claims not supported by the assessment data?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Here is the complete security finding in valid JSON:\n\n```json\n{\n  \"summary\": \"Security group audit across all 17 active AWS regions identified 4 unique security groups in us-east-1 (vpc-0a9630bfd89f3d25c) with 13 distinct inbound rules exposing sensitive ports (22/SSH, 3389/RDP, 3306/MySQL, 5432/PostgreSQL, 1433/MSSQL, 6379/Redis, 27017/MongoDB, 9200/Elasticsearch) to the entire internet (0.0.0.0/0). Two security groups contain catch-all 'allow-all' rules (protocol -1, ports 0-65535) effectively opening every port. No attached ENIs were found, indicating these SGs are currently unattached but remain a critical risk if associated with any resource. Immediate remediation is required to scope all ingress rules to trusted, named sources.\",\n  \"findings\": [\n    {\n      \"resource_id\": \"sg-07aebdd225b47ba16\",\n      \"resource_type\": \"AWS::EC2::SecurityGroup\",\n      \"check\": \"Unrestricted inbound access on sensitive ports from 0.0.0.0/0\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"sg_name\": \"VPCNonCompliant-SecurityGroup2-t6bdjozOHWKF\",\n        \"vpc_id\": \"vpc-0a9630bfd89f3d25c\",\n        \"region\": \"us-east-1\",\n        \"attached_enis\": [],\n        \"open_rules\": [\n          {\n            \"rule_id\": \"SG-001a\",\n            \"protocol\": \"ALL (-1)\",\n            \"port_range\": \"0-65535\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [22, 3389, 3306, 5432, 1433, 6379, 27017, 9200],\n            \"description\": \"Allow-all rule exposes every port including all 8 sensitive ports to the entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-001b\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"3389-3389\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [3389],\n            \"description\": \"Explicit RDP (3389/tcp) open to entire internet\"\n          }\n        ]\n      }\n    },\n    {\n      \"resource_id\": \"sg-07be30eb18350e8b9\",\n      \"resource_type\": \"AWS::EC2::SecurityGroup\",\n      \"check\": \"Unrestricted inbound access on sensitive ports from 0.0.0.0/0\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"sg_name\": \"SecurityGroupNonCompliant-SecurityGroup-8XBDHO48dhwm\",\n        \"vpc_id\": \"vpc-0a9630bfd89f3d25c\",\n        \"region\": \"us-east-1\",\n        \"attached_enis\": [],\n        \"open_rules\": [\n          {\n            \"rule_id\": \"SG-002a\",\n            \"protocol\": \"ALL (-1)\",\n            \"port_range\": \"0-65535\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [22, 3389, 3306, 5432, 1433, 6379, 27017, 9200],\n            \"description\": \"Allow-all rule exposes every port including all 8 sensitive ports to the entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002b\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"1433-1433\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [1433],\n            \"description\": \"Explicit MSSQL (1433/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002c\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"5432-5432\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [5432],\n            \"description\": \"Explicit PostgreSQL (5432/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002d\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"3389-3389\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [3389],\n            \"description\": \"Explicit RDP (3389/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002e\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"22-22\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [22],\n            \"description\": \"Explicit SSH (22/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002f\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"6379-6379\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [6379],\n            \"description\": \"Explicit Redis (6379/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002g\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"27017-27017\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [27017],\n            \"description\": \"Explicit MongoDB (27017/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002h\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"3306-3306\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [3306],\n            \"description\": \"Explicit MySQL (3306/tcp) open to entire internet\"\n          },\n          {\n            \"rule_id\": \"SG-002i\",\n            \"protocol\": \"tcp\",\n            \"port_range\": \"9200-9200\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [9200],\n            \"description\": \"Explicit Elasticsearch (9200/tcp) open to entire internet\"\n          }\n        ]\n      }\n    },\n    {\n      \"resource_id\": \"sg-0c9d922a6676b8021\",\n      \"resource_type\": \"AWS::EC2::SecurityGroup\",\n      \"check\": \"Unrestricted inbound access on sensitive ports from 0.0.0.0/0\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"sg_name\": \"VPCNonCompliant-SecurityGroup1-WQ13mkcvOFJM\",\n        \"vpc_id\": \"vpc-0a9630bfd89f3d25c\",\n        \"region\": \"us-east-1\",\n        \"attached_enis\": [],\n        \"open_rules\": [\n          {\n            \"rule_id\": \"SG-003a\",\n            \"protocol\": \"ALL (-1)\",\n            \"port_range\": \"0-65535\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [22, 3389, 3306, 5432, 1433, 6379, 27017, 9200],\n            \"description\": \"Allow-all rule exposes every port including all 8 sensitive ports to the entire internet\"\n          }\n        ]\n      }\n    },\n    {\n      \"resource_id\": \"sg-07b547f30ea078058\",\n      \"resource_type\": \"AWS::EC2::SecurityGroup\",\n      \"check\": \"Unrestricted inbound access on sensitive ports from 0.0.0.0/0 \u2014 DEFAULT security group\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"sg_name\": \"default\",\n        \"vpc_id\": \"vpc-0a9630bfd89f3d25c\",\n        \"region\": \"us-east-1\",\n        \"attached_enis\": [],\n        \"open_rules\": [\n          {\n            \"rule_id\": \"SG-004a\",\n            \"protocol\": \"ALL (-1)\",\n            \"port_range\": \"0-65535\",\n            \"source_cidr\": \"0.0.0.0/0\",\n            \"sensitive_ports_exposed\": [22, 3389, 3306, 5432, 1433, 6379, 27017, 9200],\n            \"description\": \"Default VPC security group has allow-all ingress from 0.0.0.0/0 \u2014 any resource without an explicit SG automatically inherits this rule\"\n          }\n        ]\n      }\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"sg-07aebdd225b47ba16\",\n      \"action\": \"1) IMMEDIATELY revoke the allow-all ingress rule (protocol -1, 0.0.0.0/0). 2) Revoke the explicit RDP rule (tcp/3389, 0.0.0.0/0). 3) For SSH/RDP access: enable AWS Systems Manager Session Manager and remove port 22/3389 entirely \u2014 no inbound rule needed. If a bastion is required, restrict to bastion SG ID or corporate VPN CIDR only (e.g., 10.x.x.x/32). 4) Re-add only the minimum required ports scoped to trusted source SGs or CIDRs. 5) Verify no ENI is attached before deletion; if attached, coordinate with workload owner.\",\n      \"priority\": \"P0 \u2014 Immediate (within 24 hours)\",\n      \"effort\": \"Low \u2014 AWS Console / CLI revoke-security-group-ingress commands; no architecture change required\"\n    },\n    {\n      \"resource_id\": \"sg-07be30eb18350e8b9\",\n      \"action\": \"1) IMMEDIATELY revoke the allow-all ingress rule (protocol -1, 0.0.0.0/0). 2) Revoke all 8 explicit open rules (SSH/22, RDP/3389, MySQL/3306, PostgreSQL/5432, MSSQL/1433, Redis/6379, MongoDB/27017, Elasticsearch/9200 \u2014 all from 0.0.0.0/0). 3) Database ports (3306, 5432, 1433): restrict source to the application-tier security group ID only \u2014 databases should never accept connections from outside the VPC. 4) Cache/search ports (6379, 27017, 9200): restrict to application-tier SG ID; place these services in private subnets with no internet gateway route. 5) SSH/RDP: use Session Manager (no open port) or restrict to bastion SG / corporate CIDR. 6) Consider enabling VPC Flow Logs to detect any prior exploitation.\",\n      \"priority\": \"P0 \u2014 Immediate (within 24 hours)\",\n      \"effort\": \"Medium \u2014 requires coordination with application team to identify correct source SGs; database rules need application-layer SG IDs\"\n    },\n    {\n      \"resource_id\": \"sg-0c9d922a6676b8021\",\n      \"action\": \"1) IMMEDIATELY revoke the allow-all ingress rule (protocol -1, 0.0.0.0/0). 2) Audit this SG's intended purpose (name suggests it was created as a non-compliant test SG). 3) If no longer needed, delete the security group entirely after confirming no ENI attachments. 4) If still required, add back only the minimum necessary rules scoped to specific source SG IDs or CIDRs with justification documented in the SG description field.\",\n      \"priority\": \"P0 \u2014 Immediate (within 24 hours)\",\n      \"effort\": \"Low \u2014 likely a test/non-compliant SG that can be deleted outright\"\n    },\n    {\n      \"resource_id\": \"sg-07b547f30ea078058\",\n      \"action\": \"1) IMMEDIATELY revoke the allow-all ingress rule (protocol -1, 0.0.0.0/0) from the default security group. 2) AWS best practice: the default SG should have ALL inbound rules removed (deny-all posture) since it is automatically assigned to resources that do not specify an explicit SG. 3) Add an SCP (Service Control Policy) or AWS Config rule 'vpc-default-security-group-closed' to enforce that the default SG never has open rules across all accounts. 4) Add a tag 'Purpose: DO-NOT-USE' and document this in your VPC runbook. 5) Review all resources in this VPC to ensure none is relying on the default SG for legitimate traffic.\",\n      \"priority\": \"P0 \u2014 Immediate (within 24 hours)\",\n      \"effort\": \"Low for the rule revocation; Medium for implementing the preventive SCP/Config rule organization-wide\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Highlights\n\n| Finding | SG ID | Exposed Ports | Source | Severity |\n|---|---|---|---|---|\n| SG-001 | `sg-07aebdd225b47ba16` | ALL + RDP/3389 | 0.0.0.0/0 | **CRITICAL** |\n| SG-002 | `sg-07be30eb18350e8b9` | ALL + 8 explicit ports | 0.0.0.0/0 | **CRITICAL** |\n| SG-003 | `sg-0c9d922a6676b8021` | ALL ports | 0.0.0.0/0 | **CRITICAL** |\n| SG-004 | `sg-07b547f30ea078058` *(default)* | ALL ports | 0.0.0.0/0 | **CRITICAL** |\n\n**Three compounding risk factors:**\n1. **Allow-all (`-1`) rules** on 3 of 4 SGs mean _every_ port is reachable, not just the 8 audited ones.\n2. **The `default` SG** is the highest-impact finding \u2014 any resource launched without an explicit SG assignment inherits these open rules automatically.\n3. **All 4 SGs share the same VPC** (`vpc-0a9630bfd89f3d25c`), suggesting a systematically misconfigured VPC baseline requiring a full audit of that VPC's networking posture.",
+  "token_usage": {
+    "estimated": 1550,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 82.1,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

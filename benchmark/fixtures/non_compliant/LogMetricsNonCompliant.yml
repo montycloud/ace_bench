@@ -1,0 +1,465 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  CloudTrailS3Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: "BucketOwnerFullControl"
+      BucketName: !Join
+        - "-"
+        - - "wafr-comp-ct-s3"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  CloudTrailS3Bucket2Policy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref CloudTrailS3Bucket2
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AWSCloudTrailAclCheck
+            Effect: Allow
+            Principal:
+              Service: "cloudtrail.amazonaws.com"
+            Action:
+              - "s3:GetBucketAcl"
+            Resource: !Sub "arn:aws:s3:::${CloudTrailS3Bucket2}"
+          - Sid: AWSCloudTrailWrite
+            Effect: Allow
+            Principal:
+              Service: "cloudtrail.amazonaws.com"
+            Action:
+              - "s3:PutObject"
+            Resource: !Sub "arn:aws:s3:::${CloudTrailS3Bucket2}/*"
+            Condition:
+              StringEquals:
+                "s3:x-amz-acl": "bucket-owner-full-control"
+  WartestkmsKeync:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS Key for wartestKinesisStreamNonCompliant
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "kms:*"
+            Resource: "*"
+
+  CloudTrailNC:
+    DependsOn:
+      - CloudTrailS3Bucket2Policy
+    Type: AWS::CloudTrail::Trail
+    Properties:
+      S3BucketName: !Ref CloudTrailS3Bucket2
+      EnableLogFileValidation: true
+      KMSKeyId: !GetAtt [WartestkmsKeync, Arn]
+      AdvancedEventSelectors:
+        - Name: "Management events selector"
+          FieldSelectors:
+            - Field: "eventCategory"
+              Equals:
+                - "Management"
+      IsLogging: true
+      TrailName: !Join
+        - "-"
+        - - "wafr-comp-ct"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+
+      IncludeGlobalServiceEvents: true
+      IsMultiRegionTrail: true
+      CloudWatchLogsLogGroupArn: !GetAtt CloudTrailLogGroupNC.Arn
+      CloudWatchLogsRoleArn: !GetAtt CloudTrailCloudWatchLogsNCRole.Arn
+
+  CloudTrailLogGroupNC:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "${AWS::StackName}-multi-region-cloudtrail-logs"
+
+  CloudTrailCloudWatchLogsNCRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CloudTrailCloudWatchLogsPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:PutLogEvents
+                  - logs:CreateLogStream
+                Resource: !GetAtt CloudTrailLogGroupNC.Arn
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - kms:Decrypt
+                Resource:
+                  - !Sub arn:aws:s3:::${CloudTrailS3Bucket2}/*
+                  - !Sub arn:aws:s3:::${CloudTrailS3Bucket2}
+                  - !GetAtt [WartestkmsKeync, Arn]
+
+  SNSTopicNC:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      DisplayName: ""
+      TopicName: !Join
+        - "-"
+        - - "Sample-Topic"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+
+  SNSSubscriptionNC:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref SNSTopicNC
+      Protocol: "lambda"
+      Endpoint: !GetAtt LambdaFunctionSample.Arn
+
+  LambdaFunctionSample:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - "Lambda"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      Handler: "index.handler"
+      Role: !GetAtt LambdaExecutionRoleNC.Arn
+      Runtime: "nodejs18.x"
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            console.log("Event: ", JSON.stringify(event, null, 2));
+            return {
+              statusCode: 200,
+              body: JSON.stringify('Hello from Lambda!'),
+            };
+          };
+
+  LambdaExecutionRoleNC:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Join
+        - "-"
+        - - "LambdaExecutionRoleNC"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaExecutionPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+              - Effect: "Allow"
+                Action: "sns:Publish"
+                Resource: !Ref SNSTopicNC
+
+  #wrong pattern
+  VPCChangesLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: "{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) }"
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "VpcEventCount"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  VPCChangesCloudWatchAlarmNC:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "VPCNetworkConfigChangesAlarmNC"
+      AlarmDescription: "Triggered by AWS VPC(s) environment config changes."
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref SNSTopicNC
+      MetricName: "VpcEventCount"
+      Namespace: "CloudTrailMetrics"
+      Statistic: "Sum"
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+  #wrong pattern
+  CloudtrailChnagesLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: "{ ($.eventName = Trail) || ($.eventName = UpdateTraile) || ($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }"
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "CloudTrailEventCount"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  CloudtrailChnagesCloudWatchAlarmNC:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "CloudTrailChangesAlarmNC"
+      AlarmDescription: "Triggered by AWS CloudTrail configuration changes."
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref SNSTopicNC
+      MetricName: "CloudTrailEventCount"
+      Namespace: "CloudTrailMetrics"
+      Statistic: "Sum"
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+
+  # no cloudwatch alarm for this metric
+  ConfigChangesLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: "{ ($.eventSource = config.amazonaws.com) && (($.eventName = StopConfigurationRecorder)||($.eventName = DeleteDeliveryChannel)||($.eventName = PutDeliveryChannel)||($.eventName = PutConfigurationRecorder)) }"
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "ConfigEventCount"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  # no SNS target for this metric alarm
+  S3ChangesLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: "{ ($.eventSource = s3.amazonaws.com) && (($.eventName = PutBucketAcl) || ($.eventName = PutBucketPolicy) || ($.eventName = PutBucketCors) || ($.eventName = PutBucketLifecycle) || ($.eventName = PutBucketReplication) || ($.eventName = DeleteBucketPolicy) || ($.eventName = DeleteBucketCors) || ($.eventName = DeleteBucketLifecycle) || ($.eventName = DeleteBucketReplication)) }"
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "S3BucketConfigChanges"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  S3ChangesCloudWatchAlarmNC:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "S3BucketConfigChangesAlarmNC"
+      AlarmDescription: "Triggered by AWS S3 Bucket config changes."
+      ActionsEnabled: true
+      # AlarmActions:
+      #   - !Ref SNSTopicNC
+      MetricName: "S3BucketConfigChanges"
+      Namespace: "CloudTrailMetrics"
+      Statistic: "Sum"
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+
+  #wrong pattern
+  UnauthorizedAPICallChangesLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: '{($.errorCode = "*UnauthorizedOperation")}'
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "UAuthorizationAPICallFailure"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  UnauthorizedAPICallChangesCloudWatchAlarmNC:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "AWSAuthorizationFailureAlarmNC"
+      AlarmDescription: "Triggered when unauthorized AWS API calls are made."
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref SNSTopicNC
+      MetricName: "UAuthorizationAPICallFailure"
+      Namespace: "CloudTrailMetrics"
+      Statistic: "Sum"
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+
+  #no alarm exist for this one
+  NonMFASignInLogsMetricFilterNC:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      FilterPattern: '{ ($.eventName = "ConsoleLogin") && ($.additionalEventData.MFAUsed != "Yes") && ($.userIdentity.type = "IAMUser") && ($.responseElements.ConsoleLogin = "Success") }'
+      LogGroupName: !Ref CloudTrailLogGroupNC
+      MetricTransformations:
+        - MetricName: "ConsoleSignInWithoutMfaCount"
+          MetricNamespace: "CloudTrailMetrics"
+          MetricValue: "1"
+
+  NonMFASignInCloudWatchAlarmNC:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "ConsoleSignInWithoutMfaAlarmNC"
+      AlarmDescription: "Triggered by sign-in requests made without MFA."
+      ActionsEnabled: true
+      # AlarmActions:
+      #   - !Ref SNSTopicNC
+      MetricName: "ConsoleSignInWithoutMfaCount"
+      Namespace: "CloudTrailMetrics"
+      Statistic: "Sum"
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+
+  DeleteS3LambdaFunctionNC:
+    Type: AWS::Lambda::Function
+    Properties:
+      Timeout: 120
+      FunctionName: !Sub
+        - delete-s3-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      Runtime: python3.11
+      Environment:
+        Variables:
+          Account: !Ref AWS::AccountId
+          Bucket_Name: !Ref CloudTrailS3Bucket2
+      Handler: "index.handler"
+      Role: !GetAtt FullAccessRoleNC.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          import os
+          def handler(event, context):
+            s3_bucket = os.environ['Bucket_Name']
+            responseData = {}
+            if event["RequestType"] == "Delete":
+              try:
+                s3 = boto3.resource('s3')
+                bucket = s3.Bucket(s3_bucket)
+                bucket.objects.all().delete()
+                bucket.delete(ExpectedBucketOwner=os.environ['Account'])
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDLogNC")
+                return
+              except:
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDLogNC")
+                return
+            else:
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDLogNC")
+              return
+  DeleteS3CustomResourceNC:
+    Type: Custom::DeleteS3
+    Properties:
+      ServiceToken: !GetAtt DeleteS3LambdaFunctionNC.Arn
+      Timeout: 120
+
+  FullAccessRoleNC:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub
+        - wafr-s3-access-role-${AWS::AccountId}-${RandomGUID}
+        - RandomGUID: !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - /
+                  - !Ref AWS::StackId
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: "S3FullAccessPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                Resource:
+                  - !GetAtt CloudTrailS3Bucket2.Arn
+                  - !Sub "${CloudTrailS3Bucket2.Arn}/*"
+
+Outputs:
+  AccountIdRegion:
+    Value: !Sub ${AWS::AccountId}/${AWS::Region}
+  SNSTopicName:
+    Value: !GetAtt SNSTopicNC.TopicName
+  ConfigChangesLogsMetricFilterNC:
+    Value: !Ref ConfigChangesLogsMetricFilterNC
+  S3ChangesLogsMetricFilterNC:
+    Value: !Ref S3ChangesLogsMetricFilterNC
+  NonMFASignInLogsMetricFilterNC:
+    Value: !Ref NonMFASignInLogsMetricFilterNC

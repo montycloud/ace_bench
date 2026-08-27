@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "Album"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "Album"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      TableName:
+        !Join [
+          "-",
+          ["test-table", !Select [2, !Split ["/", !Ref AWS::StackId]]],
+        ]
+Outputs:
+  DynamoDBTableId:
+    Description: DynamoDBTable ID
+    Value:
+      Ref: DynamoDBTable
+  DynamoDBTableArn:
+    Description: DynamoDBTable Arn
+    Value: !GetAtt [DynamoDBTable, Arn]

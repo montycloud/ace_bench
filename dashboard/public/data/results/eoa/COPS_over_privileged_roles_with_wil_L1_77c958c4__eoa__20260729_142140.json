@@ -1,0 +1,112 @@
+{
+  "id": "COPS_over_privileged_roles_with_wil_L1_77c958c4__eoa__20260729_142140",
+  "scenario_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+  "scenario_name": "Over-Privileged Roles with Wildcard Actions",
+  "category": "security",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T14:21:40.143140+00:00",
+  "total_score": 0.25,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 0.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources by findings count \u2014 IAM privilege checks surface here"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status to understand scope of IAM privilege violations"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top checks/resources by findings count \u2014 IAM privilege checks surface here",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get overall findings status to understand scope of IAM privilege violations",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "NCLambda-adminRole-us-east-1"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "NCLambda-adminRole-us-east-1"
+      ],
+      "unconfirmed": []
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": false,
+      "issues": [
+        "no valid JSON found in response"
+      ]
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items from env:fx/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/l1/v1 | packet:cp/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List every IAM policy (managed or inline) whose statements include Action=\"*\" with Resource=\"*\" and a non-restricted Principal; include role name, policy ARN, and the attached principals. Recommendation: Flag each as immediate least-privilege violation and reference the workload(s) that should drive the scoped replacement policy. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-over-privileged-roles-with-wil-L1-77c958c4",
+    "description": "IAM roles define what actions AWS services and code can perform. A role with Action:* (wildcard) in its policy grants unlimited permissions \u2014 any code running under that role can create, delete, or modify anything in the account. The principle of least privilege requires granting only the specific permissions needed, nothing more. Wildcard policies are a critical misconfiguration that turns a compromised Lambda function or EC2 instance into a full account takeover. the agent should identify IAM roles or policies with overly broad wildcard action grants.",
+    "objective": "Surface every IAM artifact granting administrative or wildcard permissions and list principals affected; capture all must-find items from env:fx/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/l1/v1 | packet:cp/ace-bench/security-risk-com/iam-least-privilege/over-privileged-roles-with-wildcar/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List every IAM policy (managed or inline) whose statements include Action=\"*\" with Resource=\"*\" and a non-restricted Principal; include role name, policy ARN, and the attached principals. Recommendation: Flag each as immediate least-privilege violation and reference the workload(s) that should drive the scoped replacement policy.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | root use or persistent admin credential creation",
+    "wafr_pillar": "Security",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "NCLambda-adminRole-us-east-1"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is IAM roles or policies with wildcard actions (Action:* or overly broad permissions) violating least privilege?",
+      "Did the agent identify specific IAM role or policy names \u2014 or, if tools could not surface role names, explicitly acknowledge that rather than fabricating names?",
+      "Did the agent avoid fabricating IAM role names, policy ARNs, or permission details not verifiable from tool output?",
+      "Did the agent recommend scoping down permissions to least privilege (specifying exact actions and resources needed rather than wildcards)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I need to decline this request. **IAM policy analysis is outside my scope.**\n\nI am an **EC2 Instance Optimization Agent**, and my capabilities are strictly limited to:\n\n- \u2705 Identifying **underutilized EC2 instances** (CPU metrics via CloudWatch)\n- \u2705 Providing **right-sizing recommendations** with cost savings estimates\n- \u2705 Flagging **stopped instances** still incurring EBS costs\n- \u2705 **Resizing instances** (only when explicitly authorized by the user)\n\n---\n\n**What you asked for involves:**\n\n| Topic | In My Scope? |\n|---|---|\n| IAM policy scanning | \u274c No |\n| IAM managed/inline policy analysis | \u274c No |\n| Principal & Resource wildcard detection | \u274c No |\n| Least-privilege violation reporting | \u274c No |\n\n---\n\n**To accomplish your IAM security goal, I recommend:**\n\n1. **AWS IAM Access Analyzer** \u2014 natively detects overly permissive policies with `Action: \"*\"` / `Resource: \"*\"`\n2. **AWS Security Hub** \u2014 aggregates IAM findings under CIS AWS Foundations Benchmark controls (e.g., Control 1.16)\n3. **AWS Trusted Advisor** \u2014 flags IAM policies with full `*:*` permissions\n4. A dedicated **Cloud Security Posture Management (CSPM)** agent or tool scoped for IAM\n\n---\n\nWould you like me to run an **EC2 optimization scan** instead? I can check for underutilized instances, right-sizing opportunities, and stopped instances incurring unnecessary EBS costs.",
+  "token_usage": {
+    "estimated": 281,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 8.5,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

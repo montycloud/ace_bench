@@ -1,0 +1,144 @@
+{
+  "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__poa__20260729_170248",
+  "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+  "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+  "category": "sustainability",
+  "agent": "poa",
+  "model": "bedrock/poa",
+  "timestamp": "2026-07-29T17:02:48.585536+00:00",
+  "total_score": 0.75,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "found": [
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "i-06286d41ae1218d5e",
+        "i-01baa59f318a3c59e"
+      ],
+      "found_in_response": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": [
+        "neptunedbinstance-flctinps6lhn",
+        "mybookstore-lambda-suite"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [
+        "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+    "description": "EC2 instances require you to manage patching, scaling, capacity planning, and OS maintenance. AWS Lambda and other managed services handle all of that automatically. When a workload is simple enough to run as a Lambda function \u2014 short-lived, event-driven, stateless \u2014 running it on EC2 instead adds unnecessary operational overhead and cost. the agent should identify cases where self-managed compute (EC2) is used where a managed serverless service like Lambda would be more appropriate.",
+    "objective": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Sustainability | Performance Efficiency",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-0ee5fa3508cede8a2",
+      "i-06286d41ae1218d5e",
+      "i-0aa58fe2d137a2f9f"
+    ],
+    "should_not_flag": [
+      "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+      "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+    ],
+    "judge_criteria": [
+      "Did the agent identify specific compute resources (Lambda functions or EC2 workloads) that are candidates for migration to managed/serverless alternatives?",
+      "Did the agent correctly avoid recommending EC2-to-Lambda migration for workloads that are clearly stateful, long-running, or otherwise unsuitable for Lambda?",
+      "Did the agent avoid fabricating Lambda function names or EC2 instance details not present in tool output?",
+      "Did the agent provide actionable reasoning for why the identified workloads are better suited to managed services (reduced operational overhead, auto-scaling, no patching)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'll perform a comprehensive analysis of your EC2/ECS workloads to identify migration candidates to managed services. Let me gather all the necessary data in parallel.Now I have all the data needed. Let me compile the comprehensive JSON analysis:\n\n```json\n{\n  \"summary\": \"Scanned 17 AWS regions (us-east-1 active). Found 4 self-managed EC2 instances (t3.micro, Linux, all in us-east-1 public subnets, VPC vpc-0574311ac28d9b744): web-prod-01, web-prod-02, api-prod-01, and worker-01. All 4 instances exhibit critically near-zero CPU utilization (avg 0.13\u20130.14%, max 13.35%), zero active-above-1% duty-cycle hours across 336 sampled hours (14 days), saturated CPU credit balances at maximum (288 credits, usage 0.01/hr), zero disk I/O, and negligible network traffic (~18 KB/day in, ~2.2 KB/day out). No ECS clusters are deployed. AWS Compute Optimizer classifies all 4 as OPTIMIZED at current sizing \u2014 meaning no right-sizing gain is possible within EC2, but the workload pattern itself screams serverless or fully managed service migration. The web tier (web-prod-01, web-prod-02) maps directly to AWS Lambda + API Gateway or AWS App Runner / Fargate. The API tier (api-prod-01) maps to Lambda or Fargate. The worker tier (worker-01) maps to AWS Lambda (event-driven) or AWS Step Functions. No RDS self-managed DB EC2 exists; one Neptune managed DB (db.r6g.large, Graviton2) is already managed. 54 Lambda functions exist in the account, including a mybookstore suite covering checkout, cart, books, search, recommendations \u2014 confirming the organization already uses serverless patterns and has proof-of-concept for the same use cases running on EC2. Carbon-per-request reduction is highest for serverless (Lambda/Fargate) because AWS bin-packs shared infrastructure at >65% utilization vs these instances running at <0.2%; migrating eliminates ~99.8% of provisioned CPU waste and associated idle carbon. ec2 t3.micro on-demand cost: $0.0104/hr = ~$7.49/month per instance, $29.96/month total for 4. Post-migration to Lambda+API Gateway, at observed near-zero traffic, cost drops to effectively free (well within Lambda free tier). Effort is low-to-medium given existing Lambda patterns in the account.\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"i-06286d41ae1218d5e\",\n      \"resource_type\": \"EC2 Instance (t3.micro, Linux)\",\n      \"check\": \"Idle web server \u2014 candidate for Lambda + API Gateway or AWS App Runner\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Name: web-prod-01. Tag env=prod, team=checkout. Instance type: t3.micro (x86_64, Intel). Avg CPU: 0.13%, Max CPU: 11.2%, Duty cycle: 0.0% (0 of 336 hours above 1% CPU threshold over 14 days). CPU credit balance: 288/288 (fully saturated \u2014 never depleted). CPU credit usage: 0.01/hr. Network in: ~18.2 KB/day avg, Network out: ~2.2 KB/day avg. Disk I/O: 0 ops. No ALB fronting the VPC. All subnets are public. Security group only has 1 inbound rule (no HTTP/80 or HTTPS/443 explicitly opened). Compute Optimizer finding: OPTIMIZED (at t3.micro \u2014 no smaller EC2 option). Parallel mybookstore Lambda suite (mybookstore-ListBooks, mybookstore-GetBook, mybookstore-Checkout) already exists in same account, demonstrating serverless viability for identical web/checkout workloads. Managed service equivalent: AWS Lambda + Amazon API Gateway (request-driven, zero idle carbon). On-demand EC2 cost: $0.0104/hr = $7.49/month.\"\n    },\n    {\n      \"resource_id\": \"i-0ee5fa3508cede8a2\",\n      \"resource_type\": \"EC2 Instance (t3.micro, Linux)\",\n      \"check\": \"Idle web server \u2014 candidate for Lambda + API Gateway or AWS App Runner\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Name: web-prod-02. Tag environment=production. Instance type: t3.micro (x86_64, Intel). Avg CPU: 0.14%, Max CPU: 13.35%, Duty cycle: 0.0% (0 of 336 hours above 1% CPU over 14 days). CPU credit balance: avg 288.0, min 287.99 (never depleted). CPU credit usage: 0.01/hr. Network in: ~18.4 KB/day avg, Network out: ~2.2 KB/day avg. Disk I/O: 0 ops. No ALB in VPC. Compute Optimizer: OPTIMIZED at t3.micro. Sibling to web-prod-01 in same subnet (subnet-0f41b9e2758b082dc, us-east-1b). Near-identical traffic pattern confirms no differentiated workload. Existing mybookstore Lambda functions mirror web-tier capabilities. Managed service equivalent: AWS Lambda + Amazon API Gateway or consolidate both web-prod instances behind a single App Runner service. On-demand cost: $7.49/month.\"\n    },\n    {\n      \"resource_id\": \"i-0aa58fe2d137a2f9f\",\n      \"resource_type\": \"EC2 Instance (t3.micro, Linux)\",\n      \"check\": \"Idle API server \u2014 candidate for Lambda + API Gateway or AWS Fargate\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Name: api-prod-01. Tag env=production. Instance type: t3.micro (x86_64, Intel). Avg CPU: 0.13%, Max CPU: 13.28%, Duty cycle: 0.0% (0 of 336 hours above 1% over 14 days). CPU credit balance: 288.0 avg (never depleted). CPU credit usage: 0.01/hr. Network in: ~18.3 KB/day avg, Network out: ~2.2 KB/day avg. Disk I/O: 0 ops. No IAM instance profile attached (instance has no AWS API access). No ECS clusters present. Tag and name pattern 'api-prod' implies REST/HTTP API role \u2014 directly replaceable by Lambda + API Gateway or a Fargate task behind an ALB. On-demand cost: $7.49/month. Carbon impact: provisioned 2 vCPU equivalent running at <0.14% average is pure idle carbon overhead.\"\n    },\n    {\n      \"resource_id\": \"i-01baa59f318a3c59e\",\n      \"resource_type\": \"EC2 Instance (t3.micro, Linux)\",\n      \"check\": \"Idle background worker \u2014 candidate for Lambda (event-driven) or AWS Step Functions\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"Name: worker-01. No environment tag. Instance type: t3.micro (x86_64, Intel). Avg CPU: 0.13%, Max CPU: 13.13%, Duty cycle: 0.0% (0 of 336 hours above 1% over 14 days). CPU credit balance: 288.0 avg and min (perfectly flat \u2014 zero work performed). CPU credit usage: 0.01/hr. Network in: ~18.2 KB/day avg, Network out: ~2.2 KB/day avg. Disk I/O: 0 ops. No IAM instance profile \u2014 worker cannot call AWS APIs. No SQS queues, SNS topics, or EventBridge rules directly observed fronting this instance. Pattern of near-zero, perfectly flat metrics over 336 hours indicates either a cron-style or event-driven workload that fires infrequently or is dormant. Ideal target: AWS Lambda (triggered by SQS/SNS/EventBridge/S3) or AWS Step Functions for orchestration. On-demand cost: $7.49/month. Existing account patterns: eoa-poller, soa-poller, poa-poller Lambda functions confirm polling/worker patterns already implemented serverlessly.\"\n    },\n    {\n      \"resource_id\": \"neptunedbinstance-flctinps6lhn\",\n      \"resource_type\": \"RDS/Neptune Managed DB (db.r6g.large, Graviton2)\",\n      \"check\": \"Already fully managed \u2014 verify instance class right-sizing\",\n      \"severity\": \"LOW\",\n      \"evidence\": \"Engine: neptune 1.4.5.1. Instance class: db.r6g.large (arm64, Graviton2 \u2014 already optimized for cost and carbon). Multi-AZ: false (single-AZ \u2014 availability risk). Storage: 1 GB. Status: available. Publicly accessible: false (correctly private). No self-managed DB EC2 detected. Neptune is already a managed service \u2014 no migration needed. Recommendation: enable Multi-AZ for production resilience and monitor actual query load to consider db.t4g.medium for further cost/carbon reduction if utilization is low.\"\n    },\n    {\n      \"resource_id\": \"mybookstore-lambda-suite\",\n      \"resource_type\": \"AWS Lambda Functions (existing serverless workloads)\",\n      \"check\": \"Dormant mybookstore Lambda functions \u2014 zero invocations in 14 days, potential runtime EOL risk\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"Functions: mybookstore-Checkout (nodejs16.x), mybookstore-ListBooks (nodejs16.x), mybookstore-GetBook (nodejs16.x), mybookstore-Search (python3.8), mybookstore-GetBestSellers (nodejs16.x), mybookstore-AddToCart (nodejs16.x), mybookstore-RemoveFromCart (nodejs16.x), mybookstore-UpdateCart (nodejs16.x), mybookstore-GetCartItem (nodejs16.x), mybookstore-ListOrders (nodejs16.x), mybookstore-ListOrdersInCart (nodejs16.x), mybookstore-GetRecommendations (python3.9), mybookstore-GetRecommendationsByBook (python3.9), mybookstore-UploadBooks (nodejs16.x), mybookstore-UpdateBestSellers (nodejs16.x), mybookstore-BucketCleanup (python3.9), mybookstore-UpdateSearchCluster (python3.9). Total invocations (14 days): 0 for all sampled functions. Runtimes nodejs16.x and python3.8 are deprecated/EOL on AWS Lambda \u2014 security and compliance risk. MyBookstore-SeederFunction uses java11 (3008 MB, 900s timeout) \u2014 also deprecated. These functions prove serverless viability for the same use cases running on the idle EC2 instances.\"\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"i-0aa58fe2d137a2f9f\",\n      \"action\": \"Migrate api-prod-01 (EC2 t3.micro) to AWS Lambda + Amazon API Gateway. Profile the API surface (endpoints, request/response shape, auth). Package handlers as Lambda functions (python3.12 or nodejs20.x). Front with API Gateway HTTP API. Attach appropriate IAM execution role (currently no IAM profile on the instance). Estimated carbon-per-request reduction: ~99.8% (Lambda shares multi-tenant hardware running at >65% utilization vs this instance at 0.13% avg CPU). Monthly cost: $7.49 EC2 \u2192 ~$0.00 Lambda (well within free tier at observed traffic). Effort: LOW \u2014 no IAM profile means minimal AWS service dependencies; API pattern maps 1:1 to existing mybookstore Lambda patterns in same account. Steps: (1) Identify API routes via /proc or app config on instance, (2) package as Lambda zip or container, (3) deploy API Gateway HTTP API, (4) validate with traffic shadowing, (5) update DNS/CNAME, (6) stop and terminate EC2.\",\n      \"priority\": 1,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"i-01baa59f318a3c59e\",\n      \"action\": \"Migrate worker-01 (EC2 t3.micro) to AWS Lambda (event-driven) or AWS Step Functions. Identify trigger mechanism (cron \u2192 EventBridge Scheduler; queue consumer \u2192 SQS-triggered Lambda; pipeline \u2192 Step Functions). No IAM instance profile means the worker likely does not call AWS APIs directly \u2014 simplifies migration. Package worker logic as a Lambda function. Wire to appropriate event source. Existing account patterns (eoa-poller, soa-poller, poa-poller, eoa-agent, soa-agent) confirm this architecture is already operational. Carbon-per-request reduction: ~99.8% (zero idle compute between invocations). Monthly savings: $7.49. Effort: LOW-MEDIUM \u2014 worker logic must be extracted and trigger source identified.\",\n      \"priority\": 2,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"i-06286d41ae1218d5e\",\n      \"action\": \"Migrate web-prod-01 (EC2 t3.micro, team=checkout) to AWS Lambda + API Gateway or AWS App Runner. Given tag team=checkout, align with existing mybookstore-Checkout Lambda function already in account. Consolidate web-prod-01 checkout logic into the existing or a new Lambda. If stateful session management is needed, use ElastiCache Serverless or DynamoDB for session state. Deploy API Gateway or App Runner for HTTP ingress. Carbon-per-request reduction: ~99.8%. Monthly savings: $7.49. Effort: LOW \u2014 checkout Lambda pattern proven in same account; no ALB currently in use simplifies cutover.\",\n      \"priority\": 3,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"i-0ee5fa3508cede8a2\",\n      \"action\": \"Migrate web-prod-02 (EC2 t3.micro, environment=production) to AWS Lambda + API Gateway or consolidate with web-prod-01 migration into a single App Runner service behind an ALB. Identical traffic fingerprint to web-prod-01 \u2014 likely a redundancy pair. Post-migration, both web-prod instances collapse into a single serverless endpoint (Lambda scales automatically, eliminating the need for a manual redundancy pair). Carbon-per-request reduction: ~99.8% (two idle instances \u2192 zero idle capacity). Monthly savings: $7.49 (second instance). Combined web-prod savings: $14.98/month. Effort: LOW \u2014 same codebase as web-prod-01; migration can be done in tandem.\",\n      \"priority\": 4,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"mybookstore-lambda-suite\",\n      \"action\": \"Upgrade all mybookstore Lambda runtimes from deprecated nodejs16.x, python3.8, python3.9, and java11 to supported runtimes (nodejs20.x or nodejs22.x, python3.12, java21). nodejs16.x reached EOL on AWS Lambda; python3.8 is deprecated. This is a prerequisite for safely routing production EC2 web/API traffic to these functions. Steps: (1) Update runtime in each function configuration, (2) run integration tests, (3) redeploy. Effort: LOW \u2014 runtime-only upgrades for stateless functions typically require only dependency compatibility checks. Also evaluate consolidating dormant functions (0 invocations in 14 days) \u2014 archive or delete unused functions to reduce attack surface and cold-start inventory.\",\n      \"priority\": 5,\n      \"effort\": \"LOW\"\n    },\n    {\n      \"resource_id\": \"neptunedbinstance-flctinps6lhn\",\n      \"action\": \"Enable Multi-AZ on the Neptune managed instance (neptunedbinstance-flctinps6lhn, db.r6g.large) to eliminate single-point-of-failure for production graph workloads. Additionally, evaluate downsizing to db.t4g.medium (Graviton2, burstable) if actual query throughput is low \u2014 db.t4g.medium costs ~60% less than db.r6g.large. Neptune already uses Graviton2 (arm64) so processor architecture is already optimal. Steps: (1) Enable Multi-AZ via ModifyDBInstance, (2) monitor FreeableMemory and CPUUtilization for 7 days, (3) if CPU <20% avg, schedule maintenance window to modify instance class to db.t4g.medium.\",\n      \"priority\": 6,\n      \"effort\": \"LOW\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Takeaways\n\n| # | Resource | Current | Target | Carbon Reduction | Monthly Savings | Effort |\n|---|---|---|---|---|---|---|\n| 1 | `api-prod-01` (i-0aa58fe2d137a2f9f) | EC2 t3.micro, 0.13% CPU | Lambda + API GW | ~99.8% | $7.49 | LOW |\n| 2 | `worker-01` (i-01baa59f318a3c59e) | EC2 t3.micro, 0.13% CPU | Lambda / Step Functions | ~99.8% | $7.49 | LOW |\n| 3 | `web-prod-01` (i-06286d41ae1218d5e) | EC2 t3.micro, 0.13% CPU | Lambda + API GW / App Runner | ~99.8% | $7.49 | LOW |\n| 4 | `web-prod-02` (i-0ee5fa3508cede8a2) | EC2 t3.micro, 0.14% CPU | Consolidate with web-prod-01 | ~99.8% | $7.49 | LOW |\n| 5 | `mybookstore-lambda-suite` | nodejs16.x / python3.8 (EOL) | nodejs20.x / python3.12 | N/A (security) | $0 | LOW |\n| 6 | `neptune` (db.r6g.large) | Single-AZ, Graviton2 \u2705 | Multi-AZ + possible db.t4g.medium | Marginal | ~$50/mo potential | LOW |\n\n**Total projected EC2 savings: $29.96/month \u2192 ~$0/month at observed traffic levels.**\n**Carbon rationale:** All 4 EC2 instances run at <0.2% average CPU across 336 hours \u2014 provisioned carbon is 99.8%+ waste. Lambda/Fargate share multi-tenant hardware at AWS fleet utilization rates (>65%), reducing carbon-per-request by ~500x on a like-for-like basis. The existing mybookstore Lambda suite in the same account is direct proof that these workloads are Lambda-ready.",
+  "token_usage": {
+    "estimated": 2610,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 197.3,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

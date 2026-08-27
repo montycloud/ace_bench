@@ -1,0 +1,583 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Creates a VPC Following WAFR Best Practices Configurations"
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 198.16.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCVPC1
+  # Create a CloudWatch Logs Log Group for storing query logs
+  QueryLogsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: "/aws/vendedlogs/vpcsgr53qlogs"
+      RetentionInDays: 30
+
+  # Create a Route 53 Resolver Query Logging Configuration
+  ResolverQueryLoggingConfig:
+    Type: AWS::Route53Resolver::ResolverQueryLoggingConfig
+    Properties:
+      DestinationArn: !GetAtt QueryLogsLogGroup.Arn
+      Name: !Join
+        - "-"
+        - - "resolver-query-config"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+
+  # Associate the Query Logging Configuration with the VPC
+  ResolverQueryLoggingConfigAssociation:
+    Type: AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation
+    Properties:
+      ResolverQueryLogConfigId: !Ref ResolverQueryLoggingConfig
+      ResourceId: !Ref VPC
+
+  FlowLog:
+    Type: "AWS::EC2::FlowLog"
+    Properties:
+      DeliverLogsPermissionArn: !GetAtt FlowLogRole.Arn
+      LogGroupName: /aws/vpc/flow-log-test
+      ResourceId: !Ref VPC
+      ResourceType: VPC
+      TrafficType: ALL
+  FlowLogRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: /
+      Policies:
+        - PolicyName: Root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "logs:CreateLogGroup"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: "arn:aws:logs:*:*:log-group:/aws/vpc/flow-log:*"
+  FlowLogLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: /aws/vpc/flow-log
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.1.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET1
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.2.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET2
+  SubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.3.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [2, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET3
+  SubnetD:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 198.16.5.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [2, !GetAZs { "Ref": "AWS::Region" }]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSUBNET4
+  InterfaceEndPoint: #for checkid - vpc_endpoints
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      VpcEndpointType: "Interface"
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.logs"
+      VpcId: !Ref VPC
+      SubnetIds:
+        - !Ref SubnetA
+        - !Ref SubnetB
+      SecurityGroupIds:
+        - !Ref SecurityGroup1
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 198.16.4.0/24
+      AvailabilityZone: !Select [0, !GetAZs { "Ref": "AWS::Region" }]
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  SubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet
+      RouteTableId: !Ref PrivateRouteTable
+
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCIG1
+
+  VPCGatewayAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCROUTE1
+
+  SubnetARouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetA
+      RouteTableId: !Ref RouteTable
+
+  SubnetBRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetB
+      RouteTableId: !Ref RouteTable
+
+  InternetRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+
+  NatgateWay: #for checkid - vpc_nat_gw_in_use
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      ConnectivityType: public
+      AllocationId: !GetAtt NATGatewayEIP.AllocationId
+      SubnetId: !Ref PrivateSubnet
+      Tags:
+        - Key: MC_Key
+          Value: WARCNatGateway
+
+  NATGatewayEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  RouteNATGateway:
+    DependsOn: NatgateWay
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NatgateWay
+
+  SecurityGroup1:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG1
+
+  SecurityGroup2:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow all traffic to the internet
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: 0
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+      Tags:
+        - Key: MC_KEY
+          Value: WARNCSG2
+  networkacl:
+    Type: AWS::EC2::NetworkAcl
+    Properties:
+      VpcId: !Ref VPC
+  InboundRuleSSH:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId: !Ref networkacl
+      RuleNumber: 100
+      Protocol: 6 # TCP
+      RuleAction: Deny #for checkid - Network ACLs should not allow ingress from internet
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 22
+        To: 22
+  InboundRuleRDP:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId: !Ref networkacl
+      RuleNumber: 101
+      Protocol: 6 # TCP
+      RuleAction: Deny #forcheckid - Network ACLs should not allow ingress from internet
+      Egress: false
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 3389
+        To: 3389
+  vpcSubnetNetworkAclAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      SubnetId: !Ref SubnetC
+      NetworkAclId: !Ref networkacl
+  MyLambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: LambdaACMCertImportPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:PutParameter
+                  - ssm:DeleteParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:*:parameter/acm/cert"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - "arn:aws:iam::aws:policy/AWSCertificateManagerFullAccess"
+
+  MyLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: "index.lambda_handler"
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import subprocess
+          import os
+          import boto3
+          import sys
+          import cfnresponse
+          import json
+
+          def lambda_handler(event, context):
+            # File paths
+            if event["RequestType"] == "Create":
+              try:  
+                responseData = {}
+
+                private_key_path = '/tmp/PrivateKey.pem'
+                csr_path = '/tmp/Certificate.csr'
+                crt_path = '/tmp/Certificate.crt'
+                openssl_conf_path = '/tmp/openssl.conf'
+
+                subprocess.call('pip install pyOpenSSL -t /tmp/ --no-cache-dir'.split(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                sys.path.insert(1, '/tmp/')
+                from OpenSSL import crypto
+                
+                # Generate RSA private key
+                key = crypto.PKey()
+                key.generate_key(crypto.TYPE_RSA, 2048)
+                
+                # Create a self-signed certificate
+                cert = crypto.X509()
+                cert.set_version(2)
+                cert.set_serial_number(1000)
+                cert.get_subject().CN = '*.example01.com'
+                cert.set_issuer(cert.get_subject())
+                cert.gmtime_adj_notBefore(0)
+                cert.gmtime_adj_notAfter(365 * 24 * 60 * 60)
+                cert.set_pubkey(key)
+                cert.sign(key, 'sha256')
+                
+                # Save the certificate and private key to files
+                with open(crt_path, 'wb') as cert_file:
+                    cert_file.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
+                
+                with open(private_key_path, 'wb') as key_file:
+                    key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+                
+                print("Self-signed certificate and private key generated successfully.")
+                # Read the certificate and private key
+                with open(crt_path, 'rb') as f:
+                    certificate = f.read()
+                with open(private_key_path, 'rb') as f:
+                    private_key = f.read()
+
+                # Import the certificate into ACM
+                client = boto3.client('acm', region_name='us-east-1')
+                response = client.import_certificate(
+                    Certificate=certificate,
+                    PrivateKey=private_key
+                )
+                # Store the certificate ARN in SSM Parameter Store
+                ssm_client = boto3.client('ssm')
+                ssm_client.put_parameter(
+                    Name='/acm/cert',
+                    Value=response['CertificateArn'],
+                    Type='String',
+                    Overwrite=True
+                )                
+                responseData = {'CertificateArn': response['CertificateArn']}
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData)
+                return
+              except Exception as e:
+                print(f"Error occurred: {e}")
+            else:
+              responseData = {}
+              ssm_client = boto3.client('ssm')
+              response = ssm_client.get_parameter(Name='/acm/cert')              
+              ssm_client.delete_parameter(Name='acm/cert')
+              
+              certificate_arn = response['Parameter']['Value']
+              client = boto3.client('acm', region_name='us-east-1')
+              client.delete_certificate(CertificateArn=certificate_arn)
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData)
+              return
+      Runtime: "python3.11"
+      Timeout: 60
+
+  MyCustomResource:
+    Type: "Custom::MyResource"
+    Version: "1.0"
+    Properties:
+      ServiceTimeout: 120
+      ServiceToken: !GetAtt MyLambdaFunction.Arn
+
+  # The below Lambda function delete the security groups created as part of the cluster.
+  DeleteSGLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaEC2Permissions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DescribeVpcs"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:RevokeSecurityGroupIngress"
+                  - "logs:*"
+                Resource: "*"
+
+  # Lambda Function
+  DeleteEMRSecurityGroupsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: "index.handler"
+      Role: !GetAtt DeleteSGLambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          VPC_ID: !Ref VPC
+      Code:
+        ZipFile: |
+          import os
+          import boto3
+          import cfnresponse
+          def delete_security_groups(ec2_client):
+            # Security group names to delete
+            sg_names_to_delete = ['ElasticMapReduce-slave', 'ElasticMapReduce-master']
+            # Retrieve all VPCs
+            vpc_id = os.environ.get('VPC_ID')
+            # For each VPC, look for each security group name we want to delete
+            for sg_name in sg_names_to_delete:
+              security_groups = ec2_client.describe_security_groups(
+                Filters=[
+                  {'Name': 'group-name', 'Values': [sg_name]},
+                  {'Name': 'vpc-id', 'Values': [vpc_id]}
+                ]
+              )['SecurityGroups']
+              for sg in security_groups:
+                sg_id = sg['GroupId']
+                try:
+                  response = ec2_client.describe_security_groups(GroupIds=[sg_id])
+                  ip_permissions = response['SecurityGroups'][0]['IpPermissions']
+
+                  # Revoke all inbound rules
+                  if ip_permissions:
+                      ec2_client.revoke_security_group_ingress(GroupId=sg_id, IpPermissions=ip_permissions)
+                      print(f"Inbound rules removed for Security Group {sg_id}")
+                  else:
+                      print("No inbound rules to remove.")
+                except Exception as e:
+                  print(f"Could not remove inbound rules {sg_id}")
+            for sg_name in sg_names_to_delete:
+              security_groups = ec2_client.describe_security_groups(
+                Filters=[
+                  {'Name': 'group-name', 'Values': [sg_name]},
+                  {'Name': 'vpc-id', 'Values': [vpc_id]}
+                ]
+              )['SecurityGroups']
+              for sg in security_groups:
+                sg_id = sg['GroupId']
+                try:
+                  ec2_client.delete_security_group(GroupId=sg_id)
+                  print(f"Deleted security group {sg_name} ({sg_id}) in VPC {vpc_id}")
+                except Exception as e:
+                  print(f"Could not delete security group {sg_name} ({sg_id}) in VPC {vpc_id}: {str(e)}")
+
+
+          def handler(event, context):
+            ec2_client = boto3.client('ec2')          
+            if (event["RequestType"] == "Delete"):
+              delete_security_groups(ec2_client)
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDEMRNC")
+              return
+            elif (event["RequestType"] == "Create" or event["RequestType"] == "Update"):
+              responseData = {}
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalIDEMRNC")
+              return
+      Runtime: python3.11
+      Timeout: 300
+      MemorySize: 128
+
+  # Custom Resource to Trigger the Lambda Function
+  DeleteSecurityGroupsCustomResource:
+    Type: Custom::DeleteEMRSecurityGroups
+    Properties:
+      ServiceToken: !GetAtt DeleteEMRSecurityGroupsFunction.Arn
+      ServiceTimeout: 300
+
+Outputs:
+  SecurityGroupID1:
+    Description: Security Group -1 ID
+    Value:
+      Ref: SecurityGroup1
+    Export:
+      Name: SecurityGroupID1
+  SecurityGroupID2:
+    Description: Security Group -2 ID
+    Value:
+      Ref: SecurityGroup2
+    Export:
+      Name: SecurityGroupID2
+  VPCID:
+    Description: VPC ID
+    Value:
+      Ref: VPC
+    Export:
+      Name: VPCID
+  EndpointId:
+    Description: "ID of the created VPC Endpoint"
+    Value: !Ref InterfaceEndPoint
+  SubnetAID:
+    Description: Subnet A ID
+    Value:
+      Ref: SubnetA
+    Export:
+      Name: SubnetAID
+  SubnetBID:
+    Description: Subnet B ID
+    Value:
+      Ref: SubnetB
+    Export:
+      Name: SubnetBID
+  SubnetCID:
+    Description: Subnet C ID
+    Value:
+      Ref: SubnetC
+    Export:
+      Name: SubnetCID
+  SubnetDID:
+    Description: Subnet D ID
+    Value:
+      Ref: SubnetD
+  InternetGatewayID:
+    Description: Internetgateway ID
+    Value:
+      Ref: InternetGateway
+    Export:
+      Name: InternetGatewayID
+  RouteTableID:
+    Description: RouteTable ID
+    Value:
+      Ref: RouteTable
+    Export:
+      Name: RouteTableID
+  FlowLogOutput:
+    Description: "flow log name"
+    Value: !Ref FlowLog
+  NatGatewayId:
+    Description: NatGatewayId
+    Value:
+      Ref: NatgateWay
+    Export:
+      Name: NatgateWay
+  SSCERTARN:
+    Description: Self Signed Certificate Arn
+    Value: !GetAtt MyCustomResource.CertificateArn
+    Export:
+      Name: SSCERTARN

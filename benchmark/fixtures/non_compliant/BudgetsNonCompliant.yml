@@ -1,0 +1,13 @@
+Resources:
+  MyBudget:
+    Type: 'AWS::Budgets::Budget'
+    Properties:
+      Budget:
+        BudgetLimit:
+          Amount: 1000
+          Unit: 'USD'
+        TimeUnit: 'MONTHLY'
+        BudgetType: 'COST'
+        CostFilters:
+          Service:
+            - 'Amazon Simple Storage Service'

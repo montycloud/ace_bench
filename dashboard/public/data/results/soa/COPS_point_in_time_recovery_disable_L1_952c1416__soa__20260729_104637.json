@@ -1,0 +1,151 @@
+{
+  "id": "COPS_point_in_time_recovery_disable_L1_952c1416__soa__20260729_104637",
+  "scenario_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+  "scenario_name": "Point-in-Time Recovery Disabled on Transactional Tables",
+  "category": "reliability",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T10:46:37.136022+00:00",
+  "total_score": 0.75,
+  "scores": {
+    "tools": 0.0,
+    "answer": 1.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top DynamoDB resources by finding count to identify tables with PITR disabled"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand backup/PITR check failure scope across the assessment"
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "List WAFR reliability pillar questions to find the PITR/backup question and its choices"
+        },
+        {
+          "tool": "get_question",
+          "params": {},
+          "reason": "Get full question detail including choices and improvement plan for the backup/PITR question"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Surface top DynamoDB resources by finding count to identify tables with PITR disabled",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings summary to understand backup/PITR check failure scope across the assessment",
+          "found": false
+        },
+        {
+          "tool": "list_questions",
+          "params": {},
+          "reason": "List WAFR reliability pillar questions to find the PITR/backup question and its choices",
+          "found": false
+        },
+        {
+          "tool": "get_question",
+          "params": {},
+          "reason": "Get full question detail including choices and improvement plan for the backup/PITR question",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "mybookstore-Cart",
+        "mybookstore-Books",
+        "mybookstore-Orders"
+      ],
+      "found": [
+        "mybookstore-Cart",
+        "mybookstore-Orders",
+        "mybookstore-Books",
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b"
+      ],
+      "found_in_response": [
+        "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+        "mybookstore-Cart",
+        "mybookstore-Books",
+        "mybookstore-Orders"
+      ],
+      "found_in_tools": [],
+      "missed": [],
+      "unconfirmed": [
+        "eoa-jobs",
+        "poa-jobs",
+        "s3soa-jobs",
+        "soa-jobs"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items from env:fx/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/l1/v1 | packet:cp/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: List DynamoDB tables where PointInTimeRecoverySpecification is disabled, along with table size, write throughput class, and table class. Recommendation: Enable PITR on every non-ephemeral table and schedule on-demand backups for tables exceeding the 35-day PITR window. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-point-in-time-recovery-disable-L1-952c1416",
+    "description": "DynamoDB Point-in-Time Recovery (PITR) maintains a continuous backup of your table for 35 days, letting you restore to any second in that window. Without PITR, if data is accidentally deleted, corrupted by a bug, or modified by a bad deployment, recovery depends entirely on manual snapshots \u2014 which may not exist or may be hours old. For transactional tables storing orders, payments, or user data, PITR is the safety net that prevents data loss from becoming a business incident. the agent should identify DynamoDB tables with PITR disabled.",
+    "objective": "Baseline DynamoDB data-durability posture and surface tables without PITR protection; capture all must-find items from env:fx/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/l1/v1 | packet:cp/ace-bench/reliability/data-durability/point-in-time-recovery-disabled-on/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: List DynamoDB tables where PointInTimeRecoverySpecification is disabled, along with table size, write throughput class, and table class. Recommendation: Enable PITR on every non-ephemeral table and schedule on-demand backups for tables exceeding the 35-day PITR window.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | disable backup/DR controls without rollback evidence",
+    "wafr_pillar": "Reliability",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b",
+      "mybookstore-Cart",
+      "mybookstore-Books",
+      "mybookstore-Orders"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent identify that the issue is DynamoDB Point-in-Time Recovery (PITR) being disabled on transactional tables?",
+      "Did the agent identify specific DynamoDB table names \u2014 or, if tools could not surface table names, explicitly acknowledge that limitation rather than fabricating table names?",
+      "Did the agent explain the recovery capability PITR provides (continuous 35-day backup, restore to any second in that window)?",
+      "Did the agent avoid fabricating DynamoDB table names or PITR status details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "```json\n{\n  \"summary\": \"Scanned 8 DynamoDB tables across the AWS account. 8 out of 8 tables (100%) have Point-In-Time Recovery (PITR) disabled, representing a critical data-protection gap. PITR provides continuous, automatic backups with a 35-day recovery window at no upfront cost \u2014 only storage consumed is billed. All tables are in the STANDARD table class. Write throughput is split: 4 tables use PAY_PER_REQUEST billing and 4 use PROVISIONED capacity. Notable production-facing tables include the mybookstore suite (Books, Cart, Orders) and job-tracking tables (eoa-jobs, poa-jobs, s3soa-jobs, soa-jobs). Immediate action is recommended: enable PITR on all non-ephemeral tables and schedule on-demand backups for any table whose data retention requirements exceed the 35-day PITR window.\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"eoa-jobs\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PAY_PER_REQUEST\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 0\n      }\n    },\n    {\n      \"resource_id\": \"mybookstore-Books\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 9711,\n        \"item_count\": 56,\n        \"write_throughput_class\": \"PROVISIONED\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 1\n      }\n    },\n    {\n      \"resource_id\": \"mybookstore-Cart\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PROVISIONED\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 1\n      }\n    },\n    {\n      \"resource_id\": \"mybookstore-Orders\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"CRITICAL\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PROVISIONED\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 1\n      }\n    },\n    {\n      \"resource_id\": \"poa-jobs\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PAY_PER_REQUEST\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 0\n      }\n    },\n    {\n      \"resource_id\": \"s3soa-jobs\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 2960422,\n        \"item_count\": 23,\n        \"write_throughput_class\": \"PAY_PER_REQUEST\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 0\n      }\n    },\n    {\n      \"resource_id\": \"soa-jobs\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PAY_PER_REQUEST\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 0\n      }\n    },\n    {\n      \"resource_id\": \"test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b\",\n      \"resource_type\": \"AWS::DynamoDB::Table\",\n      \"check\": \"PointInTimeRecovery disabled\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"pitr_status\": \"DISABLED\",\n        \"table_size_bytes\": 0,\n        \"item_count\": 0,\n        \"write_throughput_class\": \"PROVISIONED\",\n        \"table_class\": \"STANDARD\",\n        \"provisioned_wcu\": 1\n      }\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"mybookstore-Books\",\n      \"action\": \"Enable PITR immediately via UpdateContinuousBackups (PointInTimeRecoveryEnabled=true). Because this is a production bookstore catalog table with live item data (56 items, 9.7 KB), also schedule weekly on-demand backups using CreateBackup to retain restore points beyond the 35-day PITR window. Tag backups with retention policy.\",\n      \"priority\": \"P1 \u2014 Immediate\",\n      \"effort\": \"Low (single API call to enable PITR; ~15 min to add on-demand backup schedule via AWS Backup plan)\"\n    },\n    {\n      \"resource_id\": \"mybookstore-Cart\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. Cart tables are transactional and prone to accidental data corruption; PITR enables second-granularity restores. Evaluate whether cart data needs retention beyond 35 days; if not, PITR alone is sufficient.\",\n      \"priority\": \"P1 \u2014 Immediate\",\n      \"effort\": \"Low (single API call)\"\n    },\n    {\n      \"resource_id\": \"mybookstore-Orders\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. Orders are business-critical records subject to audit and compliance requirements. Additionally, create an AWS Backup plan with monthly on-demand snapshots retained for 1 year to satisfy the >35-day compliance window.\",\n      \"priority\": \"P1 \u2014 Immediate\",\n      \"effort\": \"Low-Medium (PITR: single API call; AWS Backup plan: ~30 min setup)\"\n    },\n    {\n      \"resource_id\": \"s3soa-jobs\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. This is the only jobs table with non-zero data (2.96 MB, 23 items), indicating active use. Assess job-record retention requirements \u2014 if records must be preserved beyond 35 days, schedule on-demand backups via AWS Backup.\",\n      \"priority\": \"P1 \u2014 Immediate\",\n      \"effort\": \"Low (single API call; optional AWS Backup plan ~15 min)\"\n    },\n    {\n      \"resource_id\": \"eoa-jobs\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. Table is currently empty but is PAY_PER_REQUEST (designed for bursty/production workloads). Enable PITR proactively before data is written to avoid a protection gap.\",\n      \"priority\": \"P2 \u2014 This Sprint\",\n      \"effort\": \"Low (single API call)\"\n    },\n    {\n      \"resource_id\": \"poa-jobs\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. Table is currently empty but uses PAY_PER_REQUEST billing, indicating production intent. Enable PITR before data is written.\",\n      \"priority\": \"P2 \u2014 This Sprint\",\n      \"effort\": \"Low (single API call)\"\n    },\n    {\n      \"resource_id\": \"soa-jobs\",\n      \"action\": \"Enable PITR via UpdateContinuousBackups. Table is currently empty with PAY_PER_REQUEST billing. Enable PITR proactively.\",\n      \"priority\": \"P2 \u2014 This Sprint\",\n      \"effort\": \"Low (single API call)\"\n    },\n    {\n      \"resource_id\": \"test-table-d4e9a170-2e6d-11f1-aa48-0afff185c25b\",\n      \"action\": \"Evaluate whether this table is ephemeral (test/dev). If it is a persistent test fixture, enable PITR via UpdateContinuousBackups. If it is a truly temporary table with no retention requirement, consider deleting it to eliminate unnecessary cost and surface area. Enable a Table tagging convention (e.g., Environment=test, Ephemeral=true) to automate future classification.\",\n      \"priority\": \"P3 \u2014 Next Sprint\",\n      \"effort\": \"Low (classification: ~10 min; PITR enable or delete: single API call)\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Takeaways\n\n| Dimension | Detail |\n|---|---|\n| **Tables scanned** | 8 |\n| **PITR disabled** | 8 (100%) |\n| **CRITICAL severity** | 3 (`mybookstore-*` \u2014 production app tables) |\n| **HIGH severity** | 4 (active job-tracking tables) |\n| **MEDIUM severity** | 1 (test table \u2014 evaluate before acting) |\n| **On-demand backup needed (>35d window)** | `mybookstore-Orders` (compliance), `mybookstore-Books` (catalog audit) |\n| **Estimated PITR enable effort** | < 1 hour total across all 8 tables |\n\n> **Severity rationale:** `mybookstore-*` tables are rated **CRITICAL** because they back a live application (Books has active item data, Cart/Orders handle transactions). The `*-jobs` tables are **HIGH** because PAY_PER_REQUEST billing signals production workloads. The `test-table-*` is **MEDIUM** pending ephemeral classification.",
+  "token_usage": {
+    "estimated": 1150,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 51.9,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

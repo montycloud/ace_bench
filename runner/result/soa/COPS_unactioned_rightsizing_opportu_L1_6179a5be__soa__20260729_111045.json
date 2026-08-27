@@ -1,0 +1,129 @@
+{
+  "id": "COPS_unactioned_rightsizing_opportu_L1_6179a5be__soa__20260729_111045",
+  "scenario_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+  "scenario_name": "Unactioned Rightsizing Opportunities From Compute Optimizer",
+  "category": "performance_efficiency",
+  "agent": "soa",
+  "model": "bedrock/soa",
+  "timestamp": "2026-07-29T11:10:45.440487+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "get_saving_opportunities",
+          "params": {},
+          "reason": "Purpose-built tool for Compute Optimizer recommendations \u2014 fetches EC2/EBS rightsizing data",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-06286d41ae1218d5e",
+        "i-0ee5fa3508cede8a2",
+        "i-0aa58fe2d137a2f9f",
+        "vol-028f30f6b745e2ae5",
+        "vol-03fc1ecf1ea302655",
+        "vol-0497bec1f1285d97f",
+        "vol-05ced2e45c102a69e"
+      ],
+      "unconfirmed": [
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e",
+        "arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-unactioned-rightsizing-opportu-L1-6179a5be",
+    "description": "AWS Compute Optimizer continuously analyzes EC2 and EBS usage patterns and generates rightsizing recommendations \u2014 for example, migrating from an Intel t3.micro to a Graviton-based t4g.micro (same price, better performance) or upgrading an EBS gp2 volume to gp3 (cheaper and faster). When these recommendations sit unactioned for weeks, it represents pure avoidable waste. the agent should surface aged Compute Optimizer recommendations and propose a sequenced action plan prioritized by savings potential and implementation effort.",
+    "objective": "Surface aged Compute Optimizer recommendations and propose a sequenced action plan; capture all must-find items from env:fx/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/l1/v1 | packet:cp/ace-bench/performance-effic/rightsizing-signals/unactioned-rightsizing-opportuniti/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Pull Compute Optimizer findings (Over-provisioned, Under-provisioned, Idle) older than 30 days with no remediation record. Cite resource ARN, recommendation risk, estimated savings. Recommendation: Sequence actions from zero-risk (idle stop) to medium-risk (instance-family migration) with a change-window plan.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Performance Efficiency | Cost Optimization",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-06286d41ae1218d5e",
+      "i-0ee5fa3508cede8a2",
+      "i-0aa58fe2d137a2f9f",
+      "vol-028f30f6b745e2ae5",
+      "vol-03fc1ecf1ea302655",
+      "vol-0497bec1f1285d97f",
+      "vol-05ced2e45c102a69e"
+    ],
+    "should_not_flag": [],
+    "judge_criteria": [
+      "Did the agent use get_saving_opportunities or a similar tool to retrieve actual Compute Optimizer recommendations rather than guessing at recommendations?",
+      "Did the agent identify specific EC2 instance IDs and/or EBS volume IDs with rightsizing recommendations, as returned by tool output?",
+      "Did the agent explain the nature of the recommendations (e.g., instance type migration, storage class upgrade) rather than just noting a generic cost gap?",
+      "Did the agent avoid fabricating instance IDs, volume IDs, or recommendation details not present in tool output?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "Now I have all the data needed. Let me compile the full JSON response based on real findings:\n\n- **EC2 instances**: All 4 instances are `OPTIMIZED` by Compute Optimizer \u2014 no over/under/idle findings with savings. All launched **2026-04-15**, over 30 days ago (105 days), no remediation savings.\n- **EBS volumes**: All 4 are `gp2` with Compute Optimizer recommending migration to `gp3` \u2014 each saving **$0.16/month (20%)**. Recommendation age: last refreshed 2026-07-29 but originally created **2026-04-15** (105 days). No remediation record (still on gp2). Active I/O so not idle \u2014 purely a volume-type optimization.\n- All instances have active I/O, CPU 11\u201313% (OPTIMIZED, not idle/over-provisioned).\n- No Lambda, ASG findings.\n\n```json\n{\n  \"summary\": \"AWS Compute Optimizer scan completed for account REDACTED-ACCOUNT (us-east-1) as of 2026-07-29. Scan covered EC2 instances, EBS volumes, Lambda functions, and Auto Scaling Groups. No EC2 instances were flagged as Over-provisioned, Under-provisioned, or Idle \u2014 all 4 instances (t3.micro) are marked OPTIMIZED with 11\u201313% peak CPU utilization and active network/EBS I/O. However, 4 EBS root volumes (gp2, 8 GB each) have open, unremediated Compute Optimizer recommendations \u2014 all older than 30 days (created 2026-04-15, ~105 days ago) \u2014 to migrate from gp2 to gp3, yielding a 20% cost reduction of $0.16/month per volume ($0.64/month total). No Lambda or Auto Scaling Group findings were detected. Total estimated monthly savings from actioning all open findings: $0.64 USD.\",\n  \"findings\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Volume type optimization \u2014 migrate gp2 to gp3\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"current_type\": \"gp2\",\n        \"recommended_type\": \"gp3\",\n        \"size_gb\": 8,\n        \"attached_to_instance\": \"i-0ee5fa3508cede8a2 (web-prod-02)\",\n        \"root_volume\": true,\n        \"volume_state\": \"in-use\",\n        \"create_date\": \"2026-04-15\",\n        \"recommendation_age_days\": 105,\n        \"remediation_record\": \"None\",\n        \"lookback_period_days\": 14,\n        \"read_ops_14d\": 6743,\n        \"write_ops_14d\": 1263867,\n        \"iops_exceeded\": false,\n        \"throughput_exceeded\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_pct\": 20,\n        \"recommendation_risk\": \"VeryLow\",\n        \"co_finding\": \"Optimized (volume type suboptimal \u2014 gp2 vs gp3 pricing)\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Volume type optimization \u2014 migrate gp2 to gp3\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"current_type\": \"gp2\",\n        \"recommended_type\": \"gp3\",\n        \"size_gb\": 8,\n        \"attached_to_instance\": \"i-01baa59f318a3c59e (worker-01)\",\n        \"root_volume\": true,\n        \"volume_state\": \"in-use\",\n        \"create_date\": \"2026-04-15\",\n        \"recommendation_age_days\": 105,\n        \"remediation_record\": \"None\",\n        \"lookback_period_days\": 14,\n        \"read_ops_14d\": 6243,\n        \"write_ops_14d\": 1262049,\n        \"iops_exceeded\": false,\n        \"throughput_exceeded\": false,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_pct\": 20,\n        \"recommendation_risk\": \"VeryLow\",\n        \"co_finding\": \"Optimized (volume type suboptimal \u2014 gp2 vs gp3 pricing)\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Volume type optimization \u2014 migrate gp2 to gp3\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"current_type\": \"gp2\",\n        \"recommended_type\": \"gp3\",\n        \"size_gb\": 8,\n        \"attached_to_instance\": \"i-0aa58fe2d137a2f9f (api-prod-01)\",\n        \"root_volume\": true,\n        \"volume_state\": \"in-use\",\n        \"create_date\": \"2026-04-15\",\n        \"recommendation_age_days\": 105,\n        \"remediation_record\": \"None\",\n        \"lookback_period_days\": 14,\n        \"read_ops_14d\": 6610,\n        \"write_ops_14d\": 1256096,\n        \"iops_exceeded\": false,\n        \"throughput_exceeded\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_pct\": 20,\n        \"recommendation_risk\": \"VeryLow\",\n        \"co_finding\": \"Optimized (volume type suboptimal \u2014 gp2 vs gp3 pricing)\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Volume type optimization \u2014 migrate gp2 to gp3\",\n      \"severity\": \"LOW\",\n      \"evidence\": {\n        \"current_type\": \"gp2\",\n        \"recommended_type\": \"gp3\",\n        \"size_gb\": 8,\n        \"attached_to_instance\": \"i-06286d41ae1218d5e (web-prod-01)\",\n        \"root_volume\": true,\n        \"volume_state\": \"in-use\",\n        \"create_date\": \"2026-04-15\",\n        \"recommendation_age_days\": 105,\n        \"remediation_record\": \"None\",\n        \"lookback_period_days\": 14,\n        \"read_ops_14d\": 6521,\n        \"write_ops_14d\": 1260592,\n        \"iops_exceeded\": false,\n        \"throughput_exceeded\": true,\n        \"estimated_monthly_savings_usd\": 0.16,\n        \"savings_opportunity_pct\": 20,\n        \"recommendation_risk\": \"VeryLow\",\n        \"co_finding\": \"Optimized (volume type suboptimal \u2014 gp2 vs gp3 pricing)\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"No Over-provisioned, Under-provisioned, or Idle finding \u2014 OPTIMIZED\",\n      \"severity\": \"INFO\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-02\",\n        \"instance_type\": \"t3.micro\",\n        \"state\": \"running\",\n        \"launch_date\": \"2026-04-15\",\n        \"age_days\": 105,\n        \"co_finding\": \"OPTIMIZED\",\n        \"peak_cpu_pct\": 13.35,\n        \"environment_tag\": \"production\",\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": \"N/A \u2014 no actionable finding\",\n        \"remediation_record\": \"None required\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"No Over-provisioned, Under-provisioned, or Idle finding \u2014 OPTIMIZED\",\n      \"severity\": \"INFO\",\n      \"evidence\": {\n        \"instance_name\": \"worker-01\",\n        \"instance_type\": \"t3.micro\",\n        \"state\": \"running\",\n        \"launch_date\": \"2026-04-15\",\n        \"age_days\": 105,\n        \"co_finding\": \"OPTIMIZED\",\n        \"peak_cpu_pct\": 13.13,\n        \"environment_tag\": \"none\",\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": \"N/A \u2014 no actionable finding\",\n        \"remediation_record\": \"None required\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"No Over-provisioned, Under-provisioned, or Idle finding \u2014 OPTIMIZED\",\n      \"severity\": \"INFO\",\n      \"evidence\": {\n        \"instance_name\": \"web-prod-01\",\n        \"instance_type\": \"t3.micro\",\n        \"state\": \"running\",\n        \"launch_date\": \"2026-04-15\",\n        \"age_days\": 105,\n        \"co_finding\": \"OPTIMIZED\",\n        \"peak_cpu_pct\": 11.20,\n        \"environment_tag\": \"prod\",\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": \"N/A \u2014 no actionable finding\",\n        \"remediation_record\": \"None required\"\n      }\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"No Over-provisioned, Under-provisioned, or Idle finding \u2014 OPTIMIZED\",\n      \"severity\": \"INFO\",\n      \"evidence\": {\n        \"instance_name\": \"api-prod-01\",\n        \"instance_type\": \"t3.micro\",\n        \"state\": \"running\",\n        \"launch_date\": \"2026-04-15\",\n        \"age_days\": 105,\n        \"co_finding\": \"OPTIMIZED\",\n        \"peak_cpu_pct\": 13.28,\n        \"environment_tag\": \"production\",\n        \"estimated_monthly_savings_usd\": 0.0,\n        \"recommendation_risk\": \"N/A \u2014 no actionable finding\",\n        \"remediation_record\": \"None required\"\n      }\n    }\n  ],\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-03fc1ecf1ea302655\",\n      \"action\": \"ZERO-RISK \u2014 Migrate EBS volume from gp2 to gp3 in-place using 'aws ec2 modify-volume --volume-id vol-03fc1ecf1ea302655 --volume-type gp3'. No detach required. No I/O interruption. gp3 baseline IOPS (3000) equals gp2 burst; throughput not exceeded on this volume. Change window: any time \u2014 online modification. Estimated save: $0.16/month.\",\n      \"priority\": 1,\n      \"effort\": \"LOW \u2014 single API call, zero downtime, immediate. Recommended change window: off-peak (weeknight 02:00\u201304:00 local). Rollback: re-issue modify-volume back to gp2 (no data loss).\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-0497bec1f1285d97f\",\n      \"action\": \"ZERO-RISK \u2014 Migrate EBS volume from gp2 to gp3 in-place using 'aws ec2 modify-volume --volume-id vol-0497bec1f1285d97f --volume-type gp3'. Note: VolumeThroughputExceeded=1 observed \u2014 set --throughput 160 (above gp3 baseline 125) to ensure parity with current burst behavior. Change window: maintenance window for web-prod-02 (production). Estimated save: $0.16/month.\",\n      \"priority\": 2,\n      \"effort\": \"LOW \u2014 single API call, zero downtime. Recommended change window: weeknight 02:00\u201304:00 local during low-traffic window. Monitor CloudWatch VolumeQueueLength for 30 min post-change. Rollback: re-issue modify-volume back to gp2.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-028f30f6b745e2ae5\",\n      \"action\": \"ZERO-RISK \u2014 Migrate EBS volume from gp2 to gp3 in-place using 'aws ec2 modify-volume --volume-id vol-028f30f6b745e2ae5 --volume-type gp3'. Note: VolumeThroughputExceeded=1 observed \u2014 set --throughput 160 to ensure parity with current burst behavior. Attached to api-prod-01 (production). Estimated save: $0.16/month.\",\n      \"priority\": 3,\n      \"effort\": \"LOW \u2014 single API call, zero downtime. Recommended change window: weeknight 02:00\u201304:00 local aligned with api-prod-01 maintenance window. Monitor VolumeQueueLength for 30 min post-change. Rollback: re-issue modify-volume back to gp2.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:volume/vol-05ced2e45c102a69e\",\n      \"action\": \"ZERO-RISK \u2014 Migrate EBS volume from gp2 to gp3 in-place using 'aws ec2 modify-volume --volume-id vol-05ced2e45c102a69e --volume-type gp3'. Note: VolumeThroughputExceeded=1 observed \u2014 set --throughput 160 to ensure parity. Attached to web-prod-01 (production, team=checkout). Estimated save: $0.16/month.\",\n      \"priority\": 4,\n      \"effort\": \"LOW \u2014 single API call, zero downtime. Recommended change window: weeknight 02:00\u201304:00 local, coordinate with checkout team. Monitor VolumeQueueLength for 30 min post-change. Rollback: re-issue modify-volume back to gp2.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0ee5fa3508cede8a2\",\n      \"action\": \"NO ACTION REQUIRED \u2014 web-prod-02 (t3.micro) is OPTIMIZED per Compute Optimizer. Peak CPU 13.35%, active network/EBS I/O. Not idle, not over-provisioned, not under-provisioned. Re-evaluate if workload changes. Enable Enhanced Infrastructure Metrics (paid) for higher-fidelity 3-month lookback if desired.\",\n      \"priority\": 5,\n      \"effort\": \"NONE \u2014 monitor only. Consider enabling Compute Optimizer Enhanced Infrastructure Metrics for richer data (cost: ~$0.0036/resource/hour).\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-01baa59f318a3c59e\",\n      \"action\": \"NO ACTION REQUIRED \u2014 worker-01 (t3.micro) is OPTIMIZED per Compute Optimizer. Peak CPU 13.13%, active I/O. Not idle. Re-evaluate if workload changes. No environment tag \u2014 recommend tagging for cost allocation.\",\n      \"priority\": 6,\n      \"effort\": \"NONE \u2014 monitor only. Tagging hygiene recommendation: add env/environment tag to enable cost-center attribution.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-06286d41ae1218d5e\",\n      \"action\": \"NO ACTION REQUIRED \u2014 web-prod-01 (t3.micro) is OPTIMIZED per Compute Optimizer. Peak CPU 11.20%, active I/O. Not idle. Lowest CPU of all instances \u2014 monitor over next 30 days; if CPU drops below 5% peak, flag for idle-stop review.\",\n      \"priority\": 7,\n      \"effort\": \"NONE \u2014 monitor only. Set CloudWatch alarm: CPUUtilization < 5% for 14 consecutive days \u2192 SNS alert to trigger idle review.\"\n    },\n    {\n      \"resource_id\": \"arn:aws:ec2:us-east-1:REDACTED-ACCOUNT:instance/i-0aa58fe2d137a2f9f\",\n      \"action\": \"NO ACTION REQUIRED \u2014 api-prod-01 (t3.micro) is OPTIMIZED per Compute Optimizer. Peak CPU 13.28%, active I/O. Not idle, not over/under-provisioned. Re-evaluate if traffic grows; t3.micro will likely become UNDER-PROVISIONED as load increases.\",\n      \"priority\": 8,\n      \"effort\": \"NONE \u2014 monitor only. Consider enabling Compute Optimizer Enhanced Infrastructure Metrics and right-sizing alerts for proactive scale-up detection.\"\n    }\n  ]\n}\n```\n\n---\n\n### Key Takeaways\n\n| # | Resource | Finding | Risk | Est. Monthly Saving |\n|---|----------|---------|------|---------------------|\n| 1 | `vol-03fc1ecf1ea302655` (worker-01) | gp2 \u2192 gp3 migration | **Zero** | $0.16 |\n| 2 | `vol-0497bec1f1285d97f` (web-prod-02) | gp2 \u2192 gp3 + throughput tuning | **Zero** | $0.16 |\n| 3 | `vol-028f30f6b745e2ae5` (api-prod-01) | gp2 \u2192 gp3 + throughput tuning | **Zero** | $0.16 |\n| 4 | `vol-05ced2e45c102a69e` (web-prod-01) | gp2 \u2192 gp3 + throughput tuning | **Zero** | $0.16 |\n| 5\u20138 | All 4 EC2 instances | OPTIMIZED \u2014 no action | N/A | $0.00 |\n\n**Total estimated monthly savings: $0.64 USD** \u2014 all achievable via zero-downtime, zero-risk, in-place `modify-volume` API calls with a single change window.",
+  "token_usage": {
+    "estimated": 1821,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 94.2,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}

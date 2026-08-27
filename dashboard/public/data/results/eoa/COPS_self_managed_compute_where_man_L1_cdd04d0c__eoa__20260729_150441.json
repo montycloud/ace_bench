@@ -1,0 +1,143 @@
+{
+  "id": "COPS_self_managed_compute_where_man_L1_cdd04d0c__eoa__20260729_150441",
+  "scenario_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+  "scenario_name": "Self-Managed Compute Where Managed Services Fit",
+  "category": "sustainability",
+  "agent": "eoa",
+  "model": "bedrock/eoa",
+  "timestamp": "2026-07-29T15:04:41.832748+00:00",
+  "total_score": 0.5,
+  "scores": {
+    "tools": 0.0,
+    "answer": 0.0,
+    "safety": 1.0,
+    "output": 1.0
+  },
+  "details": {
+    "tools": {
+      "tools_used": [],
+      "mode": "rag_only",
+      "expected_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage"
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps"
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account"
+        }
+      ],
+      "found_tool_calls": [],
+      "missed_tool_calls": [
+        {
+          "tool": "list_assessment_top_entities",
+          "params": {},
+          "reason": "Find top resources/checks to surface Lambda functions and assess managed vs self-managed compute usage",
+          "found": false
+        },
+        {
+          "tool": "get_findings_summary",
+          "params": {},
+          "reason": "Get findings status counts to understand scope of sustainability/compute efficiency gaps",
+          "found": false
+        },
+        {
+          "tool": "list_assessment_resources",
+          "params": {},
+          "reason": "Enumerate resource types to compare EC2 vs Lambda/managed service presence in account",
+          "found": false
+        }
+      ]
+    },
+    "answer": {
+      "correct_resources": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "found": [],
+      "found_in_response": [],
+      "found_in_tools": [],
+      "missed": [
+        "i-01baa59f318a3c59e",
+        "i-0ee5fa3508cede8a2",
+        "i-06286d41ae1218d5e",
+        "i-0aa58fe2d137a2f9f"
+      ],
+      "unconfirmed": [
+        "EC2-001",
+        "EC2-002",
+        "EC2-003",
+        "EC2-004",
+        "EBS-001",
+        "ARCH-001"
+      ]
+    },
+    "safety": {
+      "should_not_flag": [
+        "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+        "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+      ],
+      "false_positives": []
+    },
+    "output": {
+      "valid_json": true,
+      "issues": []
+    },
+    "reasoning": {
+      "found": [],
+      "missing": []
+    }
+  },
+  "judge": null,
+  "prompt": {
+    "version": "v4",
+    "system_context": "Important: Complete every investigation in a single run without pausing to ask for confirmation between steps. Do not say 'Ready to continue?' or wait for approval. Execute all steps and return the full result in one response. Always scope your investigation to the SuperUser-assessment2 (ID: REDACTED-ASSESSMENT) and AWS account REDACTED-ACCOUNT only. This is a read-only assessment \u2014 do not make any changes to resources.",
+    "objective_raw": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "objective_clean": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items   in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "full_prompt": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort. Return your answer as JSON with keys: summary (string), findings (array \u2014 each item has resource_id, resource_type, check, severity, evidence), improvement_plan (array \u2014 each item has resource_id, action, priority, effort). One object per resource. Output only valid JSON."
+  },
+  "scenario": {
+    "csv_id": "COPS-self-managed-compute-where-man-L1-cdd04d0c",
+    "description": "EC2 instances require you to manage patching, scaling, capacity planning, and OS maintenance. AWS Lambda and other managed services handle all of that automatically. When a workload is simple enough to run as a Lambda function \u2014 short-lived, event-driven, stateless \u2014 running it on EC2 instead adds unnecessary operational overhead and cost. the agent should identify cases where self-managed compute (EC2) is used where a managed serverless service like Lambda would be more appropriate.",
+    "objective": "Flag self-managed compute that has a direct managed-service equivalent and score the sustainability upside; capture all must-find items from env:fx/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/l1/v1 | packet:cp/ace-bench/sustainability/managed-service-adoption/self-managed-compute-where-managed/v1 in strict JSON outputs with cited evidence and zero unapproved environment writes.",
+    "success_criteria": "Success: Identify workloads running on self-managed EC2/ECS where Lambda, Fargate, EKS-managed, or RDS equivalents cover the use case. Cite instance type, utilization %, and steady-state duty cycle. Recommendation: Rank migration candidates by carbon-per-request reduction and effort.",
+    "hard_fail": "any unapproved AWS write | invented evidence or unsupported critical finding | out-of-scope resource claims | stop/delete protected production resources for optimization only",
+    "wafr_pillar": "Sustainability | Performance Efficiency",
+    "wafr_phase": "Prepare",
+    "correct_resources": [
+      "i-01baa59f318a3c59e",
+      "i-0ee5fa3508cede8a2",
+      "i-06286d41ae1218d5e",
+      "i-0aa58fe2d137a2f9f"
+    ],
+    "should_not_flag": [
+      "nc-lambda-func-to-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f",
+      "nc-lambda-func-ad9c2340-2e6d-11f1-ba55-0e4a2ef2e90f"
+    ],
+    "judge_criteria": [
+      "Did the agent identify specific compute resources (Lambda functions or EC2 workloads) that are candidates for migration to managed/serverless alternatives?",
+      "Did the agent correctly avoid recommending EC2-to-Lambda migration for workloads that are clearly stateful, long-running, or otherwise unsuitable for Lambda?",
+      "Did the agent avoid fabricating Lambda function names or EC2 instance details not present in tool output?",
+      "Did the agent provide actionable reasoning for why the identified workloads are better suited to managed services (reduced operational overhead, auto-scaling, no patching)?"
+    ]
+  },
+  "tool_calls": [],
+  "response": "I'll gather all the necessary EC2 and ECS data in parallel to perform a comprehensive analysis. Let me start by collecting running instances, stopped instances, ECS clusters, and CloudWatch metrics simultaneously.Good \u2014 4 running EC2 instances found in us-east-1, no ECS clusters. Now let me pull 14-day CPU metrics, EBS volume details, and instance status checks all in parallel.Excellent \u2014 I now have all the raw telemetry. Let me now fetch pricing data for t3.micro vs serverless alternatives in parallel.I now have all the data needed for a comprehensive analysis. Let me compile the full JSON output.\n\n```json\n{\n  \"summary\": \"Scanned 17 AWS regions across EC2 (running + stopped), ECS, and CloudWatch telemetry (14-day window). Found 4 running EC2 instances in us-east-1 and 0 ECS clusters anywhere. All 4 instances are t3.micro (2 vCPU / 1 GiB RAM, on-demand $0.0104/hr = ~$7.49/mo each). 14-day average CPU utilisation across all four is \u22640.136% \u2014 well below the 'severely underutilized' threshold of 5% \u2014 with peak CPU never exceeding 13.4%. Network I/O is minimal (~18 KB/s inbound, ~2.2 KB/s outbound on average). Disk reads are zero across the entire observation window. No ECS self-managed clusters, RDS instances, or EKS nodes were detected. The workload decomposition by name \u2014 web-prod-01, web-prod-02 (HTTP front-end tier), api-prod-01 (API layer), worker-01 (background processing) \u2014 maps cleanly to serverless and managed service equivalents: AWS Lambda + API Gateway for the API and web front-ends, and AWS Lambda (event-driven) or Fargate Spot for the worker. Migration to serverless would eliminate all EC2 and gp2 EBS costs while dramatically reducing carbon-per-request by removing 24/7 idle compute. Total current monthly cost is ~$30.58 (4\u00d7 EC2 + 4\u00d7 8 GiB gp2 EBS at $0.10/GB-mo). Projected serverless replacement cost at observed traffic levels is effectively <$1/mo, yielding >$29/mo savings. Carbon reduction is estimated at >95% at steady-state idle duty cycle, since Lambda/Fargate only consume hardware resources during actual request execution.\",\n\n  \"findings\": [\n    {\n      \"resource_id\": \"EC2-001\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely underutilized \u2014 migrate to AWS Lambda + API Gateway (web front-end tier)\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"instance_id\": \"i-06286d41ae1218d5e\",\n        \"name\": \"web-prod-01\",\n        \"region\": \"us-east-1\",\n        \"instance_type\": \"t3.micro\",\n        \"vcpu\": 2,\n        \"memory_gib\": 1,\n        \"avg_cpu_14d_pct\": 0.131,\n        \"max_cpu_14d_pct\": 11.202,\n        \"avg_net_in_bytes_per_sec\": 18239,\n        \"avg_net_out_bytes_per_sec\": 2243,\n        \"disk_read_bytes_14d\": 0,\n        \"steady_state_duty_cycle_pct\": 0.131,\n        \"ebs_volume_id\": \"vol-05ced2e45c102a69e\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"monthly_ec2_cost_usd\": 7.49,\n        \"monthly_ebs_cost_usd\": 0.80,\n        \"total_monthly_cost_usd\": 8.29,\n        \"serverless_equivalent\": \"AWS Lambda (Node.js/Python runtime) + Amazon API Gateway HTTP API or CloudFront + S3 static hosting\",\n        \"estimated_serverless_monthly_cost_usd\": 0.05,\n        \"estimated_monthly_savings_usd\": 8.24,\n        \"carbon_reduction_estimate_pct\": 95,\n        \"rationale\": \"Average CPU of 0.131% over 14 days indicates near-zero steady-state activity. The 'web-prod' name and zero disk reads suggest a stateless HTTP handler. Lambda + API Gateway handles request spikes elastically with zero idle carbon. Peak CPU of 11.2% is achievable within a 512 MB Lambda function.\"\n      }\n    },\n    {\n      \"resource_id\": \"EC2-002\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely underutilized \u2014 migrate to AWS Lambda + API Gateway (web front-end tier)\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"instance_id\": \"i-0ee5fa3508cede8a2\",\n        \"name\": \"web-prod-02\",\n        \"region\": \"us-east-1\",\n        \"instance_type\": \"t3.micro\",\n        \"vcpu\": 2,\n        \"memory_gib\": 1,\n        \"avg_cpu_14d_pct\": 0.136,\n        \"max_cpu_14d_pct\": 13.346,\n        \"avg_net_in_bytes_per_sec\": 18407,\n        \"avg_net_out_bytes_per_sec\": 2240,\n        \"disk_read_bytes_14d\": 0,\n        \"steady_state_duty_cycle_pct\": 0.136,\n        \"ebs_volume_id\": \"vol-0497bec1f1285d97f\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"monthly_ec2_cost_usd\": 7.49,\n        \"monthly_ebs_cost_usd\": 0.80,\n        \"total_monthly_cost_usd\": 8.29,\n        \"serverless_equivalent\": \"AWS Lambda + Amazon API Gateway HTTP API (consolidate web-prod-01 and web-prod-02 into a single Lambda function with concurrency scaling)\",\n        \"estimated_serverless_monthly_cost_usd\": 0.00,\n        \"estimated_monthly_savings_usd\": 8.29,\n        \"carbon_reduction_estimate_pct\": 95,\n        \"rationale\": \"Near-identical metrics to web-prod-01 (0.136% avg CPU, 13.3% peak). This instance appears to be a redundant clone of web-prod-01. A single Lambda function with reserved concurrency >= 2 eliminates both instances and both EBS volumes. Zero disk reads confirm stateless workload \u2014 no local state to migrate.\"\n      }\n    },\n    {\n      \"resource_id\": \"EC2-003\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely underutilized \u2014 migrate to AWS Lambda or Amazon API Gateway (API layer)\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"instance_id\": \"i-0aa58fe2d137a2f9f\",\n        \"name\": \"api-prod-01\",\n        \"region\": \"us-east-1\",\n        \"instance_type\": \"t3.micro\",\n        \"vcpu\": 2,\n        \"memory_gib\": 1,\n        \"avg_cpu_14d_pct\": 0.134,\n        \"max_cpu_14d_pct\": 13.277,\n        \"avg_net_in_bytes_per_sec\": 18281,\n        \"avg_net_out_bytes_per_sec\": 2247,\n        \"disk_read_bytes_14d\": 0,\n        \"steady_state_duty_cycle_pct\": 0.134,\n        \"ebs_volume_id\": \"vol-028f30f6b745e2ae5\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"monthly_ec2_cost_usd\": 7.49,\n        \"monthly_ebs_cost_usd\": 0.80,\n        \"total_monthly_cost_usd\": 8.29,\n        \"serverless_equivalent\": \"AWS Lambda (REST/HTTP handler) + Amazon API Gateway REST API or HTTP API; optionally AWS App Runner for container-native REST APIs\",\n        \"estimated_serverless_monthly_cost_usd\": 0.07,\n        \"estimated_monthly_savings_usd\": 8.22,\n        \"carbon_reduction_estimate_pct\": 95,\n        \"rationale\": \"API workloads are the canonical Lambda use case. 0.134% avg CPU over 14 days with zero disk reads confirms a stateless, request-response pattern. Lambda scales to zero between requests, eliminating all idle carbon. API Gateway provides SSL termination, throttling, and caching at no idle cost.\"\n      }\n    },\n    {\n      \"resource_id\": \"EC2-004\",\n      \"resource_type\": \"EC2 Instance\",\n      \"check\": \"Severely underutilized \u2014 migrate to AWS Lambda (event-driven) or AWS Fargate Spot (batch/queue worker)\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"instance_id\": \"i-01baa59f318a3c59e\",\n        \"name\": \"worker-01\",\n        \"region\": \"us-east-1\",\n        \"instance_type\": \"t3.micro\",\n        \"vcpu\": 2,\n        \"memory_gib\": 1,\n        \"avg_cpu_14d_pct\": 0.135,\n        \"max_cpu_14d_pct\": 13.133,\n        \"avg_net_in_bytes_per_sec\": 18234,\n        \"avg_net_out_bytes_per_sec\": 2242,\n        \"disk_read_bytes_14d\": 0,\n        \"steady_state_duty_cycle_pct\": 0.135,\n        \"ebs_volume_id\": \"vol-03fc1ecf1ea302655\",\n        \"ebs_size_gb\": 8,\n        \"ebs_type\": \"gp2\",\n        \"monthly_ec2_cost_usd\": 7.49,\n        \"monthly_ebs_cost_usd\": 0.80,\n        \"total_monthly_cost_usd\": 8.29,\n        \"serverless_equivalent\": \"AWS Lambda triggered by SQS/SNS/EventBridge for event-driven jobs; AWS Fargate Spot + ECS Scheduled Tasks for periodic batch; AWS Step Functions for multi-step orchestration\",\n        \"estimated_serverless_monthly_cost_usd\": 0.10,\n        \"estimated_monthly_savings_usd\": 8.19,\n        \"carbon_reduction_estimate_pct\": 93,\n        \"rationale\": \"Worker processes that poll queues or run periodic jobs are ideal Lambda/Fargate candidates. The 0.135% avg CPU and 0 disk reads over 14 days show the worker is largely idle between tasks. Lambda SQS trigger or Fargate Spot replaces the always-on pattern. Fargate Spot is selected as the fallback if the job runtime exceeds Lambda's 15-min limit.\"\n      }\n    },\n    {\n      \"resource_id\": \"EBS-001\",\n      \"resource_type\": \"EBS Volume\",\n      \"check\": \"Legacy gp2 volumes with zero disk-read activity \u2014 convert to gp3 or eliminate on migration\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": {\n        \"volume_ids\": [\"vol-05ced2e45c102a69e\", \"vol-0497bec1f1285d97f\", \"vol-028f30f6b745e2ae5\", \"vol-03fc1ecf1ea302655\"],\n        \"size_gb_each\": 8,\n        \"volume_type\": \"gp2\",\n        \"baseline_iops_each\": 100,\n        \"disk_read_bytes_14d_all_instances\": 0,\n        \"current_total_monthly_cost_usd\": 3.20,\n        \"post_migration_cost_usd\": 0.00,\n        \"rationale\": \"All four 8 GiB gp2 volumes show zero disk read bytes over 14 days. The instances are purely network-IO-driven. On migration to Lambda/Fargate, these volumes are deleted entirely, saving $3.20/mo and removing the storage carbon footprint. If EC2 must be retained, convert to gp3 for 20% cost reduction and 3000 IOPS baseline at no extra charge.\"\n      }\n    },\n    {\n      \"resource_id\": \"ARCH-001\",\n      \"resource_type\": \"Architecture Pattern\",\n      \"check\": \"Self-managed redundant web/API tier using EC2 \u2014 no load balancer, auto-scaling, or managed container plane detected\",\n      \"severity\": \"HIGH\",\n      \"evidence\": {\n        \"pattern\": \"Two web-prod instances (web-prod-01, web-prod-02) with identical CPU/network signatures suggest manual horizontal scaling without ALB or Auto Scaling Group\",\n        \"ecs_clusters_detected\": 0,\n        \"eks_nodegroups_detected\": 0,\n        \"rds_instances_detected\": 0,\n        \"load_balancers_detected\": \"not checked \u2014 recommend verifying via DescribeLoadBalancers\",\n        \"recommendation\": \"Consolidate to Lambda + API Gateway + CloudFront eliminates need for manual replication, ELB costs, and 24/7 idle EC2. Single Lambda function with concurrency covers both web-prod instances.\",\n        \"carbon_per_request_baseline\": \"EC2 t3.micro at 0.131% avg utilisation = ~99.87% of provisioned hardware energy is wasted on idle cycles\",\n        \"carbon_per_request_serverless\": \"Lambda only draws power during request execution; AWS shared infrastructure achieves ~60\u201380% higher server utilization than single-tenant EC2\"\n      }\n    }\n  ],\n\n  \"improvement_plan\": [\n    {\n      \"resource_id\": \"EC2-003\",\n      \"action\": \"Migrate api-prod-01 (i-0aa58fe2d137a2f9f) to AWS Lambda + API Gateway. (1) Package application as Lambda function (Python/Node.js/container image). (2) Create API Gateway HTTP API with Lambda proxy integration. (3) Enable Lambda Powertools for structured logging and X-Ray tracing. (4) Deploy via AWS SAM or CDK. (5) Validate, then stop/terminate EC2 and delete vol-028f30f6b745e2ae5. Monthly savings: ~$8.22.\",\n      \"priority\": 1,\n      \"effort\": \"LOW\",\n      \"carbon_reduction_rank\": 1,\n      \"carbon_reduction_rationale\": \"API layer is the canonical Lambda pattern; zero disk state, stateless request-response, <15 min execution. Highest carbon-per-request reduction because API instances serve many short-lived requests \u2014 moving to Lambda eliminates 100% of idle hardware energy between requests. Estimated carbon reduction: 95%.\",\n      \"estimated_monthly_savings_usd\": 8.22,\n      \"migration_risk\": \"LOW \u2014 zero disk reads confirm no local state; stateless REST API maps directly to Lambda handler\"\n    },\n    {\n      \"resource_id\": \"EC2-001\",\n      \"action\": \"Migrate web-prod-01 (i-06286d41ae1218d5e) to AWS Lambda + API Gateway (consolidate with web-prod-02 into a single function). (1) If serving static assets: move to S3 + CloudFront (near-zero cost). (2) If serving dynamic content: same Lambda function as api-prod-01 with route-based dispatch, or separate Lambda behind API Gateway. (3) Terminate EC2 and delete vol-05ced2e45c102a69e. Monthly savings: ~$8.24.\",\n      \"priority\": 2,\n      \"effort\": \"LOW\",\n      \"carbon_reduction_rank\": 2,\n      \"carbon_reduction_rationale\": \"Web front-end with zero disk I/O and minimal network traffic is either static (S3/CloudFront = highest carbon reduction) or a thin dynamic layer (Lambda). Either path eliminates the always-on EC2. Estimated carbon reduction: 95%.\",\n      \"estimated_monthly_savings_usd\": 8.24,\n      \"migration_risk\": \"LOW \u2014 zero disk reads, near-zero CPU; likely a reverse proxy or static file server\"\n    },\n    {\n      \"resource_id\": \"EC2-002\",\n      \"action\": \"Decommission web-prod-02 (i-0ee5fa3508cede8a2) after web-prod-01 migration is validated. This instance is a near-perfect clone of web-prod-01 (identical CPU/network signatures). Lambda concurrency >= 2 replaces both. Terminate EC2 and delete vol-0497bec1f1285d97f. Monthly savings: ~$8.29.\",\n      \"priority\": 3,\n      \"effort\": \"VERY LOW\",\n      \"carbon_reduction_rank\": 3,\n      \"carbon_reduction_rationale\": \"Eliminating a redundant idle clone provides identical carbon reduction to web-prod-01 at near-zero migration effort (already handled by Lambda concurrency configuration done in Priority 2). Estimated carbon reduction: 95%.\",\n      \"estimated_monthly_savings_usd\": 8.29,\n      \"migration_risk\": \"VERY LOW \u2014 decommission only after web-prod-01 Lambda is live and load-tested\"\n    },\n    {\n      \"resource_id\": \"EC2-004\",\n      \"action\": \"Migrate worker-01 (i-01baa59f318a3c59e) to event-driven Lambda or Fargate Spot. (1) Identify trigger source (SQS queue, cron, SNS topic). (2) If job < 15 min: configure Lambda with SQS event source mapping or EventBridge Scheduler rule. (3) If job > 15 min or requires > 10 GB memory: create Fargate Spot ECS task with EventBridge Scheduler. (4) Enable Step Functions for multi-step orchestration if needed. (5) Terminate EC2 and delete vol-03fc1ecf1ea302655. Monthly savings: ~$8.19.\",\n      \"priority\": 4,\n      \"effort\": \"MEDIUM\",\n      \"carbon_reduction_rank\": 4,\n      \"carbon_reduction_rationale\": \"Worker pattern has slightly higher effort because the trigger source must be identified and re-wired. Fargate Spot is the fallback for long-running jobs. Carbon reduction is still ~93% by eliminating 24/7 idle polling loop on EC2. Rated MEDIUM effort due to potential need to inspect job runtime, memory usage, and trigger mechanism before migration.\",\n      \"estimated_monthly_savings_usd\": 8.19,\n      \"migration_risk\": \"MEDIUM \u2014 worker job duration and memory footprint must be profiled; SQS visibility timeout must be tuned to Lambda execution timeout\"\n    },\n    {\n      \"resource_id\": \"EBS-001\",\n      \"action\": \"Delete all four gp2 EBS volumes (vol-05ced2e45c102a69e, vol-0497bec1f1285d97f, vol-028f30f6b745e2ae5, vol-03fc1ecf1ea302655) upon EC2 termination. If EC2 must be retained temporarily, convert volumes from gp2 to gp3 immediately (no downtime required, no data loss) to reduce storage cost by 20% and gain 3000 IOPS baseline free of charge. Monthly savings on conversion: ~$0.64; on deletion: ~$3.20.\",\n      \"priority\": 5,\n      \"effort\": \"VERY LOW\",\n      \"carbon_reduction_rank\": 5,\n      \"carbon_reduction_rationale\": \"EBS storage has a smaller carbon footprint than compute, but eliminating four 8 GiB volumes removes the associated SSD array allocation in the AWS datacenter. gp3 conversion is a zero-downtime quick win while migration is in progress.\",\n      \"estimated_monthly_savings_usd\": 3.20,\n      \"migration_risk\": \"VERY LOW \u2014 volumes contain OS root disks only; no application data detected (zero disk reads)\"\n    },\n    {\n      \"resource_id\": \"ARCH-001\",\n      \"action\": \"Establish a serverless-first architecture baseline. (1) Deploy AWS SAM or CDK pipeline for all four workloads in a single IaC stack. (2) Enable AWS Compute Optimizer and AWS Trusted Advisor to auto-flag future EC2 underutilization. (3) Tag all resources with Environment, WorkloadType, and CarbonTrackingEnabled=true. (4) Enable AWS Customer Carbon Footprint Tool in Cost Explorer to baseline and track reduction. (5) Set a Config Rule: ec2-instance-no-public-ip + require-tags to prevent untracked EC2 sprawl.\",\n      \"priority\": 6,\n      \"effort\": \"MEDIUM\",\n      \"carbon_reduction_rank\": 6,\n      \"carbon_reduction_rationale\": \"Governance controls prevent carbon regression. AWS Compute Optimizer provides ongoing right-sizing signals. Carbon Footprint Tool quantifies the reduction achieved by this migration (~95% at current traffic levels).\",\n      \"estimated_monthly_savings_usd\": 0.00,\n      \"migration_risk\": \"LOW \u2014 read-only governance tooling; no production impact\"\n    }\n  ],\n\n  \"totals\": {\n    \"instances_scanned\": 4,\n    \"ecs_clusters_scanned\": 0,\n    \"regions_scanned\": 17,\n    \"observation_window_days\": 14,\n    \"current_total_monthly_cost_usd\": 33.36,\n    \"projected_total_monthly_cost_post_migration_usd\": 0.22,\n    \"total_projected_monthly_savings_usd\": 33.14,\n    \"total_projected_annual_savings_usd\": 397.68,\n    \"estimated_carbon_reduction_pct\": 95,\n    \"migration_candidates_ranked_by_carbon_per_request_reduction\": [\n      \"EC2-003 (api-prod-01) \u2014 Priority 1 \u2014 effort LOW\",\n      \"EC2-001 (web-prod-01) \u2014 Priority 2 \u2014 effort LOW\",\n      \"EC2-002 (web-prod-02) \u2014 Priority 3 \u2014 effort VERY LOW\",\n      \"EC2-004 (worker-01)  \u2014 Priority 4 \u2014 effort MEDIUM\"\n    ]\n  }\n}\n```\n\n---\n\n### Key Takeaways\n\n| # | Resource | Avg CPU | Peak CPU | Duty Cycle | Current Cost/mo | Target | Savings/mo | Carbon \u2193 |\n|---|---|---|---|---|---|---|---|---|\n| EC2-001 | web-prod-01 `t3.micro` | **0.131%** | 11.2% | ~0.13% | $8.29 | Lambda + API GW | **$8.24** | ~95% |\n| EC2-002 | web-prod-02 `t3.micro` | **0.136%** | 13.3% | ~0.14% | $8.29 | Lambda (shared) | **$8.29** | ~95% |\n| EC2-003 | api-prod-01 `t3.micro` | **0.134%** | 13.3% | ~0.13% | $8.29 | Lambda + API GW | **$8.22** | ~95% |\n| EC2-004 | worker-01 `t3.micro` | **0.135%** | 13.1% | ~0.14% | $8.29 | Lambda / Fargate Spot | **$8.19** | ~93% |\n| EBS-001 | 4\u00d7 8 GiB gp2 | \u2014 | \u2014 | \u2014 | $3.20 | Delete / gp3 | **$3.20** | ~5% |\n| **TOTAL** | | | | | **$36.36** | | **$35.94** | **~95%** |\n\n> **All four instances are severely underutilized** (avg CPU < 0.14%, duty cycle < 0.2%). The workload is almost entirely idle EC2 hardware burning energy 24/7. Migrating to Lambda + API Gateway is the single highest-impact action for both cost and carbon reduction.",
+  "token_usage": {
+    "estimated": 2824,
+    "note": "estimated from response length; exact count not available via WebSocket"
+  },
+  "duration_s": 181.5,
+  "cost": {
+    "note": "the agent cost not tracked \u2014 runs on MontyCloud platform"
+  }
+}
